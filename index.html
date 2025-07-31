@@ -832,16 +832,17 @@ Promise.all(feeds.map(feed =>
     <!-- FORMULARIO INTERES -->
     <div class="interes-box" id="contacto">
       <h3>¿Te interesa?</h3>
-      <form class="interes-form" id="interes-form" onsubmit="enviarInteres(event)">
-        <label for="nombre">Nombre</label>
-        <input id="nombre" name="nombre" type="text" required autocomplete="name" placeholder="Tu nombre completo">
-        <label for="email">Correo electrónico</label>
-        <input id="email" name="email" type="email" required autocomplete="email" placeholder="correo@ejemplo.com">
-        <label for="comentario">Comentario</label>
-        <textarea id="comentario" name="comentario" rows="3" required placeholder="¿En qué te gustaría invertir o qué deseas saber?"></textarea>
-        <button type="submit">Enviar</button>
-        <div id="mensaje-enviado" class="mensaje-enviado"></div>
-      </form>
+      <form action="https://formsubmit.co/TU_CORREO@ejemplo.com" method="POST">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_next" value="https://tusitio.com/gracias.html">
+  <label for="nombre">Nombre</label>
+  <input id="nombre" name="nombre" type="text" required placeholder="Tu nombre completo">
+  <label for="email">Correo electrónico</label>
+  <input id="email" name="email" type="email" required placeholder="correo@ejemplo.com">
+  <label for="comentario">Comentario</label>
+  <textarea id="comentario" name="comentario" rows="3" required placeholder="¿En qué te gustaría invertir o qué deseas saber?"></textarea>
+  <button type="submit">Enviar</button>
+</form>
     </div>
   </main>
   <footer>
