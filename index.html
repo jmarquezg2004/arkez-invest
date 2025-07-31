@@ -830,21 +830,24 @@ Promise.all(feeds.map(feed =>
 }
 </style>
     <!-- FORMULARIO INTERES -->
-    <section class="interes-section">
-  <div class="interes-box" id="contacto">
-    <h3>¿Te interesa?</h3>
-    <form action="https://formspree.io/f/mzzgqpke" method="POST">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="https://tusitio.com/gracias.html">
-      <label for="nombre">Nombre</label>
-      <input id="nombre" name="nombre" type="text" required placeholder="Tu nombre completo">
-      <label for="email">Correo electrónico</label>
-      <input id="email" name="email" type="email" required placeholder="correo@ejemplo.com">
-      <label for="comentario">Comentario</label>
-      <textarea id="comentario" name="comentario" rows="3" required placeholder="¿En qué te gustaría invertir o qué deseas saber?"></textarea>
-      <button type="submit">Enviar</button>
-    </form>
-  </div>
+   <div class="interes-box" id="contacto">
+  <h3>¿Te interesa?</h3>
+  <form class="interes-form" action="https://formspree.io/f/mzzgqpke" method="POST">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" value="https://tusitio.com/gracias.html">
+    
+    <label for="nombre">Nombre</label>
+    <input id="nombre" name="nombre" type="text" required autocomplete="name" placeholder="Tu nombre completo">
+    
+    <label for="email">Correo electrónico</label>
+    <input id="email" name="email" type="email" required autocomplete="email" placeholder="correo@ejemplo.com">
+    
+    <label for="comentario">Comentario</label>
+    <textarea id="comentario" name="comentario" rows="3" required placeholder="¿En qué te gustaría invertir o qué deseas saber?"></textarea>
+    
+    <button type="submit">Enviar</button>
+  </form>
+</div>
 </section>
     </div>
   </main>
