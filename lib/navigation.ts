@@ -7,6 +7,7 @@ type NavigationGroup = SiteLink & {
 export const siteName = "Arkez Invest";
 export const siteDescription = "Arkez Invest es una empresa de educación, formación y consultoría financiera que aplica herramientas tecnológicas para desarrollar capacidades en personas y empresas.";
 export const siteUrl = "https://arkezinvest.com";
+export const innovationLink = { label: "Innovación", href: "/innovacion/" } as const;
 export const contactLink = { label: "Contacto", href: "/contacto/" };
 export const serviceHref = (id: string) => `/servicios/${id}/`;
 export const educationLink = {

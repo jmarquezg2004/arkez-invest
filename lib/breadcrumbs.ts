@@ -1,6 +1,6 @@
 import { pages } from "./content";
 
-export function breadcrumbs(path: string) {
+export function breadcrumbs(path: string, title = pages[path].title) {
   const segments = path.split("/").filter(Boolean);
   const parents = segments.slice(0, -1).map((_, index) => `/${segments.slice(0, index + 1).join("/")}/`)
     .filter((route) => pages[route]);
@@ -8,6 +8,6 @@ export function breadcrumbs(path: string) {
   return [
     { href: "/", label: "Inicio" },
     ...parents.map((route) => ({ href: route, label: pages[route].title })),
-    { href: path, label: pages[path].title },
+    { href: path, label: title },
   ];
 }

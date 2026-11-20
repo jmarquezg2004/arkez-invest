@@ -1,3 +1,5 @@
+import { innovationDescription, innovationPath } from "./innovation";
+
 type SeoEntry = {
   title: string;
   description: string;
@@ -76,6 +78,13 @@ export const seoData: Readonly<Record<string, SeoEntry>> = {
     primary: "finanzas empresariales",
     secondary: ["flujo de caja", "liquidez operativa", "planificación financiera"],
     intent: "comercial",
+  },
+  [innovationPath]: {
+    title: "Innovación financiera: IA, DeFi y tokenización | Arkez",
+    description: innovationDescription,
+    primary: "innovación financiera",
+    secondary: ["inteligencia artificial aplicada a inversiones", "activos tokenizados", "finanzas descentralizadas", "simulador de portafolios"],
+    intent: "informativa",
   },
   "/recursos/": {
     title: "Biblioteca de recursos financieros en Arkez Invest",

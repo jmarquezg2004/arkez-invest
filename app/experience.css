@@ -218,8 +218,10 @@
 .page-body .feature-card h3 a:hover { text-decoration: underline; }
 .site-footer { background: var(--experience-night); }
 
-@media (max-width: 880px) {
+@media (max-width: 1000px) {
   .header-inner { position: static; }
+}
+@media (max-width: 880px) {
   .experience-services { gap: 2.25rem 1.5rem; }
   .lab-tabs button { font-size: .88rem; }
 }

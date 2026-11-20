@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { ArrowRight, BookOpen, Building2, ChevronDown, Compass, Menu, X } from "lucide-react";
 import { Brand } from "./brand";
-import { contactLink, navigation, type SiteLink } from "@/lib/navigation";
+import { contactLink, innovationLink, navigation, type SiteLink } from "@/lib/navigation";
 
 const menuIntroductions: Partial<Record<string, { icon: typeof Compass; description: string }>> = {
   "/servicios/": { icon: Compass, description: "Formación, análisis y consultoría para desarrollar capacidades financieras." },
@@ -104,6 +104,7 @@ export function SiteHeader() {
               </details>
             );
           })}
+          <a className="nav-link" href={innovationLink.href} aria-current={pathname === innovationLink.href ? "page" : undefined}>{innovationLink.label}</a>
         </nav>
         <a className="button button-header desktop-contact" href={contactLink.href} aria-current={pathname === contactLink.href ? "page" : undefined}>
           {contactLink.label}
@@ -125,6 +126,7 @@ export function SiteHeader() {
                 </ul>
               </details>
             ))}
+            <MenuLink link={innovationLink} pathname={pathname} />
             <MenuLink link={contactLink} pathname={pathname} />
           </nav>
         </details>

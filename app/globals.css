@@ -205,7 +205,7 @@ a:focus-visible, summary:focus-visible {
   .desktop-nav { gap: .9rem; }
   .header-inner { gap: 1rem; }
 }
-@media (max-width: 880px) {
+@media (max-width: 1000px) {
   .header-inner { min-height: 4.25rem; }
   .desktop-nav, .desktop-contact { display: none; }
   .mobile-menu { display: block; }

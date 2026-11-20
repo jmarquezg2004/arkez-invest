@@ -12,7 +12,7 @@ const routes = [
   "/recursos/", "/recursos/guias/", "/recursos/guias/primeros-pasos/",
   "/recursos/articulos/", "/recursos/articulos/que-es-diversificar/", "/recursos/preguntas-frecuentes/",
   "/nosotros/", "/nosotros/mision-y-equipo/", "/nosotros/transparencia/",
-  "/contacto/", "/legal/privacidad/", "/legal/terminos/", "/legal/riesgos/",
+  "/contacto/", "/legal/privacidad/", "/legal/terminos/", "/legal/riesgos/", "/innovacion/",
 ];
 
 function pagePath(route) {
@@ -156,7 +156,7 @@ test("datos estructurados coherentes con servicios y autoría editorial visibles
       assert.equal(trail.at(-1).item, `https://arkezinvest.com${route}`);
     }
     if (route === "/servicios/") assert.equal(types.filter((type) => type === "Service").length, 4);
-    if (route.endsWith("/primeros-pasos/") || route.endsWith("/que-es-diversificar/")) {
+    if (route.endsWith("/primeros-pasos/") || route.endsWith("/que-es-diversificar/") || route === "/innovacion/") {
       const article = graph.find((entry) => entry["@type"] === "Article");
       assert.ok(article.author["@id"].endsWith("#organizacion"));
       assert.match(html, new RegExp(`datetime="${article.dateModified}"`, "i"));
@@ -188,4 +188,23 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     .map((file) => `/${file.replace(/index\.html$/, "")}`)
     .filter((route) => route !== "/404/" && route !== "/_not-found/");
   assert.deepEqual(found.sort(), [...routes].sort());
+});
+
+test("Innovation Hub exporta las cinco categorías, contenidos y referencias al simulador", () => {
+  const home = read("/");
+  const hub = read("/innovacion/");
+  assert.match(home, /<section class="hub-preview" id="innovacion" aria-labelledby="innovation-heading"/);
+  for (const id of ["portafolios", "defi", "ia", "academia", "ecosistema"]) {
+    assert.ok(home.includes(`id="hub-select-${id}"`));
+    assert.ok(home.includes(`href="/innovacion/#${id}"`));
+    assert.ok(hub.includes(`id="${id}"`));
+    assert.ok(hub.includes(`href="#${id}"`));
+  }
+  for (const html of [home, hub]) {
+    assert.match(html, /id="hub-weight"/);
+    assert.match(html, /id="hub-shock"/);
+    assert.match(html, /Distribución de activos/);
+    assert.match(html, /Cartera de referencia/);
+    assert.match(html, /Datos ficticios/);
+  }
 });

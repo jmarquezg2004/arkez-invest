@@ -1,9 +1,13 @@
 import type { MetadataRoute } from "next";
+import { innovationPath, innovationUpdated } from "@/lib/innovation";
 import { pages } from "@/lib/content";
 import { siteUrl } from "@/lib/navigation";
 
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return ["/", ...Object.keys(pages)].map((path) => ({ url: `${siteUrl}${path}` }));
+  return [
+    ...["/", ...Object.keys(pages)].map((path) => ({ url: `${siteUrl}${path}` })),
+    { url: `${siteUrl}${innovationPath}`, lastModified: innovationUpdated },
+  ];
 }

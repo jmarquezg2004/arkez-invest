@@ -1,8 +1,8 @@
 import { Brand } from "./brand";
-import { contactLink, legalLinks, navigation, type SiteLink } from "@/lib/navigation";
+import { contactLink, innovationLink, legalLinks, navigation, type SiteLink } from "@/lib/navigation";
 
 const footerGroups = [
-  { title: "Explora", links: navigation.slice(0, 2) },
+  { title: "Explora", links: [...navigation.slice(0, 2), innovationLink] },
   { title: "Arkez Invest", links: [...navigation.slice(2), contactLink] },
   { title: "Información", links: legalLinks },
 ] satisfies readonly { title: string; links: readonly SiteLink[] }[];

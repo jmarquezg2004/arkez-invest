@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowDown, ArrowRight, BookOpen, Building2, Compass, Layers3, TrendingUp, Users } from "lucide-react";
+import { InnovationPreview } from "@/components/innovation/innovation-preview";
 import { LearningLab } from "@/components/learning-lab";
 import { RevealSections } from "@/components/reveal-sections";
 import { StructuredData } from "@/components/structured-data";
@@ -101,6 +102,8 @@ export default function Home() {
           </ul>
         </div>
       </section>
+
+      <InnovationPreview />
 
       <section className="experience-audiences section-spacing" aria-labelledby="audience-title">
         <div className="container-shell" data-reveal>

@@ -32,7 +32,7 @@ export function StructuredData({ path, page }: { path: string; page?: ContentPag
   if (page) {
     graph.push({
       "@type": "BreadcrumbList",
-      itemListElement: breadcrumbs(path).map(({ href, label }, index) => ({
+      itemListElement: breadcrumbs(path, page.title).map(({ href, label }, index) => ({
         "@type": "ListItem",
         position: index + 1,
         name: label,
