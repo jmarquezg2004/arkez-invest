@@ -2,9 +2,31 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ArrowRight, BookOpen, Building2, ChevronDown, Compass, Menu, X } from "lucide-react";
 import { Brand } from "./brand";
 import { contactLink, navigation, type SiteLink } from "@/lib/navigation";
+
+const menuIntroductions: Partial<Record<string, { icon: typeof Compass; description: string }>> = {
+  "/servicios/": { icon: Compass, description: "Formación, análisis y consultoría para desarrollar capacidades financieras." },
+  "/para-quien/": { icon: Building2, description: "Encuentra el enfoque adecuado para tus decisiones o las de tu equipo." },
+  "/recursos/": { icon: BookOpen, description: "Estudia con guías, artículos y herramientas listas para usar." },
+  "/nosotros/": { icon: Compass, description: "Conoce nuestra misión, nuestro enfoque y cómo trabajamos." },
+};
+
+const menuDescriptions: Record<string, string> = {
+  "/servicios/educacion-financiera/": "Bases para evaluar decisiones",
+  "/servicios/analisis-de-mercados/": "Indicadores, fuentes y contexto",
+  "/servicios/formacion-practica/": "Ejercicios y herramientas aplicadas",
+  "/servicios/consultoria-financiera/": "Criterios para organizar alternativas",
+  "/servicios/metodologia/": "Del diagnóstico a la evaluación",
+  "/para-quien/personas/": "Objetivos, presupuesto e inversión",
+  "/para-quien/empresas/": "Liquidez, escenarios y decisiones de equipo",
+  "/recursos/guias/": "Casos, ejercicios y plantillas",
+  "/recursos/articulos/": "Lecturas sobre mercados y finanzas",
+  "/recursos/preguntas-frecuentes/": "Respuestas para orientarte",
+  "/nosotros/mision-y-equipo/": "Identidad institucional",
+  "/nosotros/transparencia/": "Alcance y principios de trabajo",
+};
 
 function MenuLink({ link, pathname }: { link: SiteLink; pathname: string }) {
   return (
@@ -56,17 +78,32 @@ export function SiteHeader() {
         <Brand />
         <nav aria-label="Navegación principal" className="desktop-nav">
           <a className="nav-link" href="/" aria-current={pathname === "/" ? "page" : undefined}>Inicio</a>
-          {navigation.map((group) => (
-            <details className="nav-group" name="desktop-navigation" key={group.href}>
-              <summary className="nav-link" data-current={pathname.startsWith(group.href)}>
-                {group.label}<ChevronDown size={14} aria-hidden="true" />
-              </summary>
-              <ul className="nav-dropdown">
-                <li><MenuLink link={{ ...group, label: `Ver ${group.label.toLowerCase()}` }} pathname={pathname} /></li>
-                {group.children.map((link) => <li key={link.href}><MenuLink link={link} pathname={pathname} /></li>)}
-              </ul>
-            </details>
-          ))}
+          {navigation.map((group) => {
+            const introduction = menuIntroductions[group.href] ?? { icon: Compass, description: group.label };
+            const Icon = introduction.icon;
+            return (
+              <details className="nav-group" name="desktop-navigation" key={group.href}>
+                <summary className="nav-link" data-current={pathname.startsWith(group.href)}>
+                  {group.label}<ChevronDown size={14} aria-hidden="true" />
+                </summary>
+                <div className="nav-dropdown">
+                  <div className="mega-introduction">
+                    <Icon size={23} aria-hidden="true" />
+                    <p>{introduction.description}</p>
+                    <MenuLink link={{ ...group, label: `Ver ${group.label.toLowerCase()}` }} pathname={pathname} />
+                  </div>
+                  <ul className="mega-links" role="list">
+                    {group.children.map((link) => <li key={link.href}>
+                      <a href={link.href} aria-current={pathname === link.href ? "page" : undefined}>
+                        <span><strong>{link.label}</strong><small>{menuDescriptions[link.href]}</small></span>
+                        <ArrowRight size={17} aria-hidden="true" />
+                      </a>
+                    </li>)}
+                  </ul>
+                </div>
+              </details>
+            );
+          })}
         </nav>
         <a className="button button-header desktop-contact" href={contactLink.href} aria-current={pathname === contactLink.href ? "page" : undefined}>
           {contactLink.label}

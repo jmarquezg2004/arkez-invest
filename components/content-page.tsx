@@ -22,7 +22,7 @@ export function ContentPage({ page, path, children }: { page: PageData; path: st
 
   return (
     <>
-      <section className="page-hero">
+      <section className="page-hero" data-group={trail[1]?.href.split("/")[1]}>
         <div className="container-shell">
           <nav aria-label="Ruta de navegación" className="breadcrumbs">
             <ol>

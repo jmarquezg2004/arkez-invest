@@ -70,18 +70,19 @@ test("enlaces internos, activos y anclas históricas resuelven en la exportació
   }
 });
 
-test("la portada presenta el posicionamiento, los servicios y las tres capacidades", () => {
+test("la portada presenta el posicionamiento, los servicios y los cuatro ejercicios educativos", () => {
   const html = read("/");
   assert.match(html, /Conocimiento financiero <span>para tomar mejores decisiones\.<\/span>/);
   assert.match(html, /Formación, análisis de mercados y herramientas tecnológicas para fortalecer tus capacidades financieras y de inversión\./);
   assert.match(html, /href="\/servicios\/">Explorar servicios/);
   assert.match(html, /href="\/nosotros\/">Conoce Arkez/);
   assert.match(html, /class="hero-guide" href="\/recursos\/guias\/primeros-pasos\/"/);
-  for (const capability of ["Análisis de mercados", "Gestión del riesgo", "Tecnología aplicada"]) {
+  for (const capability of ["Análisis de mercados", "Diversificación de inversiones", "Gestión del riesgo", "Tecnología aplicada"]) {
     assert.ok(html.includes(`<h3>${capability}</h3>`), capability);
   }
   assert.match(html, /Gráficos ilustrativos con fines educativos/);
-  assert.doesNotMatch(html, /Composición de una cartera|brand\/editorial(?:-small)?\.webp/);
+  assert.match(html, /brand\/prisma-980\.webp/);
+  assert.equal((html.match(/role="tab"/g) ?? []).length, 4);
 });
 
 test("la portada enlaza los servicios y públicos y comparte los cuatro pasos metodológicos", () => {
