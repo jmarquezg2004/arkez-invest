@@ -1,8 +1,9 @@
-import { createHash, randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import { extname, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { commonHeaders, contentPolicy } from "./pages-headers.mjs";
 
 const defaultRoot = fileURLToPath(new URL("../out/", import.meta.url));
 const contactPath = "/api/contacto/prueba";
@@ -42,23 +43,6 @@ function limiter(max) {
   };
 }
 
-function scriptPolicy(html) {
-  const hashes = new Set();
-  for (const [, source] of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
-    if (source) hashes.add(`'sha256-${createHash("sha256").update(source).digest("base64")}'`);
-  }
-  return [
-    "default-src 'self'",
-    `script-src 'self' ${[...hashes].join(" ")}`.trim(),
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data:",
-    "object-src 'none'",
-    "base-uri 'none'",
-    "frame-ancestors 'none'",
-    "form-action 'self'",
-  ].join("; ");
-}
-
 export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs = 800 } = {}) {
   const contactChallenges = new Map();
   const allowIssue = limiter(24);
@@ -66,9 +50,7 @@ export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs
   const base = resolve(root);
   const server = createServer({ requestTimeout: 8_000, headersTimeout: 5_000, maxHeaderSize: 8_192 }, async (request, response) => {
     response.setHeader("X-Robots-Tag", "noindex, nofollow");
-    response.setHeader("X-Content-Type-Options", "nosniff");
-    response.setHeader("Referrer-Policy", "no-referrer");
-    response.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    for (const [name, value] of Object.entries(commonHeaders)) response.setHeader(name, value);
 
     const { port } = server.address();
     const host = request.headers.host;
@@ -146,7 +128,7 @@ export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs
       }
 
       const type = types[extname(file)];
-      if (type === "text/html") response.setHeader("Content-Security-Policy", scriptPolicy(content.toString("utf8")));
+      if (type === "text/html") response.setHeader("Content-Security-Policy", contentPolicy([content.toString("utf8")]));
       response.writeHead(status, { "Content-Type": type.startsWith("text/") ? `${type}; charset=utf-8` : type, "Content-Length": content.length });
       response.end(request.method === "HEAD" ? undefined : content);
     } catch {

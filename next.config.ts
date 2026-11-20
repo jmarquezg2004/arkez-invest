@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   poweredByHeader: false,
   devIndicators: false,
+  generateBuildId: async () => process.env.ARKEZ_BUILD_ID ?? null,
 };
 
 export default nextConfig;

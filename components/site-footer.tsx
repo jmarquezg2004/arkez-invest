@@ -27,7 +27,7 @@ export function SiteFooter() {
         </nav>
       </div>
       <div className="container-shell footer-bottom">
-        <small>© {new Date().getUTCFullYear()} Arkez Invest</small>
+        <small>© {process.env.ARKEZ_BUILD_YEAR ?? new Date().getUTCFullYear()} Arkez Invest</small>
         <small>Recursos de carácter educativo.</small>
       </div>
     </footer>

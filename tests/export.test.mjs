@@ -3,6 +3,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { sep } from "node:path";
 import { test } from "node:test";
 
+const indexable = process.env.ARKEZ_INDEXABLE === "1";
 const output = new URL("../out/", import.meta.url);
 const routes = [
   "/", "/servicios/", "/servicios/educacion-financiera/", "/servicios/metodologia/",
@@ -34,7 +35,7 @@ test("cada ruta corporativa se genera con un título, un h1 y canonical propios"
     const description = html.match(/<meta name="description" content="([^"]+)"/)?.[1];
     assert.ok(description && description.length >= 140 && description.length <= 160 && !descriptions.has(description), route);
     descriptions.add(description);
-    assert.match(html, /<meta name="robots" content="noindex, nofollow"/, route);
+    assert.ok(html.includes(`<meta name="robots" content="${indexable ? "index, follow" : "noindex, nofollow"}"`), route);
     assert.match(html, /property="og:image" content="https:\/\/arkezinvest.com\/brand\/share.png"/, route);
     assert.match(html, /name="twitter:card" content="summary_large_image"/, route);
     const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
@@ -135,10 +136,16 @@ test("datos estructurados coherentes con servicios y autoría editorial visibles
   }
 });
 
-test("la exportación incluye 404, sitemap completo y robots para vista previa", () => {
+test("la exportación incluye 404, sitemap y robots acordes al perfil", () => {
   const file = (path) => readFileSync(new URL(path, output), "utf8");
   assert.match(file("404.html"), /Página no encontrada/);
-  assert.match(file("robots.txt"), /Disallow: \//);
+  const robots = file("robots.txt");
+  if (indexable) {
+    assert.match(robots, /Allow: \//);
+    assert.match(robots, /Sitemap: https:\/\/arkezinvest.com\/sitemap.xml/);
+  } else {
+    assert.match(robots, /Disallow: \//);
+  }
   const sitemap = file("sitemap.xml");
   for (const route of routes) {
     assert.ok(sitemap.includes(`<loc>https://arkezinvest.com${route}</loc>`), route);

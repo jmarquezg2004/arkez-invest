@@ -40,3 +40,7 @@ Las tres líneas de servicio sin ruta propia se publican como secciones enlazabl
 - Revisar los textos de privacidad, términos y riesgo antes de presentarlos como políticas definitivas.
 - Autorizar la captación real, los destinatarios, la política de retención y un backend o proveedor. Antes de activarlo, revisar validación en servidor, controles antispam y gestión de datos.
 - Configurar el alojamiento, cabeceras de seguridad, DNS y canonicalización con una aprobación de publicación separada.
+
+## Preparación para producción
+
+La [auditoría de seguridad](docs/seguridad-produccion.md) y el [procedimiento de publicación y reversión](docs/publicacion-reversion.md) documentan los cambios y autorizaciones. `npm run release -- production` prepara un artefacto local verificable con SHA-256. El adaptador de contacto de `deployment/` se mantiene desactivado y se configura por separado.
