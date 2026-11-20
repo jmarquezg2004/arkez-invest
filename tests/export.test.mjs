@@ -6,7 +6,8 @@ import { test } from "node:test";
 const indexable = process.env.ARKEZ_INDEXABLE === "1";
 const output = new URL("../out/", import.meta.url);
 const routes = [
-  "/", "/servicios/", "/servicios/educacion-financiera/", "/servicios/metodologia/",
+  "/", "/servicios/", "/servicios/educacion-financiera/", "/servicios/analisis-de-mercados/", "/servicios/formacion-practica/",
+  "/servicios/consultoria-financiera/", "/servicios/metodologia/",
   "/para-quien/", "/para-quien/personas/", "/para-quien/empresas/",
   "/recursos/", "/recursos/guias/", "/recursos/guias/primeros-pasos/",
   "/recursos/articulos/", "/recursos/articulos/que-es-diversificar/", "/recursos/preguntas-frecuentes/",
@@ -87,7 +88,7 @@ test("la portada enlaza los servicios y públicos y comparte los cuatro pasos me
   const home = read("/");
   const methodology = read("/servicios/metodologia/");
   for (const id of ["educacion-financiera", "analisis-de-mercados", "formacion-practica", "consultoria-financiera"]) {
-    assert.ok(home.includes(`href="/servicios/#${id}"`), id);
+    assert.ok(home.includes(`href="/servicios/${id}/"`), id);
     assert.ok(read("/servicios/").includes(`id="${id}"`), id);
   }
   assert.match(home, /href="\/para-quien\/personas\/" class="audience-link"/);
@@ -95,6 +96,33 @@ test("la portada enlaza los servicios y públicos y comparte los cuatro pasos me
   for (const step of ["Diagnóstico", "Formación práctica", "Aplicación de herramientas", "Evaluación del aprendizaje"]) {
     assert.ok(home.includes(`<h3>${step}</h3>`), step);
     assert.ok(methodology.includes(`<h2>${step}</h2>`), step);
+  }
+});
+
+test("cada servicio tiene contenido propio, preguntas y una consulta con el servicio preseleccionado", () => {
+  const indexes = read("/servicios/");
+  const slugs = ["educacion-financiera", "analisis-de-mercados", "formacion-practica", "consultoria-financiera"];
+  for (const slug of slugs) {
+    const route = `/servicios/${slug}/`;
+    const page = read(route);
+    assert.ok(indexes.includes(`href="${route}"`), route);
+    assert.match(page, /<h2>Beneficios/);
+    assert.match(page, /<h2>A quién/);
+    assert.match(page, /<h2>(?:Metodología|Cómo trabajamos)/);
+    assert.match(page, /<h2[^>]*>Preguntas y respuestas<\/h2>/);
+    assert.ok(page.includes(`href="/contacto/?servicio=${slug}"`), route);
+    const schema = JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
+    assert.ok(schema.some((entry) => entry["@type"] === "Service" && entry.url === `https://arkezinvest.com${route}`));
+  }
+
+  for (const route of routes) {
+    const main = read(route).match(/<main[\s\S]*?<\/main>/)?.[0];
+    const content = main?.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "");
+    assert.doesNotMatch(content ?? "", /href="\/servicios\/#(?:educacion-financiera|analisis-de-mercados|formacion-practica|consultoria-financiera)"/, route);
+    for (const [, link] of (content ?? "").matchAll(/<a\b[^>]*?\bhref="([^"]+)"/g)) {
+      assert.notEqual(link, "#", route);
+      assert.notEqual(link, route, route);
+    }
   }
 });
 

@@ -10,7 +10,7 @@ type RouteProps = { params: Promise<{ slug: string[] }> };
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return Object.keys(pages).filter((path) => path !== "/contacto/").map((path) => ({ slug: path.split("/").filter(Boolean) }));
+  return Object.keys(pages).filter((path) => path !== "/contacto/" && path !== "/recursos/").map((path) => ({ slug: path.split("/").filter(Boolean) }));
 }
 
 export async function generateMetadata({ params }: RouteProps): Promise<Metadata> {

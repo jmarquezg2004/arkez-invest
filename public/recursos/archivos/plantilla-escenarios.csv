@@ -1,0 +1,5 @@
+Escenario,Periodo,Saldo inicial,Cobros,Pagos,Saldo final,Variable modificada,Fuente o evidencia
+Ejemplo base,Mes 1,900,1200,1500,600,Ninguna,Datos ficticios
+Ejemplo alternativo,Mes 1,900,350,1500,-250,Retraso de un cobro de 850,Datos ficticios
+Mi escenario base,,,,,,,
+Mi escenario alternativo,,,,,,,

@@ -10,7 +10,7 @@ import { StructuredData } from "@/components/structured-data";
 export const metadata: Metadata = pageMetadata("/");
 
 const topics = [
-  { label: "Mercados e instrumentos", href: "/servicios/#analisis-de-mercados", icon: Globe2 },
+  { label: "Mercados e instrumentos", href: "/servicios/analisis-de-mercados/", icon: Globe2 },
   { label: "Riesgo y diversificación", href: "/legal/riesgos/", icon: SlidersHorizontal },
   { label: "Objetivos y estrategia", href: "/servicios/metodologia/", icon: Target },
 ];

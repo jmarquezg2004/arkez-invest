@@ -1,0 +1,34 @@
+{
+  "primeros-pasos-para-invertir": {
+    "title": "Lista de comprobación antes de invertir",
+    "intro": "Usa estas preguntas para comparar instrumentos bajo el mismo objetivo. Completa el ejercicio con datos de ejemplo.",
+    "topics": [
+      { "title": "1. Define el objetivo y la fecha", "body": "Anota qué quieres financiar, cuánto necesitas y cuándo. Si la fecha es próxima o fija, verifica si puedes disponer del dinero a tiempo." },
+      { "title": "2. Distingue plazo y liquidez", "body": "El plazo describe cuánto tiempo puedes mantener una decisión. La liquidez indica con qué facilidad puedes disponer del dinero y en qué condiciones." },
+      { "title": "3. Evalúa la pérdida que podrías asumir", "body": "Describe qué ocurriría si el valor cae antes de tu fecha objetivo. Separa la capacidad económica de asumir pérdidas de tu comodidad con la volatilidad." },
+      { "title": "4. Compara costos sobre la misma base", "body": "Anota comisiones de entrada, mantenimiento y salida en la misma moneda y el mismo período. Registra impuestos aplicables sólo cuando puedas verificarlos." },
+      { "title": "5. Registra las fuentes y dudas", "body": "Anota qué documento oficial consultaste, cuándo y qué condiciones todavía falta confirmar. Identifica qué dato cambiaría tu comparación." },
+      { "title": "Práctica: matrícula en seis meses", "body": "Compara dos alternativas ficticias. Una permite retirar cuando quieras y la otra tiene restricciones. Escribe qué pasa si la matrícula se adelanta un mes y qué costos aparecen en cada caso." }
+    ]
+  },
+  "lectura-de-mercados": {
+    "title": "Caso guiado de análisis de mercados",
+    "intro": "Una empresa ficticia pasa de 100 a 95 unidades en precio y de 1.000 a 1.800 en volumen durante dos sesiones. Los datos ilustran un método de lectura.",
+    "topics": [
+      { "title": "Separa lo observado de lo interpretado", "body": "Observación: el precio disminuyó en 5 unidades y el volumen aumentó en 800. Hipótesis: podría haber información nueva o una reacción general del mercado. La serie por sí sola no identifica la causa." },
+      { "title": "Pregunta desde el análisis técnico", "body": "¿El volumen fue inusual respecto de sesiones comparables? Revisa la unidad, el período y si algún ajuste modifica el precio histórico." },
+      { "title": "Pregunta desde el análisis fundamental", "body": "¿Hay una publicación del emisor que cambie el contexto? Consulta el informe original, revisa su fecha y distingue una variación en ventas de una en la capacidad de pagar deudas." },
+      { "title": "Registra el dato que falta", "body": "Haz una tabla con observación, fuente, fecha y dato pendiente. Explica qué evidencia ayudaría a descartar cada hipótesis. Mantén separada la descripción del comportamiento y cualquier decisión de inversión." }
+    ]
+  },
+  "liquidez-operativa": {
+    "title": "Caso de liquidez operativa",
+    "intro": "Ejercicio con cifras ficticias en la misma unidad monetaria. El objetivo es detectar una brecha de caja y observar qué supuesto la produce.",
+    "topics": [
+      { "title": "Construye el escenario base", "body": "Saldo inicial: 900. Cobros del período: 1.200. Pagos: 1.500. Suma saldo inicial y cobros, y resta los pagos. El saldo final es 600." },
+      { "title": "Cambia un solo supuesto", "body": "Si un cobro de 850 se desplaza al período siguiente, quedan 350 de cobros actuales. Con los demás valores constantes, el saldo final es -250. Esa diferencia identifica una brecha en el período actual." },
+      { "title": "Revisa fechas y restricciones", "body": "Anota qué días se cobran ingresos y cuáles son los vencimientos. Un saldo final positivo todavía puede ocultar una brecha si un pago llega antes que un cobro." },
+      { "title": "Explica el resultado a tu equipo", "body": "Registra el cobro que cambió, la fecha revisada y qué fuente confirma el nuevo plazo. Identifica qué dato haría que la brecha desaparezca o empeore." }
+    ]
+  }
+}

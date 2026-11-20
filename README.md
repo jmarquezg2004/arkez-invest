@@ -2,6 +2,8 @@
 
 Sitio corporativo en español de Arkez Invest, empresa de educación, formación y consultoría financiera para personas y empresas. La vista previa incluye servicios, guías, artículos y preguntas frecuentes.
 
+Las 20 URL originales se conservan. Las fichas de análisis de mercados, formación práctica y consultoría amplían el sitio a 23 rutas. La [auditoría de navegación y biblioteca](docs/auditoria-navegacion-biblioteca.md) documenta los cambios y las descargas.
+
 ## Ejecutar en local
 
 Requiere Node.js 22 o posterior y npm.

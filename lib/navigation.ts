@@ -8,6 +8,7 @@ export const siteName = "Arkez Invest";
 export const siteDescription = "Arkez Invest es una empresa de educación, formación y consultoría financiera que aplica herramientas tecnológicas para desarrollar capacidades en personas y empresas.";
 export const siteUrl = "https://arkezinvest.com";
 export const contactLink = { label: "Contacto", href: "/contacto/" };
+export const serviceHref = (id: string) => `/servicios/${id}/`;
 export const educationLink = {
   label: "Educación financiera",
   href: "/servicios/educacion-financiera/",
@@ -23,6 +24,9 @@ export const navigation: readonly NavigationGroup[] = [
     href: "/servicios/",
     children: [
       educationLink,
+      { label: "Análisis de mercados", href: serviceHref("analisis-de-mercados") },
+      { label: "Formación práctica", href: serviceHref("formacion-practica") },
+      { label: "Consultoría financiera", href: serviceHref("consultoria-financiera") },
       { label: "Metodología", href: "/servicios/metodologia/" },
     ],
   },

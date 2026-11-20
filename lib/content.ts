@@ -1,5 +1,7 @@
+import { serviceDetails } from "./service-details";
 import { services } from "./services";
-import { contactLink, educationLink, firstGuideLink, siteDescription, type SiteLink } from "./navigation";
+import worksheets from "./worksheets.json";
+import { educationLink, firstGuideLink, serviceHref, siteDescription, type SiteLink } from "./navigation";
 
 export type IconName = "book" | "layers" | "compass" | "shield" | "building" | "users" | "chart" | "file" | "message";
 
@@ -24,7 +26,7 @@ export type ContentPage = {
 };
 
 export const serviceCards: readonly ContentCard[] = services.map(({ id, cardTitle, description, icon }) => ({
-  href: `/servicios/#${id}`,
+  href: serviceHref(id),
   label: cardTitle,
   description,
   icon,
@@ -98,13 +100,33 @@ export const methodologySteps: readonly ContentSection[] = [
   { title: "Evaluación del aprendizaje", body: "Revisamos cómo se aplicaron los conceptos a un caso e identificamos qué habilidades conviene reforzar." },
 ];
 
+const dedicatedServices = Object.fromEntries(services.filter(({ id }) => id !== "educacion-financiera").map((service) => {
+  const details = serviceDetails[service.id];
+  return [serviceHref(service.id), {
+    title: service.title,
+    group: "Servicios",
+    description: service.body,
+    sections: [
+      { title: "Qué ofrecemos", body: service.description },
+      ...service.topics,
+      ...details.sections,
+      { title: "Recurso para practicar", body: "Consulta un ejemplo o una herramienta que puedas usar para explorar este tema.", links: [service.resource] },
+    ],
+    faq: details.faq,
+    next: { href: `/contacto/?servicio=${service.id}`, label: `Solicitar información sobre ${service.cardTitle.toLowerCase()}` },
+  }];
+})) satisfies Record<string, ContentPage>;
+
 export const pages: Readonly<Record<string, ContentPage>> = {
+  ...dedicatedServices,
   "/servicios/": {
     title: "Servicios de formación y análisis financiero",
     group: "Arkez Invest",
     description: "Educación financiera, análisis de mercados, formación práctica y consultoría para personas y empresas.",
-    sections: services,
-    cards: [educationCard, methodologyCard],
+    sections: services.map(({ id, title, body, cardTitle }) => ({
+      id, title, body, links: [{ href: serviceHref(id), label: `Ver servicio de ${cardTitle.toLowerCase()}` }],
+    })),
+    cards: [methodologyCard],
   },
   "/servicios/educacion-financiera/": {
     title: "Educación financiera para aprender y decidir",
@@ -116,8 +138,10 @@ export const pages: Readonly<Record<string, ContentPage>> = {
       { title: "Cómo leer la información", body: "Usa herramientas digitales para comparar fuentes, verificar su fecha y distinguir datos, opiniones y supuestos." },
       { title: "A quién está dirigida", body: "Personas que empiezan a organizar sus finanzas y equipos que quieren comprender conceptos financieros comunes. Cuéntanos qué decisiones quieres practicar y cuál es tu punto de partida." },
       { title: "Qué aprenderás en la formación", body: "Practica cómo organizar un presupuesto, distinguir ahorro de inversión y relacionar cada decisión con su objetivo y plazo. Si buscas cursos de educación financiera, puedes consultar qué contenidos responden a tus necesidades." },
+      ...serviceDetails["educacion-financiera"].sections,
       { title: "Metodología y ejemplo práctico", body: "Tras el diagnóstico, trabajamos con ejercicios y revisamos el aprendizaje. Por ejemplo, para comparar opciones de financiación anotamos el importe total, las comisiones y el calendario de pagos.", links: [{ href: "/servicios/metodologia/", label: "Conocer los cuatro pasos de la metodología" }, firstGuideLink] },
     ],
+    faq: serviceDetails["educacion-financiera"].faq,
     next: { href: "/contacto/?servicio=educacion-financiera", label: "Solicitar información sobre educación financiera" },
   },
   "/servicios/metodologia/": {
@@ -155,14 +179,14 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     sections: [
       { title: "Liquidez operativa", body: "Identifica cuándo vence cada obligación y qué recursos necesitas mantener disponibles para operar." },
       { title: "Horizonte y escenarios", body: "Distingue los recursos de corto plazo de aquellos con un horizonte mayor. Examina el impacto de cambios en ingresos, costos o tipo de cambio." },
-      { title: "Una práctica para tu equipo", body: "Usa un calendario de cobros y pagos ficticios para identificar una brecha de caja. Contrasta el escenario base con un retraso de cobro y registra qué decisión cambiaría.", links: [{ href: "/servicios/#consultoria-financiera", label: "Ver consultoría y planificación" }, { href: "/servicios/metodologia/", label: "Conocer la metodología" }] },
+      { title: "Una práctica para tu equipo", body: "Usa un calendario de cobros y pagos ficticios para identificar una brecha de caja. Contrasta el escenario base con un retraso de cobro y registra qué decisión cambiaría.", links: [{ href: "/servicios/consultoria-financiera/", label: "Ver consultoría y planificación" }, { href: "/servicios/metodologia/", label: "Conocer la metodología" }] },
     ],
     next: { href: "/contacto/?servicio=consultoria-financiera", label: "Consultar sobre formación y consultoría para empresas" },
   },
   "/recursos/": {
     title: "Recursos de aprendizaje financiero",
     group: "Arkez Invest",
-    description: "Guías, artículos y respuestas para practicar el análisis financiero y entender los mercados y sus riesgos.",
+    description: "Busca guías, plantillas, casos prácticos y artículos. Puedes leer los recursos en la web o guardar los archivos para practicar.",
     cards: [guidesCard, articlesCard, {
       label: "Preguntas frecuentes",
       href: "/recursos/preguntas-frecuentes/",
@@ -175,7 +199,12 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     group: "Recursos",
     description: "Ejercicios y preguntas para revisar fuentes, comparar escenarios y evaluar información financiera.",
     sections: [
-      { id: "comparar-escenarios", title: "Cómo comparar dos escenarios financieros", body: "Escribe un escenario base y otro que cambie una sola variable, como el plazo de cobro o la tasa de financiación. Compara las consecuencias para tu objetivo e identifica el dato que más puede cambiar la decisión.", links: [{ href: "/legal/riesgos/", label: "Identificar los riesgos relevantes" }] },
+      { id: "comparar-escenarios", title: "Cómo comparar dos escenarios financieros", body: "Abre el CSV en una hoja de cálculo con coma como separador de columnas. Copia las filas en blanco, usa la misma unidad y período, y cambia una sola variable. Calcula cada saldo final sumando saldo inicial y cobros y restando pagos. Anota la fuente del dato que cambiaste.", links: [{ href: "/recursos/archivos/plantilla-escenarios.csv", label: "Abrir la plantilla editable de escenarios (CSV)" }] },
+      { id: "liquidez-operativa", title: worksheets["liquidez-operativa"].title, body: worksheets["liquidez-operativa"].intro,
+        topics: worksheets["liquidez-operativa"].topics, links: [
+          { href: "/recursos/archivos/liquidez-operativa.pdf", label: "Ver el caso de liquidez operativa (PDF)" },
+          { href: "/recursos/archivos/plantilla-escenarios.csv", label: "Abrir la plantilla de escenarios (CSV)" },
+        ] },
       { id: "revisar-fuentes", title: "Lista de comprobación para revisar fuentes", body: "Registra quién publica el dato, su fecha, la unidad de medida y cómo se calculó. Si dos fuentes difieren, comprueba que describen el mismo período y concepto antes de elegir cómo usar sus datos." },
     ],
     cards: [startingCard, riskCard],
@@ -194,7 +223,7 @@ export const pages: Readonly<Record<string, ContentPage>> = {
       { title: "¿Qué pérdida podrías asumir?", body: "Piensa cómo afectaría una caída a tu objetivo y a tus otros gastos. Separa tu capacidad financiera de tu comodidad con la volatilidad." },
       { title: "¿Cómo funciona y cuánto cuesta?", body: "Revisa la documentación del instrumento y las comisiones, impuestos u otros costos aplicables. Identifica de qué depende su resultado." },
       { title: "¿Qué falta verificar?", body: "Anota la fuente consultada, sus posibles conflictos de interés y lo que desconoces antes de tomar una decisión." },
-      { title: "Ejemplo: un objetivo con fecha fija", body: "Si necesitas pagar una matrícula en seis meses, anota el importe y la fecha. Compara cuándo estaría disponible el dinero, cuánto cuesta retirarlo y qué ocurriría si el valor baja justo antes del pago. Registra la respuesta antes de pasar a otro instrumento." },
+      { title: "Ejemplo: un objetivo con fecha fija", body: "Si necesitas pagar una matrícula en seis meses, anota el importe y la fecha. Compara cuándo estaría disponible el dinero, cuánto cuesta retirarlo y qué ocurriría si el valor baja justo antes del pago. Registra la respuesta antes de pasar a otro instrumento.", links: [{ href: "/recursos/archivos/primeros-pasos-para-invertir.pdf", label: "Ver la lista de comprobación para invertir (PDF)" }] },
     ],
     next: { label: "Revisar los riesgos", href: riskCard.href },
   },
@@ -203,7 +232,7 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     group: "Recursos",
     description: "Explicaciones en español para interpretar los mercados, entender el riesgo y aplicar conceptos financieros.",
     sections: [
-      { id: "lectura-de-mercados", title: "Análisis técnico y fundamental: qué pregunta responde cada uno", body: "El fundamental examina factores como ventas, deuda y contexto económico. El técnico describe el comportamiento del precio y el volumen. Ante una caída de precio, puedes revisar si cambió la situación del emisor y, por separado, si el movimiento coincide con un cambio de volumen. Ninguna de estas observaciones determina por sí sola el precio siguiente.", links: [{ href: "/servicios/#analisis-de-mercados", label: "Explorar la formación en análisis de mercados" }] },
+      { id: "lectura-de-mercados", title: "Análisis técnico y fundamental: qué pregunta responde cada uno", body: "El fundamental examina factores como ventas, deuda y contexto económico. El técnico describe el comportamiento del precio y el volumen. Ante una caída de precio, puedes revisar si cambió la situación del emisor y, por separado, si el movimiento coincide con un cambio de volumen. Ninguna de estas observaciones determina por sí sola el precio siguiente.", topics: worksheets["lectura-de-mercados"].topics, links: [{ href: "/recursos/archivos/lectura-de-mercados.pdf", label: "Ver el caso guiado de análisis de mercados (PDF)" }] },
       { id: "inflacion", title: "Qué es la inflación y por qué cambia las comparaciones", body: "La inflación refleja un aumento general de los precios. Si el costo de lo que quieres comprar sube, necesitarás más dinero para la misma compra. Al comparar cantidades de períodos distintos, revisa qué índice estás utilizando y qué precios representa.", links: [{ href: "https://www.banrep.gov.co/es/glosario/inflacion-consumidor", label: "Banco de la República: inflación al consumidor" }] },
     ],
     cards: [diversificationCard],
@@ -277,9 +306,9 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     group: "Arkez Invest",
     description: "Información de contacto para consultas sobre educación, formación y consultoría financiera.",
     sections: [
-      { title: "Qué incluir en una consulta", body: "Indica qué servicio te interesa, si la consulta es para ti o para un equipo y qué objetivo te gustaría trabajar. Evita adjuntar documentos o incluir credenciales o datos de terceros.", links: [{ href: "/servicios/", label: "Comparar las áreas de servicio" }, { href: "/legal/privacidad/", label: "Consultar la privacidad de la vista previa" }] },
+      { title: "Qué incluir en una consulta", body: "Indica qué servicio te interesa, si la consulta es para ti o para un equipo y qué objetivo te gustaría trabajar. Evita adjuntar documentos o incluir credenciales o datos de terceros.", links: [{ href: "/legal/privacidad/", label: "Consultar la privacidad de la vista previa" }] },
     ],
-    next: { label: "Explorar los recursos", href: "/recursos/" },
+
   },
   "/legal/privacidad/": {
     title: "Privacidad",
@@ -309,6 +338,6 @@ export const pages: Readonly<Record<string, ContentPage>> = {
       { title: "Activos digitales", body: "Además de la volatilidad, considera el riesgo operativo, la custodia, el protocolo y los cambios regulatorios que puedan afectar al instrumento." },
       { title: "Cómo plantear un escenario de riesgo", body: "Identifica qué variable podría cambiar, como un plazo de venta o el tipo de cambio. Estima cómo afectaría el acceso al dinero y compara el resultado con tu objetivo.", links: [{ href: "/recursos/guias/#comparar-escenarios", label: "Practicar con la guía de escenarios" }, { href: "https://www.investor.gov/introduction-investing/investing-basics/what-risk", label: "Investor.gov: conceptos de riesgo de inversión" }] },
     ],
-    next: contactLink,
+
   },
 };

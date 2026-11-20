@@ -10,7 +10,7 @@ const contactPath = "/api/contacto/prueba";
 const maxBodyBytes = 256;
 const challengeLifetime = 5 * 60 * 1000;
 const types = {
-  ".css": "text/css", ".html": "text/html", ".ico": "image/x-icon", ".js": "text/javascript",
+  ".csv": "text/csv", ".pdf": "application/pdf", ".css": "text/css", ".html": "text/html", ".ico": "image/x-icon", ".js": "text/javascript",
   ".json": "application/json", ".png": "image/png", ".svg": "image/svg+xml", ".txt": "text/plain",
   ".webp": "image/webp", ".woff2": "font/woff2", ".xml": "application/xml",
 };
