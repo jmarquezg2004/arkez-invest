@@ -1,3 +1,4 @@
+import { services } from "./services";
 import { contactLink, educationLink, firstGuideLink, siteDescription, type SiteLink } from "./navigation";
 
 export type IconName = "book" | "layers" | "compass" | "shield" | "building" | "users" | "chart" | "file" | "message";
@@ -7,7 +8,9 @@ export type ContentCard = SiteLink & {
   icon: IconName;
 };
 
-type ContentSection = { id?: string; title: string; body: string };
+type Topic = { title: string; body: string };
+export type ContentSection = Topic & { id?: string; topics?: readonly Topic[]; links?: readonly SiteLink[] };
+type Editorial = { updated: string; sources: readonly SiteLink[] };
 
 export type ContentPage = {
   title: string;
@@ -17,42 +20,12 @@ export type ContentPage = {
   cards?: readonly ContentCard[];
   faq?: readonly ContentSection[];
   next?: SiteLink;
+  editorial?: Editorial;
 };
 
-const services = [
-  {
-    id: "educacion-financiera",
-    title: "Educación financiera",
-    description: "Comprende los conceptos que sustentan tus decisiones de ahorro, financiación e inversión.",
-    body: "Desarrolla una base para entender instrumentos, costos y riesgos. Aprende a relacionar estas variables con el objetivo, el plazo y la liquidez de cada decisión.",
-    icon: "book",
-  },
-  {
-    id: "analisis-de-mercados",
-    title: "Análisis de mercados",
-    description: "Interpreta tendencias, indicadores y fuentes de información financiera.",
-    body: "Aprende a leer indicadores en contexto, comparar fuentes y reconocer los supuestos detrás de una interpretación. El análisis ayuda a formular preguntas y evaluar escenarios.",
-    icon: "chart",
-  },
-  {
-    id: "formacion-practica",
-    title: "Formación práctica",
-    description: "Aplica conceptos y herramientas digitales con ejercicios y escenarios ilustrativos.",
-    body: "Organiza datos, compara alternativas y documenta tus supuestos en ejercicios que conectan los conceptos con decisiones de personas y empresas.",
-    icon: "layers",
-  },
-  {
-    id: "consultoria-financiera",
-    title: "Consultoría financiera",
-    description: "Estructura preguntas, criterios y escenarios para decisiones de personas y empresas.",
-    body: "La consultoría se orienta a comprender una situación financiera, identificar la información necesaria y estructurar el análisis de alternativas para tomar decisiones.",
-    icon: "compass",
-  },
-] satisfies readonly (ContentSection & { id: string; description: string; icon: IconName })[];
-
-export const serviceCards: readonly ContentCard[] = services.map(({ id, title, description, icon }) => ({
+export const serviceCards: readonly ContentCard[] = services.map(({ id, cardTitle, description, icon }) => ({
   href: `/servicios/#${id}`,
-  label: title,
+  label: cardTitle,
   description,
   icon,
 }));
@@ -127,58 +100,67 @@ export const methodologySteps: readonly ContentSection[] = [
 
 export const pages: Readonly<Record<string, ContentPage>> = {
   "/servicios/": {
-    title: "Servicios",
+    title: "Servicios de formación y análisis financiero",
     group: "Arkez Invest",
     description: "Educación financiera, análisis de mercados, formación práctica y consultoría para personas y empresas.",
     sections: services,
     cards: [educationCard, methodologyCard],
   },
   "/servicios/educacion-financiera/": {
-    title: "Educación financiera",
+    title: "Educación financiera para aprender y decidir",
     group: "Servicios",
     description: "Desarrolla conocimientos para analizar decisiones financieras, entender los mercados y evaluar los riesgos de distintos instrumentos.",
     sections: [
       { title: "Fundamentos de inversión", body: "Explora la relación entre objetivos, horizonte, liquidez y tolerancia a pérdidas. Aprende a distinguir una explicación educativa de una recomendación personalizada." },
       { title: "Cómo funcionan los instrumentos", body: "Conoce las diferencias entre acciones, fondos, ETF y activos digitales. Cada instrumento tiene condiciones, costos y riesgos propios." },
       { title: "Cómo leer la información", body: "Usa herramientas digitales para comparar fuentes, verificar su fecha y distinguir datos, opiniones y supuestos." },
+      { title: "A quién está dirigida", body: "Personas que empiezan a organizar sus finanzas y equipos que quieren comprender conceptos financieros comunes. Cuéntanos qué decisiones quieres practicar y cuál es tu punto de partida." },
+      { title: "Qué aprenderás en la formación", body: "Practica cómo organizar un presupuesto, distinguir ahorro de inversión y relacionar cada decisión con su objetivo y plazo. Si buscas cursos de educación financiera, puedes consultar qué contenidos responden a tus necesidades." },
+      { title: "Metodología y ejemplo práctico", body: "Tras el diagnóstico, trabajamos con ejercicios y revisamos el aprendizaje. Por ejemplo, para comparar opciones de financiación anotamos el importe total, las comisiones y el calendario de pagos.", links: [{ href: "/servicios/metodologia/", label: "Conocer los cuatro pasos de la metodología" }, firstGuideLink] },
     ],
-    next: firstGuideLink,
+    next: { href: "/contacto/?servicio=educacion-financiera", label: "Solicitar información sobre educación financiera" },
   },
   "/servicios/metodologia/": {
-    title: "Nuestra metodología",
+    title: "Nuestra metodología de formación financiera",
     group: "Servicios",
     description: "Conectamos conceptos financieros, análisis de escenarios y herramientas digitales para ejercitar la toma de decisiones.",
     sections: methodologySteps,
     next: { label: "Ver guías prácticas", href: guidesCard.href },
   },
   "/para-quien/": {
-    title: "¿Para quién es Arkez Invest?",
+    title: "Formación financiera para personas y empresas",
     group: "Arkez Invest",
     description: "Formación y consultoría financiera para personas y empresas que quieren desarrollar sus capacidades de análisis.",
+    sections: [
+      { title: "Para decidir sobre tus finanzas", body: "Si buscas ordenar ingresos, gastos o metas de inversión, el enfoque para personas parte de tus objetivos, plazos y capacidad de asumir riesgos." },
+      { title: "Para planificar con tu equipo", body: "Si necesitas estudiar liquidez o financiación, el enfoque para empresas parte de los flujos de caja y los supuestos que influyen en las decisiones del equipo." },
+    ],
     cards: [personsCard, businessCard],
   },
   "/para-quien/personas/": {
-    title: "Para personas",
+    title: "Formación en finanzas personales",
     group: "Para quién",
     description: "Desarrolla habilidades para entender tus finanzas, evaluar información y comparar alternativas según tus objetivos.",
     sections: [
       { title: "Si estás empezando", body: "Diferencia ahorro, inversión y dinero para gastos próximos. Establecer esa distinción te ayuda a entender qué dinero puedes exponer a pérdidas y durante cuánto tiempo." },
       { title: "Si ya inviertes", body: "Revisa si tu exposición se concentra en un solo mercado, sector, emisor o moneda. Comprueba también los costos y las condiciones para retirar el dinero." },
+      { title: "Un ejercicio para priorizar objetivos", body: "Distingue los gastos próximos de una meta de largo plazo y revisa qué importe puedes reservar periódicamente. Si las fechas o los ingresos cambian, compara cómo se ajusta cada meta.", links: [educationLink, firstGuideLink] },
     ],
-    next: firstGuideLink,
+    next: { href: "/contacto/?servicio=educacion-financiera", label: "Consultar sobre formación para personas" },
   },
   "/para-quien/empresas/": {
-    title: "Para empresas",
+    title: "Formación en finanzas empresariales",
     group: "Para quién",
     description: "Formación y consultoría para fortalecer el análisis financiero y la planificación de tu empresa.",
     sections: [
       { title: "Liquidez operativa", body: "Identifica cuándo vence cada obligación y qué recursos necesitas mantener disponibles para operar." },
       { title: "Horizonte y escenarios", body: "Distingue los recursos de corto plazo de aquellos con un horizonte mayor. Examina el impacto de cambios en ingresos, costos o tipo de cambio." },
+      { title: "Una práctica para tu equipo", body: "Usa un calendario de cobros y pagos ficticios para identificar una brecha de caja. Contrasta el escenario base con un retraso de cobro y registra qué decisión cambiaría.", links: [{ href: "/servicios/#consultoria-financiera", label: "Ver consultoría y planificación" }, { href: "/servicios/metodologia/", label: "Conocer la metodología" }] },
     ],
-    next: { label: "Conocer la metodología", href: methodologyCard.href },
+    next: { href: "/contacto/?servicio=consultoria-financiera", label: "Consultar sobre formación y consultoría para empresas" },
   },
   "/recursos/": {
-    title: "Recursos para aprender",
+    title: "Recursos de aprendizaje financiero",
     group: "Arkez Invest",
     description: "Guías, artículos y respuestas para practicar el análisis financiero y entender los mercados y sus riesgos.",
     cards: [guidesCard, articlesCard, {
@@ -189,50 +171,69 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     }],
   },
   "/recursos/guias/": {
-    title: "Guías prácticas",
+    title: "Guías prácticas de análisis financiero",
     group: "Recursos",
     description: "Ejercicios y preguntas para revisar fuentes, comparar escenarios y evaluar información financiera.",
+    sections: [
+      { id: "comparar-escenarios", title: "Cómo comparar dos escenarios financieros", body: "Escribe un escenario base y otro que cambie una sola variable, como el plazo de cobro o la tasa de financiación. Compara las consecuencias para tu objetivo e identifica el dato que más puede cambiar la decisión.", links: [{ href: "/legal/riesgos/", label: "Identificar los riesgos relevantes" }] },
+      { id: "revisar-fuentes", title: "Lista de comprobación para revisar fuentes", body: "Registra quién publica el dato, su fecha, la unidad de medida y cómo se calculó. Si dos fuentes difieren, comprueba que describen el mismo período y concepto antes de elegir cómo usar sus datos." },
+    ],
     cards: [startingCard, riskCard],
   },
   "/recursos/guias/primeros-pasos/": {
     title: "Primeros pasos para invertir",
     group: "Guías",
     description: "Una guía de formación con cinco preguntas para ordenar tu decisión antes de comparar instrumentos.",
+    editorial: { updated: "2026-11-20", sources: [
+      { label: "Investor.gov: horizonte y asignación de activos", href: "https://www.investor.gov/introduction-investing/getting-started/asset-allocation" },
+      { label: "Investor.gov: efecto de las comisiones y gastos", href: "https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins/updated" },
+    ] },
     sections: [
       { title: "¿Cuál es tu objetivo?", body: "Expresa para qué necesitas el dinero. Un objetivo concreto te ayuda a comparar alternativas con el mismo propósito." },
       { title: "¿Cuándo lo necesitarás?", body: "Distingue entre una fecha definida y un horizonte flexible. Revisa también cuánto tardarías en disponer del dinero." },
       { title: "¿Qué pérdida podrías asumir?", body: "Piensa cómo afectaría una caída a tu objetivo y a tus otros gastos. Separa tu capacidad financiera de tu comodidad con la volatilidad." },
       { title: "¿Cómo funciona y cuánto cuesta?", body: "Revisa la documentación del instrumento y las comisiones, impuestos u otros costos aplicables. Identifica de qué depende su resultado." },
       { title: "¿Qué falta verificar?", body: "Anota la fuente consultada, sus posibles conflictos de interés y lo que desconoces antes de tomar una decisión." },
+      { title: "Ejemplo: un objetivo con fecha fija", body: "Si necesitas pagar una matrícula en seis meses, anota el importe y la fecha. Compara cuándo estaría disponible el dinero, cuánto cuesta retirarlo y qué ocurriría si el valor baja justo antes del pago. Registra la respuesta antes de pasar a otro instrumento." },
     ],
     next: { label: "Revisar los riesgos", href: riskCard.href },
   },
   "/recursos/articulos/": {
-    title: "Artículos de educación financiera",
+    title: "Artículos sobre mercados financieros y riesgo",
     group: "Recursos",
     description: "Explicaciones en español para interpretar los mercados, entender el riesgo y aplicar conceptos financieros.",
+    sections: [
+      { id: "lectura-de-mercados", title: "Análisis técnico y fundamental: qué pregunta responde cada uno", body: "El fundamental examina factores como ventas, deuda y contexto económico. El técnico describe el comportamiento del precio y el volumen. Ante una caída de precio, puedes revisar si cambió la situación del emisor y, por separado, si el movimiento coincide con un cambio de volumen. Ninguna de estas observaciones determina por sí sola el precio siguiente.", links: [{ href: "/servicios/#analisis-de-mercados", label: "Explorar la formación en análisis de mercados" }] },
+      { id: "inflacion", title: "Qué es la inflación y por qué cambia las comparaciones", body: "La inflación refleja un aumento general de los precios. Si el costo de lo que quieres comprar sube, necesitarás más dinero para la misma compra. Al comparar cantidades de períodos distintos, revisa qué índice estás utilizando y qué precios representa.", links: [{ href: "https://www.banrep.gov.co/es/glosario/inflacion-consumidor", label: "Banco de la República: inflación al consumidor" }] },
+    ],
     cards: [diversificationCard],
   },
   "/recursos/articulos/que-es-diversificar/": {
-    title: "Qué significa diversificar",
+    title: "Qué es diversificar una inversión",
     group: "Artículos",
     description: "Diversificar consiste en repartir la exposición para depender menos de un único resultado. Este artículo explica cómo analizar esa exposición.",
+    editorial: { updated: "2026-11-20", sources: [
+      { label: "Investor.gov: diversificación de inversiones", href: "https://www.investor.gov/introduction-investing/investing-basics/save-and-invest/diversify-your-investments" },
+      { label: "Investor.gov: asignación de activos y diversificación", href: "https://www.investor.gov/introduction-investing/getting-started/asset-allocation" },
+    ] },
     sections: [
-      { title: "Mira lo que hay debajo", body: "Dos fondos pueden parecer distintos y tener las mismas empresas principales. Compara sus posiciones para saber cuánto se solapan." },
+      { title: "Ejemplo de concentración oculta", body: "Imagina dos fondos con las mismas empresas principales. Si estas representan buena parte de ambos fondos, comprar los dos puede dejarte expuesto a los mismos movimientos. Compara las posiciones y sus pesos para detectar el solapamiento." },
       { title: "Revisa más de una dimensión", body: "Sectores, países, monedas, emisores y tipos de instrumento son dimensiones diferentes. Algunas exposiciones se pueden mover en la misma dirección ante un evento." },
       { title: "La pérdida sigue siendo posible", body: "Una cartera diversificada puede perder valor. La diversificación ayuda a gestionar exposición y concentración. Su efecto depende de los activos y del escenario." },
     ],
     next: { label: "Explorar la guía de inicio", href: firstGuideLink.href },
   },
   "/recursos/preguntas-frecuentes/": {
-    title: "Preguntas frecuentes",
+    title: "Preguntas frecuentes sobre formación y consultoría financiera",
     group: "Recursos",
     description: "Respuestas sobre la formación, la consultoría y el uso de los recursos de Arkez Invest.",
     faq: [
       { title: "¿Por dónde empiezo?", body: "La guía Primeros pasos para invertir reúne cinco preguntas sobre objetivos, plazos, pérdidas, costos y fuentes." },
       { title: "¿El contenido es una recomendación de inversión?", body: "Los contenidos de este sitio son educativos y generales. Cada decisión depende de las circunstancias, objetivos y riesgos de quien la toma." },
       { title: "¿Puedo abrir una cuenta desde el sitio?", body: "La actividad de Arkez Invest se centra en educación, formación y consultoría. La apertura de cuentas, la custodia de activos y la ejecución de operaciones quedan fuera de su actividad." },
-      { title: "¿Puedo enviar documentos o datos financieros?", body: "La vista previa carece de canales de envío. Evita compartir documentos de identidad o información financiera para consultas educativas generales." },
+      { title: "¿Necesito experiencia previa?", body: "La formación puede partir de conceptos básicos. Indica qué temas has estudiado y qué decisión quieres entender para orientar la consulta." },
+      { title: "¿En qué se diferencia la formación de la consultoría?", body: "La formación desarrolla habilidades mediante ejercicios. La consultoría estructura una pregunta y un análisis de alternativas a partir de un objetivo concreto." },
+      { title: "¿Puedo enviar documentos o datos financieros?", body: "Utiliza los datos de ejemplo para probar el formulario. La demostración transmite una prueba técnica y deja tu nombre, correo y mensaje en el navegador." },
     ],
     next: firstGuideLink,
   },
@@ -240,6 +241,10 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     title: "Sobre Arkez Invest",
     group: "Arkez Invest",
     description: siteDescription,
+    sections: [
+      { title: "Identidad institucional", body: "Trabajamos con personas y equipos que quieren comprender sus decisiones financieras. La educación aporta conceptos, la formación los pone en práctica y la consultoría estructura el análisis de alternativas." },
+      { title: "Cómo conectamos formación y tecnología", body: "Usamos herramientas digitales para organizar fuentes y comparar escenarios. El diagnóstico y la evaluación permiten revisar qué habilidades se aplicaron y qué queda por practicar.", links: [{ href: "/servicios/metodologia/", label: "Conocer la metodología institucional" }, { href: "/servicios/", label: "Consultar las áreas de servicio" }] },
+    ],
     cards: [
       { label: "Misión y equipo", href: "/nosotros/mision-y-equipo/", description: "Conoce el propósito y el enfoque de Arkez Invest.", icon: "users" },
       { label: "Transparencia", href: "/nosotros/transparencia/", description: "Consulta el alcance de los contenidos y la forma de presentarlos.", icon: "shield" },
@@ -252,6 +257,7 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     sections: [
       { title: "Nuestra misión", body: "Hacer comprensibles los conceptos financieros y desarrollar la capacidad de interpretar mercados, evaluar riesgos y tomar decisiones informadas." },
       { title: "Nuestro enfoque", body: "Combinamos conceptos financieros, análisis de mercados y herramientas tecnológicas. Integramos herramientas fintech en ejercicios para organizar y comparar información financiera." },
+      { title: "Funciones que reúne nuestro trabajo", body: "La formación organiza contenidos y ejercicios. El análisis selecciona fuentes y variables. La consultoría define preguntas y criterios de comparación para cada objetivo." },
     ],
     next: { label: "Ver transparencia", href: "/nosotros/transparencia/" },
   },
@@ -262,15 +268,16 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     sections: [
       { title: "Alcance de nuestra actividad", body: "Arkez Invest presta servicios de educación, formación y consultoría financiera. La apertura de cuentas, la intermediación de operaciones y la custodia de activos quedan fuera de su actividad." },
       { title: "Ejemplos y referencias", body: "Los ejemplos y gráficos usan información ilustrativa para explicar conceptos. Para comparar instrumentos específicos, consulta la documentación oficial del emisor y verifica su vigencia." },
+      { title: "Responsabilidad editorial", body: "Arkez Invest es responsable de los contenidos del sitio. Las guías y artículos individuales identifican su revisión editorial y sus fuentes." },
     ],
     cards: [riskCard],
   },
   "/contacto/": {
-    title: "Contacto",
+    title: "Contacto para formación y consultoría financiera",
     group: "Arkez Invest",
     description: "Información de contacto para consultas sobre educación, formación y consultoría financiera.",
     sections: [
-      { title: "Canales de contacto", body: "Los canales oficiales se habilitarán tras su verificación. Puedes consultar los servicios y recursos disponibles en esta vista previa." },
+      { title: "Qué incluir en una consulta", body: "Indica qué servicio te interesa, si la consulta es para ti o para un equipo y qué objetivo te gustaría trabajar. Evita adjuntar documentos o incluir credenciales o datos de terceros.", links: [{ href: "/servicios/", label: "Comparar las áreas de servicio" }, { href: "/legal/privacidad/", label: "Consultar la privacidad de la vista previa" }] },
     ],
     next: { label: "Explorar los recursos", href: "/recursos/" },
   },
@@ -279,7 +286,7 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     group: "Información del sitio",
     description: "Información sobre el manejo de datos durante la revisión de este sitio informativo de Arkez Invest.",
     sections: [
-      { title: "Datos en esta versión", body: "El sitio carece de formularios, cuentas y herramientas de analítica. El operador del entorno de vista previa puede generar registros técnicos de acceso." },
+      { title: "Datos en esta versión", body: "El nombre, correo y mensaje de prueba permanecen en el navegador. El servidor local recibe una prueba técnica de un solo uso y un indicador antispam, que procesa en memoria. El sitio carece de cuentas y analítica." },
       { title: "Antes de habilitar contacto", body: "La versión con contacto deberá identificar al responsable del tratamiento y explicar las finalidades, destinatarios, conservación y el canal para ejercer derechos aplicables." },
     ],
   },
@@ -293,13 +300,14 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     ],
   },
   "/legal/riesgos/": {
-    title: "Riesgos de inversión",
+    title: "Gestión del riesgo financiero en inversiones",
     group: "Información del sitio",
     description: "Conceptos para identificar y evaluar riesgos de inversión, incluida la posibilidad de perder parte o todo el capital.",
     sections: [
       { title: "Mercado y liquidez", body: "El precio puede bajar y puede resultar difícil vender al precio o en el momento esperado." },
       { title: "Moneda, concentración y contraparte", body: "El tipo de cambio puede afectar el resultado. La exposición a pocas posiciones o a una única contraparte puede amplificar las pérdidas." },
       { title: "Activos digitales", body: "Además de la volatilidad, considera el riesgo operativo, la custodia, el protocolo y los cambios regulatorios que puedan afectar al instrumento." },
+      { title: "Cómo plantear un escenario de riesgo", body: "Identifica qué variable podría cambiar, como un plazo de venta o el tipo de cambio. Estima cómo afectaría el acceso al dinero y compara el resultado con tu objetivo.", links: [{ href: "/recursos/guias/#comparar-escenarios", label: "Practicar con la guía de escenarios" }, { href: "https://www.investor.gov/introduction-investing/investing-basics/what-risk", label: "Investor.gov: conceptos de riesgo de inversión" }] },
     ],
     next: contactLink,
   },

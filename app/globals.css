@@ -398,3 +398,34 @@ a:focus-visible, summary:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; }
 }
+
+.content-topic { margin-top: .9rem; }
+.content-sections .content-topic h3 { margin-bottom: .2rem; font-weight: 800; }
+.reading-links { margin-top: .7rem; display: grid; gap: .45rem; overflow-wrap: anywhere; }
+.reading-links a, .editorial-byline a { color: #78520f; font-weight: 750; text-decoration: underline; text-underline-offset: .18em; }
+.editorial-byline { color: var(--color-slate-copy); margin-bottom: 1.4rem; }
+.editorial-sources { margin-top: 1.4rem; }
+.editorial-sources h2, .faq-section h2, .contact-section h2 { font-size: 1.35rem; font-weight: 820; }
+.faq-section h2 { margin-bottom: .75rem; }
+.faq-list summary h3 { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 1rem; font-size: inherit; }
+
+.contact-section { max-width: 48rem; margin-bottom: 2rem; padding: clamp(1rem, 3vw, 2rem); border: 1px solid #dce2ea; border-radius: .7rem; }
+.contact-section > p { margin-top: .4rem; color: var(--color-slate-copy); }
+.contact-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .95rem; margin-top: 1rem; }
+.contact-field-wide { grid-column: 1 / -1; }
+.contact-fields label { display: block; margin-bottom: .3rem; font-weight: 750; }
+.contact-fields input, .contact-fields textarea, .contact-fields select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #8b9bae;
+  border-radius: .35rem;
+  background: white;
+  padding: .5rem .65rem;
+}
+.contact-fields textarea { resize: vertical; }
+.contact-fields :is(input, textarea, select):focus-visible { outline: 2px solid #9e6511; outline-offset: 2px; }
+.contact-actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1rem; }
+.contact-actions button:disabled { cursor: default; opacity: .68; }
+.contact-status:not(:empty), .contact-error { margin-top: .65rem; }
+.contact-error { color: #972e26; font-weight: 700; }
+@media (max-width: 560px) { .contact-fields { grid-template-columns: minmax(0, 1fr); } }

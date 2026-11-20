@@ -1,0 +1,150 @@
+type SeoEntry = {
+  title: string;
+  description: string;
+  primary: string;
+  secondary: readonly string[];
+  intent: "institucional" | "comercial" | "informativa" | "navegacional";
+};
+
+export const seoData: Readonly<Record<string, SeoEntry>> = {
+  "/": {
+    title: "Educación y consultoría financiera con Arkez Invest",
+    description: "Arkez Invest desarrolla capacidades financieras en personas y empresas mediante educación, consultoría, análisis de mercados y herramientas tecnológicas.",
+    primary: "educación y consultoría financiera",
+    secondary: ["formación financiera", "herramientas tecnológicas para inversiones"],
+    intent: "institucional",
+  },
+  "/servicios/": {
+    title: "Formación y análisis de mercados financieros | Arkez",
+    description: "Explora los servicios de Arkez Invest en educación financiera, análisis de mercados, formación práctica en inversiones y consultoría para personas y empresas.",
+    primary: "servicios de formación financiera",
+    secondary: ["análisis de mercados financieros", "consultoría financiera", "formación práctica en inversiones"],
+    intent: "comercial",
+  },
+  "/servicios/educacion-financiera/": {
+    title: "Cursos de educación financiera y práctica | Arkez Invest",
+    description: "Conoce el enfoque de Arkez Invest para aprender a organizar tus finanzas, comparar costos y comprender instrumentos de inversión con ejercicios prácticos.",
+    primary: "cursos de educación financiera",
+    secondary: ["conceptos básicos de inversión", "aprendizaje financiero"],
+    intent: "comercial",
+  },
+  "/servicios/metodologia/": {
+    title: "Metodología de formación financiera | Arkez Invest",
+    description: "Conoce los cuatro pasos de la formación de Arkez Invest: diagnóstico, ejercicios prácticos, uso de herramientas digitales y evaluación del aprendizaje.",
+    primary: "metodología de formación financiera",
+    secondary: ["diagnóstico de aprendizaje", "evaluación de competencias financieras"],
+    intent: "informativa",
+  },
+  "/para-quien/": {
+    title: "Formación financiera para personas y empresas | Arkez",
+    description: "Identifica el enfoque financiero adecuado para ti o tu organización. Compara las propuestas de Arkez Invest para decisiones personales y equipos de empresa.",
+    primary: "formación financiera para personas y empresas",
+    secondary: ["formación para equipos", "capacidades financieras"],
+    intent: "comercial",
+  },
+  "/para-quien/personas/": {
+    title: "Formación práctica en finanzas personales | Arkez Invest",
+    description: "Aprende a organizar ingresos y gastos, definir objetivos de ahorro y comparar costos y riesgos de inversión con la formación de Arkez Invest para personas.",
+    primary: "finanzas personales",
+    secondary: ["presupuesto personal", "objetivos de ahorro"],
+    intent: "comercial",
+  },
+  "/para-quien/empresas/": {
+    title: "Formación en finanzas empresariales | Arkez Invest",
+    description: "Fortalece el criterio financiero de tu equipo con Arkez Invest. Aprende a analizar liquidez, proyectar flujos de caja y documentar escenarios de planificación.",
+    primary: "finanzas empresariales",
+    secondary: ["flujo de caja", "liquidez operativa", "planificación financiera"],
+    intent: "comercial",
+  },
+  "/recursos/": {
+    title: "Recursos para el aprendizaje financiero | Arkez Invest",
+    description: "Encuentra guías, artículos y preguntas frecuentes de Arkez Invest para aprender a interpretar información financiera, comparar alternativas y evaluar riesgos.",
+    primary: "recursos de aprendizaje financiero",
+    secondary: ["material educativo financiero", "recursos sobre inversión"],
+    intent: "informativa",
+  },
+  "/recursos/guias/": {
+    title: "Guías prácticas de análisis financiero | Arkez Invest",
+    description: "Pon en práctica conceptos financieros con guías de Arkez Invest para definir objetivos, documentar fuentes y comparar escenarios antes de tomar decisiones.",
+    primary: "guías prácticas de análisis financiero",
+    secondary: ["ejercicios de finanzas", "listas de comprobación de inversión"],
+    intent: "informativa",
+  },
+  "/recursos/guias/primeros-pasos/": {
+    title: "Primeros pasos para invertir con criterio | Arkez Invest",
+    description: "Antes de invertir, define tu objetivo, el plazo y la pérdida que puedes asumir. Usa cinco preguntas para comprobar costos, condiciones y fuentes de información.",
+    primary: "primeros pasos para invertir",
+    secondary: ["cómo empezar a invertir", "costos y riesgos de inversión"],
+    intent: "informativa",
+  },
+  "/recursos/articulos/": {
+    title: "Artículos para entender mercados y riesgo | Arkez Invest",
+    description: "Lee artículos educativos de Arkez Invest sobre diversificación, inflación, análisis técnico y fundamental, y herramientas para interpretar datos financieros.",
+    primary: "artículos sobre mercados y riesgo",
+    secondary: ["análisis técnico y fundamental", "lectura de indicadores financieros"],
+    intent: "informativa",
+  },
+  "/recursos/articulos/que-es-diversificar/": {
+    title: "Qué es diversificar y cómo evaluar el riesgo | Arkez",
+    description: "Entiende qué significa diversificar una inversión, cómo detectar exposiciones que se solapan y qué riesgos persisten aunque cambie la distribución.",
+    primary: "qué es diversificar una inversión",
+    secondary: ["riesgo de concentración", "exposición y solapamiento"],
+    intent: "informativa",
+  },
+  "/recursos/preguntas-frecuentes/": {
+    title: "Preguntas sobre formación y consultoría | Arkez Invest",
+    description: "Resuelve dudas sobre la formación y la consultoría de Arkez Invest: cómo empezar, qué temas puedes estudiar y cómo solicitar información sobre los servicios.",
+    primary: "preguntas sobre formación financiera",
+    secondary: ["dudas sobre consultoría", "requisitos para aprender finanzas"],
+    intent: "informativa",
+  },
+  "/nosotros/": {
+    title: "Sobre Arkez Invest y su enfoque de formación financiera",
+    description: "Conoce Arkez Invest, empresa de educación, formación y consultoría financiera para personas y empresas. Explora su misión, metodología y áreas de trabajo.",
+    primary: "Arkez Invest",
+    secondary: ["empresa de formación y consultoría", "identidad institucional"],
+    intent: "institucional",
+  },
+  "/nosotros/mision-y-equipo/": {
+    title: "Misión y equipo de Arkez Invest | Enfoque institucional",
+    description: "Conoce la misión de Arkez Invest, su enfoque de aprendizaje y las funciones que articulan la formación, el análisis de mercados y la consultoría financiera.",
+    primary: "misión de Arkez Invest",
+    secondary: ["enfoque institucional", "trabajo de formación y análisis"],
+    intent: "institucional",
+  },
+  "/nosotros/transparencia/": {
+    title: "Transparencia y alcance de los servicios | Arkez Invest",
+    description: "Consulta el alcance de la formación y la consultoría de Arkez Invest, cómo se identifican los ejemplos educativos y qué actividad queda fuera de sus servicios.",
+    primary: "alcance de los servicios de Arkez Invest",
+    secondary: ["transparencia institucional", "contenido educativo financiero"],
+    intent: "institucional",
+  },
+  "/contacto/": {
+    title: "Contacto para formación y consultoría | Arkez Invest",
+    description: "Conoce cómo solicitar información sobre educación, análisis de mercados, formación práctica y consultoría. Prueba el formulario local con datos de ejemplo.",
+    primary: "contactar con Arkez Invest",
+    secondary: ["solicitar información de formación", "consulta sobre servicios"],
+    intent: "navegacional",
+  },
+  "/legal/privacidad/": {
+    title: "Privacidad y uso de datos de la vista previa | Arkez",
+    description: "Consulta cómo funciona la privacidad de esta vista previa de Arkez Invest, qué información queda en el navegador y qué requiere autorización antes de activarse.",
+    primary: "privacidad de Arkez Invest",
+    secondary: ["uso de datos en la vista previa"],
+    intent: "navegacional",
+  },
+  "/legal/terminos/": {
+    title: "Términos de uso del sitio de Arkez Invest | Vista previa",
+    description: "Revisa las condiciones de consulta de Arkez Invest, el carácter educativo de sus ejemplos y el uso previsto de la información y del formulario de demostración.",
+    primary: "términos de uso de Arkez Invest",
+    secondary: ["condiciones de consulta", "uso educativo"],
+    intent: "navegacional",
+  },
+  "/legal/riesgos/": {
+    title: "Gestión del riesgo financiero: conceptos | Arkez Invest",
+    description: "Identifica riesgos de inversión como mercado, liquidez, contraparte, moneda y concentración. Aprende a plantear escenarios para evaluar posibles pérdidas.",
+    primary: "gestión del riesgo financiero",
+    secondary: ["riesgo de mercado", "riesgo de liquidez", "riesgo de contraparte"],
+    intent: "informativa",
+  },
+};

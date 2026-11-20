@@ -3,19 +3,11 @@ import { Building2, Globe2, SlidersHorizontal, Target, Users } from "lucide-reac
 import { FeatureGrid } from "@/components/feature-grid";
 import { CapabilitiesPanel } from "@/components/capabilities-panel";
 import { methodologySteps, serviceCards } from "@/lib/content";
-import { legacyLinks, siteDescription, siteName } from "@/lib/navigation";
+import { legacyLinks } from "@/lib/navigation";
+import { pageMetadata } from "@/lib/seo";
+import { StructuredData } from "@/components/structured-data";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-  openGraph: {
-    title: "Arkez Invest | Educación, formación y consultoría financiera",
-    description: siteDescription,
-    url: "/",
-    siteName,
-    locale: "es",
-    type: "website",
-  },
-};
+export const metadata: Metadata = pageMetadata("/");
 
 const topics = [
   { label: "Mercados e instrumentos", href: "/servicios/#analisis-de-mercados", icon: Globe2 },
@@ -53,6 +45,7 @@ const audiences = [
 export default function Home() {
   return (
     <>
+      <StructuredData path="/" />
       <section className="home-hero" aria-labelledby="home-title">
         <div className="container-shell hero-grid">
           <div className="hero-copy">

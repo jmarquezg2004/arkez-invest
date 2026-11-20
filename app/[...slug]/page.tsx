@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContentPage } from "@/components/content-page";
 import { pages } from "@/lib/content";
-import { siteName } from "@/lib/navigation";
+import { pageMetadata } from "@/lib/seo";
+import { StructuredData } from "@/components/structured-data";
 
 type RouteProps = { params: Promise<{ slug: string[] }> };
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return Object.keys(pages).map((path) => ({ slug: path.split("/").filter(Boolean) }));
+  return Object.keys(pages).filter((path) => path !== "/contacto/").map((path) => ({ slug: path.split("/").filter(Boolean) }));
 }
 
 export async function generateMetadata({ params }: RouteProps): Promise<Metadata> {
@@ -17,24 +18,17 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   const page = pages[path];
   if (!page) notFound();
 
-  return {
-    title: page.title,
-    description: page.description,
-    alternates: { canonical: path },
-    openGraph: {
-      title: `${page.title} | ${siteName}`,
-      description: page.description,
-      url: path,
-      type: "website",
-      siteName,
-      locale: "es",
-    },
-  };
+  return pageMetadata(path, page.editorial);
 }
 
 export default async function RoutedPage({ params }: RouteProps) {
   const path = `/${(await params).slug.join("/")}/`;
   const page = pages[path];
   if (!page) notFound();
-  return <ContentPage page={page} path={path} />;
+  return (
+    <>
+      <StructuredData page={page} path={path} />
+      <ContentPage page={page} path={path} />
+    </>
+  );
 }

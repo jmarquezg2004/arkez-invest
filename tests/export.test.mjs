@@ -23,17 +23,31 @@ function read(route) {
 
 test("cada ruta corporativa se genera con un título, un h1 y canonical propios", () => {
   const titles = new Set();
+  const descriptions = new Set();
+  const headings = new Set();
   for (const route of routes) {
     const html = read(route);
     assert.match(html, /<html lang="es"/, route);
     assert.match(html, /<main id="contenido"/, route);
     assert.equal((html.match(/<h1[\s>]/g) ?? []).length, 1, route);
     assert.ok(html.includes(`href="https://arkezinvest.com${route}"`), route);
-    assert.match(html, /<meta name="description" content="[^"]+"/, route);
+    const description = html.match(/<meta name="description" content="([^"]+)"/)?.[1];
+    assert.ok(description && description.length >= 140 && description.length <= 160 && !descriptions.has(description), route);
+    descriptions.add(description);
     assert.match(html, /<meta name="robots" content="noindex, nofollow"/, route);
+    assert.match(html, /property="og:image" content="https:\/\/arkezinvest.com\/brand\/share.png"/, route);
+    assert.match(html, /name="twitter:card" content="summary_large_image"/, route);
     const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
-    assert.ok(title && !titles.has(title), `Título ausente o duplicado en ${route}`);
+    assert.ok(title && title.length >= 50 && title.length <= 60 && !titles.has(title), `Título ausente, duplicado o fuera de rango en ${route}: ${title}`);
     titles.add(title);
+    const heading = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1].replace(/<[^>]+>/g, "");
+    assert.ok(heading && !headings.has(heading), route);
+    headings.add(heading);
+    let previous = 0;
+    for (const [, level] of html.matchAll(/<h([1-6])(?:\s|>)/g)) {
+      assert.ok(Number(level) <= previous + 1, `Salto de jerarquía en ${route}`);
+      previous = Number(level);
+    }
   }
 });
 
@@ -83,11 +97,41 @@ test("la portada enlaza los servicios y públicos y comparte los cuatro pasos me
   }
 });
 
-test("la vista previa no incluye formularios ni integraciones de las páginas antiguas", () => {
+test("el contacto de prueba carece de atributos que serialicen datos personales", () => {
   const legacy = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   for (const html of [...routes.map(read), legacy]) {
-    assert.doesNotMatch(html, /<(?:form|iframe|textarea)\b|formspree\.io|rss2json\.com|raw\.githubusercontent\.com|fonts\.googleapis\.com/i);
+    assert.doesNotMatch(html, /<iframe\b|formspree\.io|rss2json\.com|raw\.githubusercontent\.com|fonts\.googleapis\.com/i);
     assert.doesNotMatch(html, /<script[^>]*src="https?:\/\//i);
+  }
+  for (const route of routes.filter((route) => route !== "/contacto/")) {
+    assert.doesNotMatch(read(route), /<form\b/);
+  }
+  const form = read("/contacto/").match(/<form[\s\S]*?<\/form>/)?.[0];
+  assert.ok(form);
+  assert.match(form, /method="post"/);
+  assert.match(form, /id="contact-email"/);
+  assert.doesNotMatch(form, /\bname=/);
+});
+
+test("datos estructurados coherentes con servicios y autoría editorial visibles", () => {
+  for (const route of routes) {
+    const html = read(route);
+    const json = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
+    assert.ok(json, route);
+    const graph = JSON.parse(json)["@graph"];
+    const types = graph.map((entry) => entry["@type"]);
+    assert.ok(types.includes("Organization") && types.includes("WebSite"), route);
+    if (route !== "/") {
+      const trail = graph.find((entry) => entry["@type"] === "BreadcrumbList").itemListElement;
+      assert.equal(trail.at(-1).item, `https://arkezinvest.com${route}`);
+    }
+    if (route === "/servicios/") assert.equal(types.filter((type) => type === "Service").length, 4);
+    if (route.endsWith("/primeros-pasos/") || route.endsWith("/que-es-diversificar/")) {
+      const article = graph.find((entry) => entry["@type"] === "Article");
+      assert.ok(article.author["@id"].endsWith("#organizacion"));
+      assert.match(html, new RegExp(`datetime="${article.dateModified}"`, "i"));
+      for (const source of article.citation) assert.ok(html.includes(`href="${source}"`));
+    }
   }
 });
 
