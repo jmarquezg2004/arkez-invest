@@ -27,7 +27,7 @@ Abre `http://127.0.0.1:4173`. El sitio necesita HTTP para resolver rutas y activ
 - `app/` contiene la portada, las rutas prerenderizadas, la 404 y los metadatos SEO.
 - `components/` contiene navegación, pie, tarjetas y plantilla de páginas internas.
 - `lib/` contiene el catálogo tipado de páginas, submenús y enlaces históricos.
-- `public/brand/` contiene versiones optimizadas del logotipo y la imagen editorial ilustrativa.
+- `public/brand/` contiene el logotipo optimizado y la licencia tipográfica.
 - `tests/` verifica la exportación estática, sus rutas, enlaces y límites de la vista previa.
 
 La vista previa sale con `noindex` y con rastreo deshabilitado. `ARKEZ_INDEXABLE=1` se reserva para la compilación de una futura publicación autorizada. El sitio usa activos locales y contenidos de Git. La página de contacto es informativa y carece de campos, servicios de envío y analítica.

@@ -49,7 +49,15 @@ test("enlaces internos, activos y anclas históricas resuelven en la exportació
   for (const id of ["mision", "portafolio", "clientes", "noticias", "contacto"]) {
     assert.ok(read("/").includes(`id="${id}"`), id);
   }
-  assert.ok(existsSync(new URL("brand/editorial-small.webp", output)));
+
+});
+
+test("la portada conserva la guía y presenta la composición como ejemplo hipotético", () => {
+  const html = read("/");
+  assert.match(html, /Composición de una cartera/);
+  assert.match(html, /Distribución hipotética con fines educativos/);
+  assert.match(html, /class="hero-guide" href="\/recursos\/guias\/primeros-pasos\/"/);
+  assert.doesNotMatch(html, /brand\/editorial(?:-small)?\.webp/);
 });
 
 test("la vista previa no incluye formularios ni integraciones de las páginas antiguas", () => {

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { BookOpen, ChevronRight, Globe2, SlidersHorizontal, Target } from "lucide-react";
+import { ChevronRight, Globe2, SlidersHorizontal, Target } from "lucide-react";
 import { FeatureGrid } from "@/components/feature-grid";
+import { PortfolioExample } from "@/components/portfolio-example";
 import { educationCard, guidesCard, methodologyCard } from "@/lib/content";
-import { educationLink, firstGuideLink, legacyLinks, siteName } from "@/lib/navigation";
+import { educationLink, legacyLinks, siteName } from "@/lib/navigation";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -32,17 +33,11 @@ export default function Home() {
             <h1 id="home-title">Invierte con <span>más criterio.</span></h1>
             <p className="hero-description">Entiende cómo funcionan los mercados, evalúa el riesgo y aprende a tomar decisiones financieras con mayor claridad.</p>
             <div className="hero-actions">
-              <a className="button button-gold" href={educationLink.href}>Explorar educación</a>
+              <a className="button button-dark" href={educationLink.href}>Explorar educación</a>
               <a className="button button-outline" href="/nosotros/">Conoce Arkez</a>
             </div>
           </div>
-          <div className="hero-visual">
-            <img src="/brand/editorial.webp" alt="Dos profesionales revisan información en una oficina con vista a la ciudad." srcSet="/brand/editorial-small.webp 600w, /brand/editorial.webp 1100w" sizes="(max-width: 760px) 92vw, 48vw" width={1100} height={875} fetchPriority="high" />
-            <a className="hero-guide" href={firstGuideLink.href}>
-              <span className="hero-guide-icon"><BookOpen size={22} strokeWidth={1.7} aria-hidden="true" /></span>
-              <span><span className="hero-guide-label">Guía de inicio</span><strong>{firstGuideLink.label}</strong></span>
-            </a>
-          </div>
+          <PortfolioExample />
         </div>
       </section>
 
