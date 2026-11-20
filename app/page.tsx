@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { ChevronRight, Globe2, SlidersHorizontal, Target } from "lucide-react";
+import { Building2, Globe2, SlidersHorizontal, Target, Users } from "lucide-react";
 import { FeatureGrid } from "@/components/feature-grid";
 import { CapabilitiesPanel } from "@/components/capabilities-panel";
-import { serviceCards } from "@/lib/content";
+import { methodologySteps, serviceCards } from "@/lib/content";
 import { legacyLinks, siteDescription, siteName } from "@/lib/navigation";
 
 export const metadata: Metadata = {
@@ -22,6 +22,33 @@ const topics = [
   { label: "Riesgo y diversificación", href: "/legal/riesgos/", icon: SlidersHorizontal },
   { label: "Objetivos y estrategia", href: "/servicios/metodologia/", icon: Target },
 ];
+
+const audiences = [
+  {
+    title: "Personas",
+    description: "Criterios para tomar decisiones sobre tus propias finanzas.",
+    benefits: [
+      "Ordena objetivos de ahorro, financiación e inversión.",
+      "Compara costos, plazos y riesgos de las alternativas.",
+      "Aprende a interpretar fuentes e indicadores financieros.",
+    ],
+    href: "/para-quien/personas/",
+    link: "Conoce el enfoque para personas",
+    icon: Users,
+  },
+  {
+    title: "Empresas",
+    description: "Un marco para analizar decisiones financieras con tu equipo.",
+    benefits: [
+      "Relaciona los compromisos de pago con la liquidez operativa.",
+      "Evalúa cómo cambian las decisiones en distintos escenarios.",
+      "Documenta supuestos y criterios para la planificación.",
+    ],
+    href: "/para-quien/empresas/",
+    link: "Conoce el enfoque para empresas",
+    icon: Building2,
+  },
+] as const;
 
 export default function Home() {
   return (
@@ -52,26 +79,44 @@ export default function Home() {
       <section className="container-shell home-section" aria-labelledby="learn-title">
         <h2 className="section-title" id="learn-title">Nuestros servicios</h2>
         <p className="section-description">Desarrollamos capacidades financieras en personas y empresas con formación práctica, análisis y consultoría.</p>
-        <FeatureGrid cards={serviceCards} />
+        <FeatureGrid cards={serviceCards} variant="services" />
       </section>
 
       <section className="audience-section" aria-labelledby="audience-title">
-        <div className="container-shell audience-grid">
-          <div>
-            <p className="eyebrow">Para quién</p>
-            <h2 className="section-title" id="audience-title">Distintos objetivos. Mejores preguntas.</h2>
-          </div>
-          <div className="audience-links">
-            <a href="/para-quien/personas/">
-              <span><strong>Personas</strong><span>Desarrolla habilidades para evaluar decisiones financieras.</span></span>
-              <ChevronRight size={20} aria-hidden="true" />
-            </a>
-            <a href="/para-quien/empresas/">
-              <span><strong>Empresas</strong><span>Fortalece el análisis y la planificación de tu empresa.</span></span>
-              <ChevronRight size={20} aria-hidden="true" />
-            </a>
+        <div className="container-shell">
+          <h2 className="section-title" id="audience-title">Para quién</h2>
+          <div className="audience-grid">
+            {audiences.map(({ title, description, benefits, href, link, icon: Icon }) => (
+              <article className="audience-card" key={href}>
+                <div className="audience-heading">
+                  <span className="feature-icon"><Icon size={22} strokeWidth={1.65} aria-hidden="true" /></span>
+                  <h3>{title}</h3>
+                </div>
+                <p>{description}</p>
+                <ul className="audience-benefits" role="list">
+                  {benefits.map((benefit) => <li key={benefit}>{benefit}</li>)}
+                </ul>
+                <a href={href} className="audience-link">{link}</a>
+              </article>
+            ))}
           </div>
         </div>
+      </section>
+
+      <section className="container-shell home-section methodology-section" aria-labelledby="methodology-title">
+        <div>
+          <h2 className="section-title" id="methodology-title">Nuestra metodología</h2>
+          <p className="section-description">Partimos de tus objetivos y revisamos cómo aplicas lo aprendido a una decisión financiera.</p>
+          <a href="/servicios/metodologia/" className="button button-outline">Conoce la metodología</a>
+        </div>
+        <ol className="methodology-steps" role="list">
+          {methodologySteps.map(({ title, body }, index) => (
+            <li key={title}>
+              <span className="methodology-step" aria-hidden="true">{index + 1}</span>
+              <div><h3>{title}</h3><p>{body}</p></div>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="container-shell legacy-links" aria-labelledby="quick-title">

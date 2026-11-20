@@ -6,13 +6,13 @@ export function CapabilitiesPanel() {
     <section className="capabilities-panel" aria-labelledby="capabilities-title">
       <h2 id="capabilities-title">Capacidades en práctica</h2>
       <ul className="capabilities-list" role="list">
-        <li>
+        <li className="market-capability">
           <div>
             <h3>Análisis de mercados</h3>
             <p>Interpretación de tendencias e indicadores.</p>
           </div>
-          <span className="capability-graphic market-graphic" aria-hidden="true">
-            <i /><i /><i /><i /><i /><i />
+          <span className="market-graphic" aria-hidden="true">
+            <span className="market-chart-lines" />
           </span>
         </li>
         <li>

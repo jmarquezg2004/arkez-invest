@@ -68,6 +68,21 @@ test("la portada presenta el posicionamiento, los servicios y las tres capacidad
   assert.doesNotMatch(html, /Composición de una cartera|brand\/editorial(?:-small)?\.webp/);
 });
 
+test("la portada enlaza los servicios y públicos y comparte los cuatro pasos metodológicos", () => {
+  const home = read("/");
+  const methodology = read("/servicios/metodologia/");
+  for (const id of ["educacion-financiera", "analisis-de-mercados", "formacion-practica", "consultoria-financiera"]) {
+    assert.ok(home.includes(`href="/servicios/#${id}"`), id);
+    assert.ok(read("/servicios/").includes(`id="${id}"`), id);
+  }
+  assert.match(home, /href="\/para-quien\/personas\/" class="audience-link"/);
+  assert.match(home, /href="\/para-quien\/empresas\/" class="audience-link"/);
+  for (const step of ["Diagnóstico", "Formación práctica", "Aplicación de herramientas", "Evaluación del aprendizaje"]) {
+    assert.ok(home.includes(`<h3>${step}</h3>`), step);
+    assert.ok(methodology.includes(`<h2>${step}</h2>`), step);
+  }
+});
+
 test("la vista previa no incluye formularios ni integraciones de las páginas antiguas", () => {
   const legacy = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   for (const html of [...routes.map(read), legacy]) {

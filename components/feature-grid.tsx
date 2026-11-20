@@ -13,9 +13,9 @@ const icons = {
   message: MessageCircle,
 } satisfies Record<IconName, typeof BookOpen>;
 
-export function FeatureGrid({ cards }: { cards: readonly ContentCard[] }) {
+export function FeatureGrid({ cards, variant }: { cards: readonly ContentCard[]; variant?: "services" }) {
   return (
-    <ul className="feature-grid" data-columns={Math.max(2, Math.min(cards.length, 4))}>
+    <ul className="feature-grid" data-variant={variant} data-columns={Math.max(2, Math.min(cards.length, 4))}>
       {cards.map(({ icon, href, label, description }) => {
         const Icon = icons[icon];
         return (
@@ -24,6 +24,7 @@ export function FeatureGrid({ cards }: { cards: readonly ContentCard[] }) {
               <span className="feature-icon"><Icon size={23} strokeWidth={1.65} aria-hidden="true" /></span>
               <h3><a href={href}>{label}</a></h3>
               <p>{description}</p>
+              {variant === "services" && <span className="feature-card-action" aria-hidden="true">Ver servicio</span>}
             </article>
           </li>
         );

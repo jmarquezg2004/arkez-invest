@@ -118,6 +118,13 @@ const diversificationCard: ContentCard = {
   icon: "chart",
 };
 
+export const methodologySteps: readonly ContentSection[] = [
+  { title: "Diagnóstico", body: "Identificamos el punto de partida, los objetivos y las decisiones que requieren mayor claridad." },
+  { title: "Formación práctica", body: "Trabajamos conceptos financieros mediante ejercicios y casos vinculados con los objetivos del diagnóstico." },
+  { title: "Aplicación de herramientas", body: "Usamos fuentes y herramientas digitales para organizar datos, comparar escenarios y documentar supuestos." },
+  { title: "Evaluación del aprendizaje", body: "Revisamos cómo se aplicaron los conceptos a un caso e identificamos qué habilidades conviene reforzar." },
+];
+
 export const pages: Readonly<Record<string, ContentPage>> = {
   "/servicios/": {
     title: "Servicios",
@@ -141,11 +148,7 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     title: "Nuestra metodología",
     group: "Servicios",
     description: "Conectamos conceptos financieros, análisis de escenarios y herramientas digitales para ejercitar la toma de decisiones.",
-    sections: [
-      { title: "Define la pregunta", body: "Empieza por tu objetivo, el plazo y las condiciones que podrían cambiar tu decisión." },
-      { title: "Entiende las variables", body: "Compara opciones observando costos, liquidez, concentración y escenarios de pérdida." },
-      { title: "Contrasta con fuentes", body: "Usa herramientas digitales para organizar datos y contrastar documentos primarios. Registra qué información falta antes de sacar conclusiones." },
-    ],
+    sections: methodologySteps,
     next: { label: "Ver guías prácticas", href: guidesCard.href },
   },
   "/para-quien/": {
