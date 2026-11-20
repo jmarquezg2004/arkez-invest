@@ -64,11 +64,13 @@ export function StructuredData({ path, page }: { path: string; page?: ContentPag
           description: resource.description,
           url: `${siteUrl}${resource.read}`,
           inLanguage: "es",
+          dateModified: resource.updated,
+          ...(resource.cover && { thumbnailUrl: `${siteUrl}${resource.cover}` }),
           ...(resource.file && {
             encoding: {
               "@type": "MediaObject",
               contentUrl: `${siteUrl}${resource.file.href}`,
-              encodingFormat: resource.file.format === "PDF" ? "application/pdf" : "text/csv",
+              encodingFormat: resource.file.mime,
             },
           }),
         },

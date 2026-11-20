@@ -1,5 +1,7 @@
 # Arkez Invest · Auditoría de navegación y biblioteca
 
+La [edición actual de los descargables](recursos-editoriales.md) amplía los PDF y sustituye la plantilla CSV por el Laboratorio financiero en Excel.
+
 ## Enlaces corregidos
 
 | Recorrido anterior | Destino y acción actual |
@@ -7,7 +9,7 @@
 | Tarjetas de servicios y el acceso «Mercados e instrumentos» de la portada apuntaban a fragmentos del índice. | Las cuatro tarjetas abren su ficha. El enlace temático de mercados abre Análisis de Mercados. |
 | El índice de servicios repetía el contenido y mezclaba enlaces a recursos con solicitudes. | Las secciones del índice presentan una síntesis y conducen a la ficha correspondiente. Los fragmentos anteriores siguen resolviendo para enlaces ya guardados. |
 | El artículo de lectura de mercados reenviaba al fragmento que lo enlazaba. | El artículo desarrolla un caso con datos ficticios y enlaza su PDF. La ficha del servicio conduce al artículo como material de práctica. |
-| La sección de escenarios reenviaba a riesgos, que remitía otra vez a escenarios. | El tutorial explica cómo usar el CSV y lo enlaza directamente. La guía incorpora además un caso de liquidez con solución y archivo. |
+| La sección de escenarios reenviaba a riesgos, que remitía otra vez a escenarios. | El tutorial explica cómo usar el libro de trabajo y lo enlaza directamente. La guía incorpora además un caso de liquidez con solución y archivo. |
 | Contacto enviaba de vuelta al índice de servicios o recursos. | La consulta conserva su acción y el enlace de privacidad. La ficha de origen preselecciona el servicio. |
 | Recursos era un índice editorial sin búsqueda ni archivos. | La biblioteca incluye lectura en HTML, vista directa de PDF y descargas nativas enlazadas a archivos reales. |
 
@@ -33,7 +35,7 @@ La biblioteca en `/recursos/` busca por título, descripción y términos, sin d
 | Recurso | Leer en la web | Archivo |
 |---|---|---|
 | Lista de comprobación para invertir | `/recursos/guias/primeros-pasos/` | `/recursos/archivos/primeros-pasos-para-invertir.pdf` |
-| Plantilla editable de escenarios con datos ficticios y filas en blanco | `/recursos/guias/#comparar-escenarios` | `/recursos/archivos/plantilla-escenarios.csv` |
+| Laboratorio financiero con ejemplos ficticios y campos propios | `/recursos/guias/#comparar-escenarios` | `/recursos/archivos/laboratorio-financiero.xlsx` |
 | Caso guiado de análisis de mercados | `/recursos/articulos/#lectura-de-mercados` | `/recursos/archivos/lectura-de-mercados.pdf` |
 | Caso de liquidez operativa | `/recursos/guias/#liquidez-operativa` | `/recursos/archivos/liquidez-operativa.pdf` |
 | Diversificación, artículo incluido en el catálogo | `/recursos/articulos/que-es-diversificar/` | Lectura web |
@@ -45,7 +47,7 @@ Los PDF contienen texto seleccionable y tienen una ruta de lectura web. La fuent
 
 - Compilación, comprobación de tipos y 19 pruebas automatizadas. Se probaron tanto el perfil de prueba con `noindex` como el export local de producción.
 - Chromium recorrió 23 páginas en siete anchos sin desbordamiento. La auditoría axe-core no encontró infracciones en las reglas A/AA evaluadas. Probé teclado, menú móvil, FAQ, búsqueda sin tildes, filtros combinados, estado vacío, limpieza y selección de los cuatro servicios en Contacto.
-- Las cuatro descargas se iniciaron con teclado. El nombre y los bytes descargados coincidieron con los archivos compilados. Los tres enlaces PDF devolvieron HTTP 200 con MIME correcto. Poppler abrió y extrajo texto de los tres. El CSV devolvió `text/csv` y contiene filas editables.
+- Las cuatro descargas se iniciaron con teclado. El nombre y los bytes descargados coincidieron con los archivos compilados. Los tres enlaces PDF devolvieron HTTP 200 con MIME correcto. Poppler abrió y extrajo texto de los tres. La edición anterior se probó con su plantilla CSV. El informe editorial documenta la validación del XLSX actual.
 - La revisión por patrones no encontró coincidencias de credenciales en los archivos y el historial examinados. La prueba de Contacto transmitió sólo un token técnico y un indicador antispam.
 - Se comprobó que los cinco enlaces editoriales externos seguían resolviendo. Son páginas de Investor.gov y del Banco de la República.
 

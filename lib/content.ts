@@ -1,3 +1,4 @@
+import type { EditionSlug } from "./library";
 import { serviceDetails } from "./service-details";
 import { services } from "./services";
 import worksheets from "./worksheets.json";
@@ -11,7 +12,7 @@ export type ContentCard = SiteLink & {
 };
 
 type Topic = { title: string; body: string };
-export type ContentSection = Topic & { id?: string; topics?: readonly Topic[]; links?: readonly SiteLink[] };
+export type ContentSection = Topic & { id?: string; topics?: readonly Topic[]; edition?: EditionSlug; preview?: { href: string; alt: string; width: number; height: number }; links?: readonly SiteLink[] };
 type Editorial = { updated: string; sources: readonly SiteLink[] };
 
 export type ContentPage = {
@@ -199,11 +200,13 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     group: "Recursos",
     description: "Ejercicios y preguntas para revisar fuentes, comparar escenarios y evaluar información financiera.",
     sections: [
-      { id: "comparar-escenarios", title: "Cómo comparar dos escenarios financieros", body: "Abre el CSV en una hoja de cálculo con coma como separador de columnas. Copia las filas en blanco, usa la misma unidad y período, y cambia una sola variable. Calcula cada saldo final sumando saldo inicial y cobros y restando pagos. Anota la fuente del dato que cambiaste.", links: [{ href: "/recursos/archivos/plantilla-escenarios.csv", label: "Abrir la plantilla editable de escenarios (CSV)" }] },
-      { id: "liquidez-operativa", title: worksheets["liquidez-operativa"].title, body: worksheets["liquidez-operativa"].intro,
+      { id: "comparar-escenarios", title: "Cómo comparar dos escenarios financieros", body: "Abre el Laboratorio financiero y revisa las hojas Instrucciones, Presupuesto, Escenarios, Inversiones, Riesgo y Dashboard. En Escenarios, usa la misma moneda y período, y cambia una sola variable por alternativa. Las celdas doradas contienen ejemplos ficticios. Las celdas azules se reservan para tus datos. El Dashboard tiene un selector para alternar entre ambos conjuntos.", links: [{ href: "/recursos/archivos/laboratorio-financiero.xlsx", label: "Abrir el Laboratorio financiero (XLSX)" }],
+        preview: { href: "/recursos/portadas/vista-dashboard.webp", alt: "Dashboard del libro con saldos por mes, comparación de escenarios y pesos por posición del ejemplo ficticio.", width: 970, height: 670 },
+      },
+      { id: "liquidez-operativa", edition: "liquidez-operativa", title: worksheets["liquidez-operativa"].title, body: worksheets["liquidez-operativa"].intro,
         topics: worksheets["liquidez-operativa"].topics, links: [
           { href: "/recursos/archivos/liquidez-operativa.pdf", label: "Ver el caso de liquidez operativa (PDF)" },
-          { href: "/recursos/archivos/plantilla-escenarios.csv", label: "Abrir la plantilla de escenarios (CSV)" },
+          { href: "/recursos/archivos/laboratorio-financiero.xlsx", label: "Abrir el libro de trabajo de escenarios (XLSX)" },
         ] },
       { id: "revisar-fuentes", title: "Lista de comprobación para revisar fuentes", body: "Registra quién publica el dato, su fecha, la unidad de medida y cómo se calculó. Si dos fuentes difieren, comprueba que describen el mismo período y concepto antes de elegir cómo usar sus datos." },
     ],
@@ -223,7 +226,7 @@ export const pages: Readonly<Record<string, ContentPage>> = {
       { title: "¿Qué pérdida podrías asumir?", body: "Piensa cómo afectaría una caída a tu objetivo y a tus otros gastos. Separa tu capacidad financiera de tu comodidad con la volatilidad." },
       { title: "¿Cómo funciona y cuánto cuesta?", body: "Revisa la documentación del instrumento y las comisiones, impuestos u otros costos aplicables. Identifica de qué depende su resultado." },
       { title: "¿Qué falta verificar?", body: "Anota la fuente consultada, sus posibles conflictos de interés y lo que desconoces antes de tomar una decisión." },
-      { title: "Ejemplo: un objetivo con fecha fija", body: "Si necesitas pagar una matrícula en seis meses, anota el importe y la fecha. Compara cuándo estaría disponible el dinero, cuánto cuesta retirarlo y qué ocurriría si el valor baja justo antes del pago. Registra la respuesta antes de pasar a otro instrumento.", links: [{ href: "/recursos/archivos/primeros-pasos-para-invertir.pdf", label: "Ver la lista de comprobación para invertir (PDF)" }] },
+      { title: "Ejemplo: un objetivo con fecha fija", edition: "primeros-pasos-para-invertir", body: "Si necesitas pagar una matrícula en seis meses, anota el importe y la fecha. Compara cuándo estaría disponible el dinero, cuánto cuesta retirarlo y qué ocurriría si el valor baja justo antes del pago. Registra la respuesta antes de pasar a otro instrumento.", links: [{ href: "/recursos/archivos/primeros-pasos-para-invertir.pdf", label: "Ver la lista de comprobación para invertir (PDF)" }] },
     ],
     next: { label: "Revisar los riesgos", href: riskCard.href },
   },
@@ -232,7 +235,7 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     group: "Recursos",
     description: "Explicaciones en español para interpretar los mercados, entender el riesgo y aplicar conceptos financieros.",
     sections: [
-      { id: "lectura-de-mercados", title: "Análisis técnico y fundamental: qué pregunta responde cada uno", body: "El fundamental examina factores como ventas, deuda y contexto económico. El técnico describe el comportamiento del precio y el volumen. Ante una caída de precio, puedes revisar si cambió la situación del emisor y, por separado, si el movimiento coincide con un cambio de volumen. Ninguna de estas observaciones determina por sí sola el precio siguiente.", topics: worksheets["lectura-de-mercados"].topics, links: [{ href: "/recursos/archivos/lectura-de-mercados.pdf", label: "Ver el caso guiado de análisis de mercados (PDF)" }] },
+      { id: "lectura-de-mercados", edition: "lectura-de-mercados", title: "Análisis técnico y fundamental: qué pregunta responde cada uno", body: "El fundamental examina factores como ventas, deuda y contexto económico. El técnico describe el comportamiento del precio y el volumen. Ante una caída de precio, puedes revisar si cambió la situación del emisor y, por separado, si el movimiento coincide con un cambio de volumen. Ninguna de estas observaciones determina por sí sola el precio siguiente.", topics: worksheets["lectura-de-mercados"].topics, links: [{ href: "/recursos/archivos/lectura-de-mercados.pdf", label: "Ver el caso guiado de análisis de mercados (PDF)" }] },
       { id: "inflacion", title: "Qué es la inflación y por qué cambia las comparaciones", body: "La inflación refleja un aumento general de los precios. Si el costo de lo que quieres comprar sube, necesitarás más dinero para la misma compra. Al comparar cantidades de períodos distintos, revisa qué índice estás utilizando y qué precios representa.", links: [{ href: "https://www.banrep.gov.co/es/glosario/inflacion-consumidor", label: "Banco de la República: inflación al consumidor" }] },
     ],
     cards: [diversificationCard],

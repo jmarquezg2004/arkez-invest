@@ -10,9 +10,11 @@ const read = (path) => readFileSync(new URL(path, output), "utf8");
 test("los enlaces Leer, Ver PDF y Descargar tienen destinos reales", async (t) => {
   const library = read("recursos/index.html");
   const downloads = [...library.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*\bdownload=""/g)].map(([, href]) => href);
-  const reads = [...library.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*aria-label="Leer:/g)].map(([, href]) => href);
+  const reads = [...library.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*aria-label="(?:Leer|Ver contenido):/g)].map(([, href]) => href);
   const pdfViews = [...library.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*aria-label="Ver PDF:/g)].map(([, href]) => href);
   assert.equal(new Set(downloads).size, 4);
+  assert.doesNotMatch(library, /plantilla-escenarios\.csv/);
+  assert.equal((library.match(/<time dateTime="2026-11-20"/g) ?? []).length, 6);
   assert.equal(new Set(reads).size, 6);
   assert.deepEqual(pdfViews.sort(), downloads.filter((href) => href.endsWith(".pdf")).sort());
 
@@ -37,10 +39,12 @@ test("los enlaces Leer, Ver PDF y Descargar tienen destinos reales", async (t) =
       assert.match(response.headers.get("Content-Type"), /^application\/pdf/);
       assert.ok(data.toString("ascii", 0, 8).startsWith("%PDF-"));
       assert.match(data.toString("ascii").trimEnd(), /%%EOF$/);
-    } else if (href.endsWith(".csv")) {
-      assert.match(response.headers.get("Content-Type"), /^text\/csv/);
-      assert.match(data.toString("utf8"), /Mes 1,900,350,1500,-250/);
-      assert.match(data.toString("utf8"), /Mi escenario base,,,,,,,/);
+      assert.equal((data.toString("ascii").match(/\/Type \/Page\b/g) ?? []).length, 8);
+    } else if (href.endsWith(".xlsx")) {
+      assert.equal(response.headers.get("Content-Type"), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      assert.equal(data.readUInt32LE(0), 0x04034b50);
+      assert.ok(data.includes("xl/workbook.xml"));
+      assert.ok(data.includes("xl/charts/chart4.xml"));
     } else {
       const { hash } = new URL(href, base);
       if (hash) assert.ok(data.toString("utf8").includes(`id="${hash.slice(1)}"`), href);

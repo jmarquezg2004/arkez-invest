@@ -1,3 +1,5 @@
+export type EditionSlug = "primeros-pasos-para-invertir" | "lectura-de-mercados" | "liquidez-operativa";
+
 export const resourceCategories = [
   { id: "guia", label: "Guías" },
   { id: "plantilla", label: "Plantillas" },
@@ -14,45 +16,61 @@ export type Resource = {
   category: ResourceCategory;
   terms: readonly string[];
   read: string;
-  file?: { href: string; format: "PDF" | "CSV" };
+  level: "Inicial" | "Intermedio";
+  updated: string;
+  cover?: string;
+  scope: string;
+  file?: { href: string; format: "PDF" | "XLSX"; mime: string };
 };
+
+const updated = "2026-11-20";
+const pdf = (slug: EditionSlug) => ({
+  cover: `/recursos/portadas/${slug}.webp`,
+  file: { href: `/recursos/archivos/${slug}.pdf`, format: "PDF", mime: "application/pdf" } as const,
+});
 
 export const resources: readonly Resource[] = [
   {
     id: "primeros-pasos",
-    title: "Lista de comprobación antes de invertir",
-    description: "Ordena el objetivo, plazo, liquidez, costos y fuentes antes de comparar instrumentos.",
+    title: "Antes de invertir",
+    description: "Compara acciones, ETF y criptoactivos mediante ejercicios de costos, concentración y riesgo.",
     category: "guia",
     terms: ["inversión", "ahorro", "riesgo", "lista"],
     read: "/recursos/guias/primeros-pasos/",
-    file: { href: "/recursos/archivos/primeros-pasos-para-invertir.pdf", format: "PDF" },
+    level: "Inicial", updated, scope: "8 páginas",
+    ...pdf("primeros-pasos-para-invertir"),
   },
   {
     id: "escenarios",
-    title: "Plantilla para comparar escenarios",
-    description: "Abre en una hoja de cálculo el caso base y el alternativo. Incluye un ejemplo y filas para tus propios supuestos.",
+    title: "Laboratorio financiero",
+    description: "Organiza presupuesto, escenarios, inversiones y riesgo en hojas editables con ejemplos y gráficos vinculados.",
     category: "plantilla",
     terms: ["flujo de caja", "riesgo", "hoja de cálculo", "costos", "Excel"],
     read: "/recursos/guias/#comparar-escenarios",
-    file: { href: "/recursos/archivos/plantilla-escenarios.csv", format: "CSV" },
+    level: "Intermedio", updated, scope: "6 hojas",
+    cover: "/recursos/portadas/laboratorio-financiero.webp",
+    file: { href: "/recursos/archivos/laboratorio-financiero.xlsx", format: "XLSX",
+      mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
   },
   {
     id: "lectura-mercados",
-    title: "Caso guiado de análisis de mercados",
+    title: "Cómo leer un movimiento de mercado",
     description: "Distingue precio, volumen y contexto del emisor usando datos ficticios y preguntas de verificación.",
     category: "caso",
     terms: ["mercados", "análisis técnico", "análisis fundamental", "indicadores"],
     read: "/recursos/articulos/#lectura-de-mercados",
-    file: { href: "/recursos/archivos/lectura-de-mercados.pdf", format: "PDF" },
+    level: "Intermedio", updated, scope: "8 páginas",
+    ...pdf("lectura-de-mercados"),
   },
   {
     id: "liquidez",
-    title: "Caso de liquidez operativa",
+    title: "Liquidez operativa bajo presión",
     description: "Calcula el saldo de caja y detecta una brecha al simular un retraso en los cobros.",
     category: "caso",
     terms: ["empresa", "tesorería", "flujo de caja", "cobros"],
     read: "/recursos/guias/#liquidez-operativa",
-    file: { href: "/recursos/archivos/liquidez-operativa.pdf", format: "PDF" },
+    level: "Intermedio", updated, scope: "8 páginas",
+    ...pdf("liquidez-operativa"),
   },
   {
     id: "diversificacion",
@@ -61,6 +79,7 @@ export const resources: readonly Resource[] = [
     category: "articulo",
     terms: ["riesgo", "cartera", "fondos"],
     read: "/recursos/articulos/que-es-diversificar/",
+    level: "Inicial", updated, scope: "Lectura web",
   },
   {
     id: "inflacion",
@@ -69,5 +88,6 @@ export const resources: readonly Resource[] = [
     category: "articulo",
     terms: ["IPC", "precios", "poder adquisitivo"],
     read: "/recursos/articulos/#inflacion",
+    level: "Inicial", updated, scope: "Lectura web",
   },
 ];

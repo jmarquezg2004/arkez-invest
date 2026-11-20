@@ -4,6 +4,7 @@ import { breadcrumbs } from "@/lib/breadcrumbs";
 import type { ContentPage as PageData } from "@/lib/content";
 import { siteName, type SiteLink } from "@/lib/navigation";
 import { FeatureGrid } from "./feature-grid";
+import { ResourceTranscript } from "./resource-transcript";
 
 function ReadingLinks({ links }: { links: readonly SiteLink[] }) {
   return <ul className="reading-links" role="list">
@@ -50,7 +51,7 @@ export function ContentPage({ page, path, children }: { page: PageData; path: st
         {children}
         {page.sections && (
           <div className="content-sections">
-            {page.sections.map(({ id, title, body, topics, links }) => (
+            {page.sections.map(({ id, title, body, topics, links, preview, edition }) => (
               <section key={title} id={id}>
                 <h2>{title}</h2>
                 <p>{body}</p>
@@ -60,7 +61,12 @@ export function ContentPage({ page, path, children }: { page: PageData; path: st
                     <p>{topic.body}</p>
                   </div>
                 ))}
+                {preview && <figure className="resource-preview">
+                  <img src={preview.href} alt={preview.alt} width={preview.width} height={preview.height} loading="lazy" />
+                  <figcaption>Vista del Dashboard con datos ficticios. El libro incluye campos para tus propios escenarios.</figcaption>
+                </figure>}
                 {links && <ReadingLinks links={links} />}
+                {edition && <ResourceTranscript slug={edition} />}
               </section>
             ))}
           </div>
