@@ -13,7 +13,7 @@ export function SiteFooter() {
       <div className="container-shell footer-grid">
         <div>
           <Brand inverted />
-          <p className="mt-4 max-w-64 text-sm leading-relaxed text-steel">Educación financiera para entender tus decisiones.</p>
+          <p className="mt-4 max-w-64 text-sm leading-relaxed text-steel">Educación, formación y consultoría financiera para personas y empresas.</p>
         </div>
         <nav aria-label="Enlaces del pie de página" className="footer-navigation">
           {footerGroups.map((group) => (
@@ -28,7 +28,7 @@ export function SiteFooter() {
       </div>
       <div className="container-shell footer-bottom">
         <small>© {new Date().getUTCFullYear()} Arkez Invest</small>
-        <small>Contenido de carácter educativo.</small>
+        <small>Recursos de carácter educativo.</small>
       </div>
     </footer>
   );

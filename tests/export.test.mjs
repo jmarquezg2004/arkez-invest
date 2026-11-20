@@ -44,20 +44,28 @@ test("enlaces internos, activos y anclas históricas resuelven en la exportació
       const url = new URL(href, "https://arkezinvest.com");
       const file = url.pathname.endsWith("/") ? pagePath(url.pathname) : new URL(`.${url.pathname}`, output);
       assert.ok(existsSync(file), `${href} en ${route}`);
+      if (url.hash && url.pathname.endsWith("/")) {
+        assert.ok(read(url.pathname).includes(`id="${url.hash.slice(1)}"`), `${href} en ${route}`);
+      }
     }
   }
   for (const id of ["mision", "portafolio", "clientes", "noticias", "contacto"]) {
     assert.ok(read("/").includes(`id="${id}"`), id);
   }
-
 });
 
-test("la portada conserva la guía y presenta la composición como ejemplo hipotético", () => {
+test("la portada presenta el posicionamiento, los servicios y las tres capacidades", () => {
   const html = read("/");
-  assert.match(html, /Composición de una cartera/);
-  assert.match(html, /Distribución hipotética con fines educativos/);
+  assert.match(html, /Conocimiento financiero <span>para tomar mejores decisiones\.<\/span>/);
+  assert.match(html, /Formación, análisis de mercados y herramientas tecnológicas para fortalecer tus capacidades financieras y de inversión\./);
+  assert.match(html, /href="\/servicios\/">Explorar servicios/);
+  assert.match(html, /href="\/nosotros\/">Conoce Arkez/);
   assert.match(html, /class="hero-guide" href="\/recursos\/guias\/primeros-pasos\/"/);
-  assert.doesNotMatch(html, /brand\/editorial(?:-small)?\.webp/);
+  for (const capability of ["Análisis de mercados", "Gestión del riesgo", "Tecnología aplicada"]) {
+    assert.ok(html.includes(`<h3>${capability}</h3>`), capability);
+  }
+  assert.match(html, /Gráficos ilustrativos con fines educativos/);
+  assert.doesNotMatch(html, /Composición de una cartera|brand\/editorial(?:-small)?\.webp/);
 });
 
 test("la vista previa no incluye formularios ni integraciones de las páginas antiguas", () => {

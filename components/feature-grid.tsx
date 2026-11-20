@@ -15,7 +15,7 @@ const icons = {
 
 export function FeatureGrid({ cards }: { cards: readonly ContentCard[] }) {
   return (
-    <ul className="feature-grid" data-columns={cards.length >= 3 ? 3 : 2}>
+    <ul className="feature-grid" data-columns={Math.max(2, Math.min(cards.length, 4))}>
       {cards.map(({ icon, href, label, description }) => {
         const Icon = icons[icon];
         return (

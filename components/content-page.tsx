@@ -32,8 +32,8 @@ export function ContentPage({ page, path }: { page: PageData; path: string }) {
       <div className="container-shell page-body">
         {page.sections && (
           <div className="content-sections">
-            {page.sections.map(({ title, body }) => (
-              <section key={title}><h2>{title}</h2><p>{body}</p></section>
+            {page.sections.map(({ id, title, body }) => (
+              <section key={title} id={id}><h2>{title}</h2><p>{body}</p></section>
             ))}
           </div>
         )}

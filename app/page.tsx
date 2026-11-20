@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { ChevronRight, Globe2, SlidersHorizontal, Target } from "lucide-react";
 import { FeatureGrid } from "@/components/feature-grid";
-import { PortfolioExample } from "@/components/portfolio-example";
-import { educationCard, guidesCard, methodologyCard } from "@/lib/content";
-import { educationLink, legacyLinks, siteName } from "@/lib/navigation";
+import { CapabilitiesPanel } from "@/components/capabilities-panel";
+import { serviceCards } from "@/lib/content";
+import { legacyLinks, siteDescription, siteName } from "@/lib/navigation";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Arkez Invest | Educación financiera",
-    description: "Entiende los mercados, evalúa el riesgo y aprende a tomar decisiones financieras con mayor criterio.",
+    title: "Arkez Invest | Educación, formación y consultoría financiera",
+    description: siteDescription,
     url: "/",
     siteName,
     locale: "es",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 const topics = [
-  { label: "Mercados e instrumentos", href: educationLink.href, icon: Globe2 },
+  { label: "Mercados e instrumentos", href: "/servicios/#analisis-de-mercados", icon: Globe2 },
   { label: "Riesgo y diversificación", href: "/legal/riesgos/", icon: SlidersHorizontal },
   { label: "Objetivos y estrategia", href: "/servicios/metodologia/", icon: Target },
 ];
@@ -29,15 +29,15 @@ export default function Home() {
       <section className="home-hero" aria-labelledby="home-title">
         <div className="container-shell hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow">Educación financiera</p>
-            <h1 id="home-title">Invierte con <span>más criterio.</span></h1>
-            <p className="hero-description">Entiende cómo funcionan los mercados, evalúa el riesgo y aprende a tomar decisiones financieras con mayor claridad.</p>
+            <p className="eyebrow">Educación, formación y consultoría</p>
+            <h1 id="home-title">Conocimiento financiero <span>para tomar mejores decisiones.</span></h1>
+            <p className="hero-description">Formación, análisis de mercados y herramientas tecnológicas para fortalecer tus capacidades financieras y de inversión.</p>
             <div className="hero-actions">
-              <a className="button button-dark" href={educationLink.href}>Explorar educación</a>
+              <a className="button button-dark" href="/servicios/">Explorar servicios</a>
               <a className="button button-outline" href="/nosotros/">Conoce Arkez</a>
             </div>
           </div>
-          <PortfolioExample />
+          <CapabilitiesPanel />
         </div>
       </section>
 
@@ -50,10 +50,9 @@ export default function Home() {
       </nav>
 
       <section className="container-shell home-section" aria-labelledby="learn-title">
-        <p className="eyebrow">Aprende con Arkez</p>
-        <h2 className="section-title" id="learn-title">La base para decidir mejor.</h2>
-        <p className="section-description">Empieza por los fundamentos y pasa de la teoría a preguntas que puedas aplicar en tu día a día.</p>
-        <FeatureGrid cards={[educationCard, methodologyCard, guidesCard]} />
+        <h2 className="section-title" id="learn-title">Nuestros servicios</h2>
+        <p className="section-description">Desarrollamos capacidades financieras en personas y empresas con formación práctica, análisis y consultoría.</p>
+        <FeatureGrid cards={serviceCards} />
       </section>
 
       <section className="audience-section" aria-labelledby="audience-title">
@@ -64,11 +63,11 @@ export default function Home() {
           </div>
           <div className="audience-links">
             <a href="/para-quien/personas/">
-              <span><strong>Personas</strong><span>Ordena tus objetivos y revisa los riesgos.</span></span>
+              <span><strong>Personas</strong><span>Desarrolla habilidades para evaluar decisiones financieras.</span></span>
               <ChevronRight size={20} aria-hidden="true" />
             </a>
             <a href="/para-quien/empresas/">
-              <span><strong>Empresas</strong><span>Explora liquidez, planificación y horizontes.</span></span>
+              <span><strong>Empresas</strong><span>Fortalece el análisis y la planificación de tu empresa.</span></span>
               <ChevronRight size={20} aria-hidden="true" />
             </a>
           </div>

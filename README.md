@@ -1,6 +1,6 @@
 # Arkez Invest
 
-Sitio corporativo y educativo en español. La Fase 1 ofrece navegación multipágina, guías, artículos, preguntas frecuentes e información sobre el alcance del sitio.
+Sitio corporativo en español de Arkez Invest, empresa de educación, formación y consultoría financiera para personas y empresas. La vista previa incluye servicios, guías, artículos y preguntas frecuentes.
 
 ## Ejecutar en local
 
