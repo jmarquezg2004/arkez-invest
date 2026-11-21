@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { CommercialPages } from "@/components/commercial-pages";
 import { ContentPage } from "@/components/content-page";
 import { pages } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
@@ -28,7 +29,7 @@ export default async function RoutedPage({ params }: RouteProps) {
   return (
     <>
       <StructuredData page={page} path={path} />
-      <ContentPage page={page} path={path} />
+      <ContentPage page={page} path={path}><CommercialPages path={path} /></ContentPage>
     </>
   );
 }

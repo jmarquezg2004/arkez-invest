@@ -1,163 +1,104 @@
 import type { Metadata } from "next";
-import { ArrowDown, ArrowRight, EducationMark, BusinessMark, CounselMark, AllocationMark, MarketMark, PeopleMark } from "@/components/arkez-icons";
-import { InnovationPreview } from "@/components/innovation/innovation-preview";
-import { MarketTrace } from "@/components/charts/financial-graphics";
-import { LearningLab } from "@/components/learning-lab";
+import { AllocationMark, BusinessMark, EducationMark, MarketMark, TechnologyMark } from "@/components/arkez-icons";
 import { RevealSections } from "@/components/reveal-sections";
 import { StructuredData } from "@/components/structured-data";
-import { methodologySteps, serviceCards } from "@/lib/content";
-import { legacyLinks } from "@/lib/navigation";
+import { offers } from "@/lib/commercial-offers";
+import { calculatorLink, ecosystemLink, innovationLink, newsLink } from "@/lib/navigation";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("/");
-
-const serviceIcons = [EducationMark, MarketMark, AllocationMark, CounselMark];
-
-const audiences = [
-  {
-    title: "Personas",
-    description: "Criterios para tomar decisiones sobre tus propias finanzas.",
-    benefits: [
-      "Ordena objetivos de ahorro, financiación e inversión.",
-      "Compara costos, plazos y riesgos de las alternativas.",
-      "Aprende a interpretar fuentes e indicadores financieros.",
-    ],
-    href: "/para-quien/personas/",
-    link: "Conoce el enfoque para personas",
-    icon: PeopleMark,
-  },
-  {
-    title: "Empresas",
-    description: "Un marco para analizar decisiones financieras con tu equipo.",
-    benefits: [
-      "Relaciona los compromisos de pago con la liquidez operativa.",
-      "Evalúa cómo cambian las decisiones en distintos escenarios.",
-      "Documenta supuestos y criterios para la planificación.",
-    ],
-    href: "/para-quien/empresas/",
-    link: "Conoce el enfoque para empresas",
-    icon: BusinessMark,
-  },
-] as const;
+const serviceIcons = [EducationMark, MarketMark, BusinessMark];
+const benefits = [
+  { title: "Practica antes de decidir", text: "Compara alternativas con casos y datos de ejemplo." },
+  { title: "Haz mejores preguntas", text: "Identifica qué costos, plazos y riesgos conviene revisar." },
+  { title: "Aplica lo aprendido", text: "Usa guías y herramientas en tus finanzas o con tu equipo." },
+];
 
 export default function Home() {
   return (
     <>
       <StructuredData path="/" />
       <RevealSections />
-      <section className="experience-hero" aria-labelledby="home-title">
+      <section className="experience-hero commercial-hero" aria-labelledby="home-title">
         <div className="container-shell experience-intro">
           <div className="experience-copy">
-            <p className="eyebrow">Educación, formación y consultoría</p>
-            <h1 id="home-title">Conocimiento financiero <span>para tomar mejores decisiones.</span></h1>
-            <p className="experience-description">Formación, análisis de mercados y herramientas tecnológicas para fortalecer tus capacidades financieras y de inversión.</p>
+            <p className="eyebrow">Educación y consultoría financiera</p>
+            <h1 id="home-title">Aprende a manejar mejor tu dinero y <span>tomar decisiones financieras con confianza.</span></h1>
+            <p className="experience-description">Cursos prácticos, herramientas gratuitas y orientación financiera para personas y empresas.</p>
             <div className="hero-actions">
-              <a className="button button-gold" href="/servicios/">Explorar servicios<ArrowRight size={18} aria-hidden="true" /></a>
-              <a className="button button-ghost" href="/nosotros/">Conoce Arkez</a>
+              <a className="button button-gold" href="/servicios/">Explorar servicios</a>
+              <a className="button button-ghost" href={calculatorLink.href}>Probar calculadora</a>
             </div>
           </div>
           <div className="hero-art">
-            <img src="/brand/prisma-980.webp" srcSet="/brand/prisma-540.webp 540w, /brand/prisma-720.webp 720w, /brand/prisma-980.webp 980w" sizes="(max-width: 760px) 94vw, 52vw" width="980" height="784" alt="" fetchPriority="high" />
+            <img src="/brand/prisma-980.webp" srcSet="/brand/prisma-540.webp 540w, /brand/prisma-720.webp 720w, /brand/prisma-980.webp 980w" sizes="(max-width: 760px) 100vw, 58vw" width="980" height="784" alt="" fetchPriority="high" />
             <div className="hero-light" aria-hidden="true" />
             <svg className="hero-register" viewBox="0 0 900 650" aria-hidden="true" preserveAspectRatio="none">
               <path d="M140 494H260L371 414H517L662 303H824"/>
               <path d="M306 500H448L503 461H635L718 401H870"/>
             </svg>
-            <figure className="hero-plot">
-              <figcaption><span>Lectura de mercados</span><span>Serie ficticia</span></figcaption>
-              <div className="hero-market-close"><strong>114</strong><span>puntos de índice · base 100</span></div>
-              <MarketTrace readings={[100, 104, 102, 109, 106, 112, 108, 114]} />
-              <a href="#laboratorio">Probar el ejercicio<ArrowDown size={15} aria-hidden="true" /></a>
-            </figure>
           </div>
         </div>
       </section>
 
-      <section className="experience-laboratory section-spacing" id="laboratorio" aria-labelledby="lab-heading">
-        <div className="container-shell">
-          <div className="experience-section-heading" data-reveal>
-            <div><p className="eyebrow">Laboratorio educativo</p><h2 id="lab-heading">Cambia un supuesto.<br />Observa qué cambia.</h2></div>
-            <p>Prueba cuatro ejercicios y compara resultados antes de aplicar un criterio a tus finanzas. Gráficos ilustrativos con fines educativos.</p>
-          </div>
-          <LearningLab />
-        </div>
-      </section>
-
-      <section className="container-shell experience-services section-spacing" aria-labelledby="learn-title">
+      <section className="container-shell experience-services section-spacing" id="portafolio" aria-labelledby="learn-title">
         <figure className="services-photo" data-reveal>
           <img src="/brand/estudio-980.webp" srcSet="/brand/estudio-540.webp 540w, /brand/estudio-980.webp 980w" sizes="(max-width: 880px) 90vw, 42vw" width="980" height="1200" alt="" loading="lazy" />
         </figure>
         <div data-reveal>
-          <p className="eyebrow">Servicios</p>
-          <h2 id="learn-title">Aprender, analizar y aplicar.</h2>
-          <p className="experience-section-description">Desarrollamos capacidades financieras en personas y empresas con formación práctica, análisis y consultoría.</p>
+          <h2 id="learn-title">Elige qué quieres aprender</h2>
           <ul className="experience-service-list" role="list">
-            {serviceCards.map(({ href, label, description }, index) => {
+            {offers.slice(0, 3).map(({ href, title, summary }, index) => {
               const Icon = serviceIcons[index];
               return <li key={href}>
                 <a href={href}>
-                  <Icon size={22} strokeWidth={1.6} aria-hidden="true" />
-                  <div><h3>{label}</h3><p>{description}</p></div>
-                  <ArrowRight size={20} aria-hidden="true" />
+                  <Icon size={22} />
+                  <div><h3>{title}</h3><p>{summary}</p></div>
                 </a>
               </li>;
             })}
           </ul>
+          <a className="commercial-text-link" href="/servicios/consultoria-financiera/">Consultar por acompañamiento financiero</a>
         </div>
       </section>
 
-      <InnovationPreview />
-
-      <section className="experience-audiences section-spacing" aria-labelledby="audience-title">
-        <div className="container-shell" data-reveal>
-          <p className="eyebrow">Para quién</p>
-          <h2 id="audience-title">Decisiones distintas.<br />Mejores preguntas.</h2>
-          <div className="audience-grid">
-            {audiences.map(({ title, description, benefits, href, link, icon: Icon }) => (
-              <article className="audience-card" key={href}>
-                <div className="audience-heading">
-                  <span className="feature-icon"><Icon size={22} strokeWidth={1.65} aria-hidden="true" /></span>
-                  <h3>{title}</h3>
-                </div>
-                <p>{description}</p>
-                <ul className="audience-benefits" role="list">
-                  {benefits.map((benefit) => <li key={benefit}>{benefit}</li>)}
-                </ul>
-                <a href={href} className="audience-link">{link}<ArrowRight size={16} aria-hidden="true" /></a>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="experience-method section-spacing" aria-labelledby="methodology-title">
-        <div className="container-shell methodology-section" data-reveal>
+      <section className="commercial-tool section-spacing" id="laboratorio" aria-labelledby="home-tool-title">
+        <div className="container-shell commercial-split" data-reveal>
           <div>
-            <p className="eyebrow">Cómo trabajamos</p>
-            <h2 id="methodology-title">Nuestra metodología</h2>
-            <p className="section-description">Partimos de tus objetivos y revisamos cómo aplicas lo aprendido a una decisión financiera.</p>
-            <a href="/servicios/metodologia/" className="button button-ghost">Conoce la metodología<ArrowRight size={18} aria-hidden="true" /></a>
+            <p className="eyebrow">Herramienta gratuita</p>
+            <h2 id="home-tool-title">Calculadora de interés compuesto</h2>
+            <p>Descubre cómo pueden crecer tus ahorros con el tiempo. Prueba cuánto cambia el resultado si ajustas tus aportes, el plazo o la tasa.</p>
           </div>
-          <ol className="methodology-steps" role="list">
-            {methodologySteps.map(({ title, body }, index) => (
-              <li key={title}>
-                <span className="methodology-step" aria-hidden="true">{index + 1}</span>
-                <div><h3>{title}</h3><p>{body}</p></div>
-              </li>
-            ))}
-          </ol>
+          <div className="commercial-tool-action">
+            <AllocationMark size={38} />
+            <a className="button button-gold" href={calculatorLink.href}>Probar calculadora</a>
+            <a href="/herramientas/#laboratorio">Abrir el laboratorio financiero</a>
+          </div>
         </div>
       </section>
 
-      <section className="experience-library section-spacing" aria-labelledby="home-library-title">
+      <section className="experience-audiences section-spacing" id="clientes" aria-labelledby="audience-title">
+        <div className="container-shell" data-reveal>
+          <h2 id="audience-title">Qué puedes hacer con lo que aprendes</h2>
+          <ul className="commercial-benefits" role="list">
+            {benefits.map(({ title, text }) => <li key={title}><h3>{title}</h3><p>{text}</p></li>)}
+          </ul>
+          <div className="hero-actions">
+            <a className="commercial-text-link" href="/para-quien/personas/">Formación para personas</a>
+            <a className="commercial-text-link" href="/para-quien/empresas/">Formación para empresas</a>
+            <a className="commercial-text-link" href="/servicios/metodologia/">Cómo enseñamos</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="experience-library section-spacing" id="noticias" aria-labelledby="home-library-title">
         <div className="container-shell library-feature">
           <div data-reveal>
-            <p className="eyebrow">Biblioteca Arkez</p>
-            <h2 id="home-library-title">Lleva la práctica contigo.</h2>
-            <p className="experience-section-description">Encuentra guías, casos y hojas de cálculo para seguir aprendiendo a tu ritmo.</p>
+            <h2 id="home-library-title">Noticias, guías y plantillas</h2>
+            <p className="experience-section-description">Consulta fuentes de actualidad o practica a tu ritmo con los recursos de Arkez.</p>
             <div className="hero-actions">
-              <a className="button button-dark" href="/recursos/">Explorar la biblioteca<ArrowRight size={18} aria-hidden="true" /></a>
-              <a className="hero-guide" href="/recursos/guias/primeros-pasos/">Guía para empezar a invertir</a>
+              <a className="button button-dark" href={newsLink.href}>Ver actualidad</a>
+              <a className="button button-outline" href="/recursos/">Explorar recursos</a>
             </div>
           </div>
           <div className="library-showcase" data-reveal>
@@ -168,11 +109,31 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="container-shell legacy-links" aria-labelledby="quick-title">
-        <h2 id="quick-title">Accesos directos</h2>
-        <ul>
-          {legacyLinks.map(({ id, href, label }) => <li key={id} id={id}><a href={href}>{label}</a></li>)}
-        </ul>
+      <section className="container-shell commercial-ecosystem section-spacing" id="innovacion" aria-labelledby="home-ecosystem-title">
+        <div className="commercial-split" data-reveal>
+          <div>
+            <h2 id="home-ecosystem-title">Explora el ecosistema financiero</h2>
+            <p>Encuentra fuentes, plataformas de información y eventos del sector en un directorio de sitios oficiales.</p>
+          </div>
+          <div className="commercial-ecosystem-links">
+            <TechnologyMark size={34} />
+            <a className="commercial-text-link" href={ecosystemLink.href} id="explorar-innovacion">Consultar el directorio</a>
+            <a className="commercial-text-link" href={innovationLink.href} id="practicar-innovacion">Visitar Innovation Hub</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="commercial-contact section-spacing" id="contacto" aria-labelledby="home-contact-title">
+        <div className="container-shell commercial-split" data-reveal>
+          <div>
+            <h2 id="home-contact-title">¿Qué quieres aprender?</h2>
+            <p>Consulta las opciones de formación o consultoría según tus objetivos.</p>
+          </div>
+          <div className="hero-actions">
+            <a className="button button-gold" href="/contacto/">Solicitar información</a>
+            <a className="button button-ghost" id="mision" href="/nosotros/mision-y-equipo/">Conocer a Arkez</a>
+          </div>
+        </div>
       </section>
     </>
   );

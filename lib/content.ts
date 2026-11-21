@@ -104,9 +104,9 @@ export const methodologySteps: readonly ContentSection[] = [
 const dedicatedServices = Object.fromEntries(services.filter(({ id }) => id !== "educacion-financiera").map((service) => {
   const details = serviceDetails[service.id];
   return [serviceHref(service.id), {
-    title: service.title,
+    title: service.id === "analisis-de-mercados" ? "Aprende a analizar los mercados" : service.title,
     group: "Servicios",
-    description: service.body,
+    description: service.id === "analisis-de-mercados" ? "Aprende a interpretar gráficos, noticias y datos financieros y a verificar sus fuentes." : service.body,
     sections: [
       { title: "Qué ofrecemos", body: service.description },
       ...service.topics,
@@ -120,19 +120,43 @@ const dedicatedServices = Object.fromEntries(services.filter(({ id }) => id !== 
 
 export const pages: Readonly<Record<string, ContentPage>> = {
   ...dedicatedServices,
-  "/servicios/": {
-    title: "Servicios de formación y análisis financiero",
+  "/herramientas/": {
+    title: "Herramientas financieras gratuitas",
     group: "Arkez Invest",
-    description: "Educación financiera, análisis de mercados, formación práctica y consultoría para personas y empresas.",
-    sections: services.map(({ id, title, body, cardTitle }) => ({
+    description: "Prueba una calculadora de ahorro y ejercicios interactivos de mercados, riesgo y diversificación con datos de ejemplo.",
+  },
+  "/herramientas/interes-compuesto/": {
+    title: "Calculadora de interés compuesto",
+    group: "Herramientas",
+    description: "Descubre cómo pueden crecer tus ahorros con el tiempo.",
+    sections: [
+      { title: "¿Qué es el interés compuesto?", body: "Es el cambio que se calcula sobre lo que ya tienes, incluidos los intereses acumulados. Por ejemplo, 100 al 10 % anual pasan a 110 el primer año y a 121 el segundo, sin aportes ni costos." },
+      { title: "¿Qué implica la frecuencia de capitalización?", body: "La tasa anual que introduces es nominal. La calculadora la divide según la frecuencia elegida y obtiene una tasa mensual equivalente para incluir los aportes. A una tasa nominal de 12 % con capitalización mensual, corresponde 1 % por mes." },
+    ],
+  },
+  "/actualidad/": {
+    title: "Actualidad financiera y económica",
+    group: "Arkez Invest",
+    description: "Encuentra fuentes para seguir la economía, la tecnología financiera y las oportunidades de aprendizaje.",
+  },
+  "/ecosistema/": {
+    title: "Directorio financiero y tecnológico",
+    group: "Arkez Invest",
+    description: "Explora sitios oficiales para informarte sobre mercados, activos digitales, tecnología financiera, formación y eventos.",
+  },
+  "/servicios/": {
+    title: "Servicios de formación y consultoría financiera",
+    group: "Arkez Invest",
+    description: "Encuentra la formación que te ayude a empezar a invertir, entender los mercados u organizar las finanzas de tu empresa.",
+    sections: services.filter(({ id }) => id === "formacion-practica" || id === "consultoria-financiera").map(({ id, title, body, cardTitle }) => ({
       id, title, body, links: [{ href: serviceHref(id), label: `Ver servicio de ${cardTitle.toLowerCase()}` }],
     })),
     cards: [methodologyCard],
   },
   "/servicios/educacion-financiera/": {
-    title: "Educación financiera para aprender y decidir",
+    title: "Aprende a invertir desde cero",
     group: "Servicios",
-    description: "Desarrolla conocimientos para analizar decisiones financieras, entender los mercados y evaluar los riesgos de distintos instrumentos.",
+    description: "Entiende qué opciones de inversión tienes, cuánto cuestan y qué riesgos debes revisar antes de decidir.",
     sections: [
       { title: "Fundamentos de inversión", body: "Explora la relación entre objetivos, horizonte, liquidez y tolerancia a pérdidas. Aprende a distinguir una explicación educativa de una recomendación personalizada." },
       { title: "Cómo funcionan los instrumentos", body: "Conoce las diferencias entre acciones, fondos, ETF y activos digitales. Cada instrumento tiene condiciones, costos y riesgos propios." },
@@ -174,15 +198,15 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     next: { href: "/contacto/?servicio=educacion-financiera", label: "Consultar sobre formación para personas" },
   },
   "/para-quien/empresas/": {
-    title: "Formación en finanzas empresariales",
+    title: "Finanzas para tu empresa",
     group: "Para quién",
-    description: "Formación y consultoría para fortalecer el análisis financiero y la planificación de tu empresa.",
+    description: "Aprende a organizar ingresos y gastos, anticipar faltantes de caja y planear con tu equipo.",
     sections: [
       { title: "Liquidez operativa", body: "Identifica cuándo vence cada obligación y qué recursos necesitas mantener disponibles para operar." },
       { title: "Horizonte y escenarios", body: "Distingue los recursos de corto plazo de aquellos con un horizonte mayor. Examina el impacto de cambios en ingresos, costos o tipo de cambio." },
       { title: "Una práctica para tu equipo", body: "Usa un calendario de cobros y pagos ficticios para identificar una brecha de caja. Contrasta el escenario base con un retraso de cobro y registra qué decisión cambiaría.", links: [{ href: "/servicios/consultoria-financiera/", label: "Ver consultoría y planificación" }, { href: "/servicios/metodologia/", label: "Conocer la metodología" }] },
     ],
-    next: { href: "/contacto/?servicio=consultoria-financiera", label: "Consultar sobre formación y consultoría para empresas" },
+    next: { href: "/contacto/?servicio=finanzas-empresariales", label: "Consultar sobre formación para empresas" },
   },
   "/recursos/": {
     title: "Recursos de aprendizaje financiero",

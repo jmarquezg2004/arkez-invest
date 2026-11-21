@@ -1,7 +1,7 @@
 const contactPath = "/api/contacto";
 const encoded = new TextEncoder();
 const maxBody = 8192;
-const services = new Set(["educacion-financiera", "analisis-de-mercados", "formacion-practica", "consultoria-financiera"]);
+const services = new Set(["educacion-financiera", "analisis-de-mercados", "formacion-practica", "consultoria-financiera", "finanzas-empresariales"]);
 
 function respond(status, code) {
   return Response.json({ ok: status === 202, code }, {

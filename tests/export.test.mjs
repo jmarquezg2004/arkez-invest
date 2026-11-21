@@ -13,6 +13,7 @@ const routes = [
   "/recursos/articulos/", "/recursos/articulos/que-es-diversificar/", "/recursos/preguntas-frecuentes/",
   "/nosotros/", "/nosotros/mision-y-equipo/", "/nosotros/transparencia/",
   "/contacto/", "/legal/privacidad/", "/legal/terminos/", "/legal/riesgos/", "/innovacion/",
+  "/herramientas/", "/herramientas/interes-compuesto/", "/actualidad/", "/ecosistema/",
 ];
 
 function pagePath(route) {
@@ -70,34 +71,45 @@ test("enlaces internos, activos y anclas históricas resuelven en la exportació
   }
 });
 
-test("la portada presenta el posicionamiento, los servicios y los cuatro ejercicios educativos", () => {
+test("la portada prioriza servicios y calculadora y el laboratorio conserva sus cuatro ejercicios", () => {
   const html = read("/");
-  assert.match(html, /Conocimiento financiero <span>para tomar mejores decisiones\.<\/span>/);
-  assert.match(html, /Formación, análisis de mercados y herramientas tecnológicas para fortalecer tus capacidades financieras y de inversión\./);
+  assert.match(html, /Aprende a manejar mejor tu dinero y <span>tomar decisiones financieras con confianza\.<\/span>/);
+  assert.match(html, /Cursos prácticos, herramientas gratuitas y orientación financiera para personas y empresas\./);
   assert.match(html, /href="\/servicios\/">Explorar servicios/);
-  assert.match(html, /href="\/nosotros\/">Conoce Arkez/);
-  assert.match(html, /class="hero-guide" href="\/recursos\/guias\/primeros-pasos\/"/);
-  for (const capability of ["Análisis de mercados", "Diversificación de inversiones", "Gestión del riesgo", "Tecnología aplicada"]) {
-    assert.ok(html.includes(`<h3>${capability}</h3>`), capability);
-  }
-  assert.match(html, /Gráficos ilustrativos con fines educativos/);
+  assert.match(html, /href="\/herramientas\/interes-compuesto\/">Probar calculadora/);
   assert.match(html, /brand\/prisma-980\.webp/);
-  assert.equal((html.match(/role="tab"/g) ?? []).length, 4);
+  assert.doesNotMatch(html, /role="tab"/);
+  const tools = read("/herramientas/");
+  for (const capability of ["Análisis de mercados", "Diversificación de inversiones", "Gestión del riesgo", "Tecnología aplicada"]) {
+    assert.ok(tools.includes(`<h3>${capability}</h3>`), capability);
+  }
+  assert.equal((tools.match(/role="tab"/g) ?? []).length, 4);
+  assert.match(read("/recursos/"), /href="\/herramientas\/interes-compuesto\/">Probar calculadora/);
 });
 
-test("la portada enlaza los servicios y públicos y comparte los cuatro pasos metodológicos", () => {
+test("las tres ofertas principales tienen destinos propios y consultoría diferenciada", () => {
   const home = read("/");
-  const methodology = read("/servicios/metodologia/");
-  for (const id of ["educacion-financiera", "analisis-de-mercados", "formacion-practica", "consultoria-financiera"]) {
-    assert.ok(home.includes(`href="/servicios/${id}/"`), id);
-    assert.ok(read("/servicios/").includes(`id="${id}"`), id);
+  const links = ["/servicios/educacion-financiera/", "/servicios/analisis-de-mercados/", "/para-quien/empresas/", "/servicios/consultoria-financiera/"];
+  for (const href of links) {
+    assert.ok(home.includes(`href="${href}"`), href);
+    assert.match(read(href), /Qué incluye el servicio/);
+    assert.match(read(href), /Modalidad/);
   }
-  assert.match(home, /href="\/para-quien\/personas\/" class="audience-link"/);
-  assert.match(home, /href="\/para-quien\/empresas\/" class="audience-link"/);
+  assert.match(read("/para-quien/empresas/"), /\?servicio=finanzas-empresariales/);
   for (const step of ["Diagnóstico", "Formación práctica", "Aplicación de herramientas", "Evaluación del aprendizaje"]) {
-    assert.ok(home.includes(`<h3>${step}</h3>`), step);
-    assert.ok(methodology.includes(`<h2>${step}</h2>`), step);
+    assert.ok(read("/servicios/metodologia/").includes(`<h2>${step}</h2>`), step);
   }
+});
+
+test("actualidad distingue enlaces originales y el directorio publica categorías y cautelas", () => {
+  const news = read("/actualidad/");
+  assert.match(news, /Mercados y economía/);
+  assert.match(news, /Tecnología financiera/);
+  assert.match(news, /Educación y oportunidades/);
+  assert.match(news, /href="\/recursos\/articulos\/"/);
+  assert.equal((news.match(/<time dateTime="/gi) ?? []).length, 3);
+  assert.match(read("/ecosistema/"), /sin afiliación ni recomendación comercial/);
+  assert.match(read("/herramientas/interes-compuesto/"), /investor\.gov\/financial-tools-calculators\/calculators\/calculadora-de-interes-compuesto/);
 });
 
 test("cada servicio tiene contenido propio, preguntas y una consulta con el servicio preseleccionado", () => {
@@ -133,7 +145,7 @@ test("el contacto de prueba carece de atributos que serialicen datos personales"
     assert.doesNotMatch(html, /<iframe\b|formspree\.io|rss2json\.com|raw\.githubusercontent\.com|fonts\.googleapis\.com/i);
     assert.doesNotMatch(html, /<script[^>]*src="https?:\/\//i);
   }
-  for (const route of routes.filter((route) => route !== "/contacto/")) {
+  for (const route of routes.filter((route) => route !== "/contacto/" && route !== "/herramientas/interes-compuesto/")) {
     assert.doesNotMatch(read(route), /<form\b/);
   }
   const form = read("/contacto/").match(/<form[\s\S]*?<\/form>/)?.[0];
@@ -202,16 +214,16 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
 });
 
 test("Innovation Hub exporta las cinco categorías, contenidos y referencias al simulador", () => {
-  const home = read("/");
+  const tools = read("/herramientas/");
   const hub = read("/innovacion/");
-  assert.match(home, /<section class="hub-preview" id="innovacion" aria-labelledby="innovation-heading"/);
+  assert.match(tools, /<section class="hub-preview" id="innovacion" aria-labelledby="innovation-heading"/);
   for (const id of ["portafolios", "defi", "ia", "academia", "ecosistema"]) {
-    assert.ok(home.includes(`id="hub-select-${id}"`));
-    assert.ok(home.includes(`href="/innovacion/#${id}"`));
+    assert.ok(tools.includes(`id="hub-select-${id}"`));
+    assert.ok(tools.includes(`href="/innovacion/#${id}"`));
     assert.ok(hub.includes(`id="${id}"`));
     assert.ok(hub.includes(`href="#${id}"`));
   }
-  for (const html of [home, hub]) {
+  for (const html of [tools, hub]) {
     assert.match(html, /id="hub-weight"/);
     assert.match(html, /id="hub-shock"/);
     assert.match(html, /Distribución de activos/);

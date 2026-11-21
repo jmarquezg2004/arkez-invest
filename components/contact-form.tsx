@@ -2,12 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 
-const choices = [
-  ["educacion-financiera", "Educación financiera"],
-  ["analisis-de-mercados", "Análisis de mercados"],
-  ["formacion-practica", "Formación práctica"],
-  ["consultoria-financiera", "Consultoría financiera"],
-] as const;
+import { contactChoices, contactSourcePage, recordCommercialEvent } from "@/lib/commercial-events";
 
 const challengeUrl = "/api/contacto/prueba";
 type Proof = { token: string; waitMs: number; receivedAt: number };
@@ -33,7 +28,7 @@ export function ContactForm() {
 
   useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get("servicio");
-    if (topicRef.current && requested && choices.some(([value]) => value === requested)) {
+    if (topicRef.current && requested && contactChoices.some(([value]) => value === requested)) {
       topicRef.current.value = requested;
     }
     if (!["127.0.0.1", "localhost"].includes(window.location.hostname)) {
@@ -93,6 +88,10 @@ export function ContactForm() {
         setPhase("ready");
         return;
       }
+      const selected = topicRef.current?.value;
+      if (selected && contactChoices.some(([id]) => id === selected)) {
+        recordCommercialEvent({ type: "inquiry_submitted", mode: "local_test", service: selected, sourcePage: contactSourcePage() });
+      }
       formRef.current?.reset();
       setPhase("success");
     } catch {
@@ -105,7 +104,7 @@ export function ContactForm() {
   return (
     <section className="contact-section" aria-labelledby="contact-form-title">
       <h2 id="contact-form-title">Solicita información</h2>
-      <p id="contact-demo-note">Usa datos ficticios. Esta demostración verifica el formulario en tu equipo y deja el nombre, correo y mensaje en tu navegador.</p>
+      <p id="contact-demo-note">Prueba el formulario con datos ficticios en la vista local. Tu nombre, correo y mensaje permanecen en tu navegador.</p>
       <form ref={formRef} onSubmit={submit} method="post" action="/contacto/" aria-describedby="contact-demo-note">
         <fieldset disabled={phase === "offline"} className="contact-fields">
           <legend className="sr-only">Datos de prueba</legend>
@@ -121,11 +120,11 @@ export function ContactForm() {
             <label htmlFor="contact-topic">Servicio de interés</label>
             <select ref={topicRef} id="contact-topic" required defaultValue="">
               <option value="" disabled>Selecciona un servicio</option>
-              {choices.map(([value, label]) => <option value={value} key={value}>{label}</option>)}
+              {contactChoices.map(([value, label]) => <option value={value} key={value}>{label}</option>)}
             </select>
           </div>
           <div className="contact-field-wide">
-            <label htmlFor="contact-message">¿Qué te gustaría consultar?</label>
+            <label htmlFor="contact-message">Mensaje</label>
             <textarea ref={messageRef} id="contact-message" rows={4} required minLength={10} maxLength={1200} autoComplete="off" onInput={(event) => event.currentTarget.setCustomValidity("")} />
           </div>
           <div hidden aria-hidden="true">
@@ -141,8 +140,9 @@ export function ContactForm() {
         </div>
         <noscript><p>Activa JavaScript en la vista previa local para probar el formulario.</p></noscript>
         <p className="contact-status" role="status">
-          {phase === "offline" && "Abre la vista con el servidor local incluido en la descarga para probar el formulario."}
-          {phase === "success" && "Prueba completada. Tus datos permanecieron en el navegador."}
+          {phase === "loading" && "Preparando la prueba del formulario…"}
+          {phase === "offline" && "El envío de consultas está pendiente de habilitación. Puedes probar el formulario en la vista local."}
+          {phase === "success" && "Prueba completada. No se envió una consulta real."}
         </p>
         {error && <p className="contact-error" role="alert">{error}</p>}
       </form>

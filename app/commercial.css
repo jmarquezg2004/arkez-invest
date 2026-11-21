@@ -1,0 +1,98 @@
+.commercial-hero .experience-copy h1 {
+  font-size: clamp(2.5rem, 4.25vw, 4.75rem);
+  line-height: 1.04;
+}
+.commercial-hero .experience-copy h1 span { line-height: 1.03; }
+.commercial-hero .experience-intro { min-height: clamp(34rem, 47vw, 42rem); }
+.commercial-hero .experience-description { max-width: 29rem; }
+.commercial-split { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: center; gap: clamp(1.4rem, 5vw, 5.5rem); }
+.commercial-split h2 { max-width: 20ch; }
+.commercial-split p { max-width: 48ch; margin-top: .9rem; }
+.commercial-benefits,
+.commercial-offer-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.15rem, 3vw, 2.5rem); margin-top: 1.55rem; }
+.commercial-benefits > li, .commercial-offer-list > li { border-top: 1px solid #a98b52; padding-top: 1rem; }
+.commercial-benefits h3, .commercial-offer-list h3 { font-size: 1.2rem; line-height: 1.35; font-weight: 780; }
+.commercial-benefits p, .commercial-offer-list p { margin-top: .45rem; color: #415671; }
+.commercial-text-link { display: inline-flex; align-items: center; min-height: 44px; color: #183755; font-weight: 760; text-underline-offset: .24em; text-decoration: underline; }
+.commercial-tool { background: #13253f; color: #fff; }
+.commercial-contact { background: var(--experience-night); color: #fff; }
+.commercial-tool .eyebrow, .commercial-tool-action > svg { color: var(--experience-gold); }
+.commercial-tool p:not(.eyebrow), .commercial-contact p { color: #deebfa; }
+.commercial-tool-action, .commercial-ecosystem-links { display: flex; align-items: flex-start; flex-direction: column; gap: .45rem; }
+.commercial-tool-action > a:not(.button) { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: .22em; }
+.commercial-ecosystem-links > svg { color: #8a6127; }
+.commercial-contact .hero-actions { margin-top: 0; }
+.commercial-contact a:focus-visible, .commercial-tool a:focus-visible { outline-color: var(--experience-gold); }
+.commercial-offer, .tools-starter { border-block: 1px solid #c8ced5; padding-block: 1.6rem; }
+.commercial-offer h2, .tools-starter h2, .compound-calculator > h2 { font-size: clamp(1.45rem, 3.2vw, 2.2rem); font-weight: 770; letter-spacing: -.04em; }
+.commercial-offer p, .tools-starter p { max-width: 58ch; margin-top: .45rem; color: #415671; }
+.commercial-offer dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin: 1.2rem 0; }
+.commercial-offer dt { font-weight: 800; }
+.commercial-offer dd { margin-top: .3rem; color: #415671; }
+.tools-starter { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.15rem; }
+.tools-starter h2 svg { display: inline-block; vertical-align: middle; margin-inline-end: .25em; }
+.tools-laboratory { margin-block: 2rem; }
+.tools-laboratory h2 { font-size: clamp(1.75rem, 4vw, 3rem); }
+.tools-laboratory .experience-section-heading { margin-bottom: 1.4rem; }
+:where(.commercial-tool, .commercial-contact, .commercial-ecosystem, .directory-sections > section, .tools-laboratory)[id] { scroll-margin-top: 6rem; }
+.commercial-offer-list a, .directory-sections a, .directory-note a { text-decoration: underline; text-underline-offset: .22em; }
+.commercial-offer-list a:hover, .directory-sections a:hover { color: #80571c; }
+.directory-nav { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.directory-nav a { background: #edf2f7; color: #173451; border-radius: 2rem; display: inline-flex; align-items: center; min-height: 44px; padding: .4rem .8rem; font-weight: 750; }
+.directory-nav a:hover { background: #dce7f1; }
+.directory-sections > section { border-top: 1px solid #bac7d4; padding-block: 1.35rem; }
+.directory-sections h2 { display: flex; align-items: center; gap: .65rem; font-size: clamp(1.3rem, 3vw, 1.75rem); font-weight: 780; }
+.directory-sections h2 svg { flex: none; color: #80571c; }
+.directory-sections h3 { font-size: 1.08rem; font-weight: 760; }
+.directory-sections ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem 1.4rem; margin-top: .85rem; }
+.directory-sections li { background: #f4f7fa; border-radius: .45rem; padding: .9rem 1rem; }
+.directory-sections p, .directory-note { color: #415671; }
+.directory-reading { margin-top: .9rem; padding: .8rem 0 .8rem 1rem; border-inline-start: 2px solid #a98b52; }
+.directory-note { max-width: 65ch; margin-block: 1rem; }
+.compound-calculator { margin-bottom: 2rem; }
+.compound-calculator > p { max-width: 64ch; color: #415671; margin-block: .5rem 1rem; }
+.compound-workspace { display: grid; grid-template-columns: minmax(0, .83fr) minmax(0, 1.17fr); gap: 1.15rem; align-items: start; }
+.compound-controls, .compound-result { border: 1px solid #c9d6e2; border-radius: .85rem; padding: clamp(.85rem, 2.6vw, 1.8rem); min-width: 0; }
+.compound-controls { background: #f3f6f9; }
+.compound-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; min-inline-size: 0; margin-bottom: 1rem; }
+.compound-fields legend, .compound-result h3 { font-size: 1.18rem; font-weight: 800; margin-bottom: .7rem; }
+.compound-controls label { display: grid; align-content: start; gap: .25rem; font-weight: 750; font-size: .94rem; min-width: 0; }
+.compound-controls label :is(input, select) { min-width: 0; width: 100%; min-height: 44px; border: 1px solid #8297ab; border-radius: .38rem; padding-inline: .45rem; color: #102944; background: #fff; }
+.compound-controls p { color: #415671; margin-block: .45rem .95rem; }
+.compound-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
+.compound-result dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin: .45rem 0 1.15rem; }
+.compound-result dt { color: #415671; font-weight: 670; }
+.compound-result dd { font-weight: 820; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.compound-total { grid-column: 1 / -1; border-bottom: 1px solid #c9d6e2; padding-bottom: .65rem; }
+.compound-total dd { font-size: clamp(1.4rem, 5vw, 2.6rem); letter-spacing: -.04em; }
+.compound-chart { border: 1px solid #c9d6e2; border-radius: .45rem; padding: .55rem; }
+.compound-chart figcaption { font-weight: 750; }
+.compound-chart svg { display: block; width: 100%; }
+.compound-chart text { fill: #415671; font-weight: 700; font-size: 18px; }
+.compound-gridline { fill: none; stroke: #a5b6c7; stroke-width: 1; }
+.compound-line-a, .compound-line-b { fill: none; stroke: #1a5283; stroke-width: 3; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.compound-line-b { stroke: #8a601e; stroke-dasharray: 6 4; }
+.compound-legend { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: .4rem; font-weight: 690; }
+.compound-legend span::before { content: ""; display: inline-block; width: 1.25rem; border-top: 3px solid #1a5283; vertical-align: middle; margin-inline-end: .25rem; }
+.compound-legend span + span::before { border-top: 3px dashed #8a601e; }
+.compound-yearly { margin-top: 1rem; }
+.compound-yearly summary { min-height: 44px; cursor: pointer; font-weight: 750; }
+.compound-yearly table { table-layout: fixed; width: 100%; border-collapse: collapse; margin-block: .5rem 1.2rem; font-variant-numeric: tabular-nums; }
+.compound-yearly :is(td, th) { text-align: start; padding: .2rem .3rem; border-bottom: 1px solid #c9d6e2; overflow-wrap: anywhere; }
+.compound-yearly th:first-child { width: 17%; }
+.compound-yearly caption { text-align: start; font-weight: 800; margin-bottom: .45rem; }
+.compound-calculator .compound-disclaimer { margin-top: 1rem; }
+@media (max-width: 760px) {
+  .commercial-hero .experience-intro { min-height: initial; }
+  .commercial-hero .experience-copy h1 { font-size: clamp(2rem, 7.75vw, 3.65rem); max-width: 25ch; }
+  .commercial-hero .hero-art { height: clamp(9rem, 38vw, 17rem); }
+  .experience-services .services-photo { grid-row: 2; }
+  .commercial-split, .compound-workspace { grid-template-columns: minmax(0, 1fr); }
+  .commercial-benefits, .commercial-offer-list, .commercial-offer dl { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 420px) {
+  .directory-sections ul { grid-template-columns: minmax(0, 1fr); }
+}
+
+.commercial-offer-list [id] { scroll-margin-top: 6rem; }
+.resource-tool { margin-bottom: 1.8rem; }

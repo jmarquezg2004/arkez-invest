@@ -11,10 +11,38 @@ type SeoEntry = {
 export const seoData: Readonly<Record<string, SeoEntry>> = {
   "/": {
     title: "Educación y consultoría financiera con Arkez Invest",
-    description: "Arkez Invest desarrolla capacidades financieras en personas y empresas mediante educación, consultoría, análisis de mercados y herramientas tecnológicas.",
+    description: "Aprende a organizar tu dinero con cursos prácticos, herramientas gratuitas y orientación financiera de Arkez Invest para personas y equipos de empresa.",
     primary: "educación y consultoría financiera",
     secondary: ["formación financiera", "herramientas tecnológicas para inversiones"],
     intent: "institucional",
+  },
+  "/herramientas/": {
+    title: "Herramientas de aprendizaje financiero | Arkez Invest",
+    description: "Practica con herramientas financieras gratuitas de Arkez Invest. Calcula el interés compuesto y cambia los supuestos de mercados, riesgo y diversificación.",
+    primary: "herramientas financieras gratuitas",
+    secondary: [],
+    intent: "informativa",
+  },
+  "/herramientas/interes-compuesto/": {
+    title: "Calculadora gratuita de interés compuesto | Arkez Invest",
+    description: "Simula el crecimiento de tus ahorros con la calculadora de interés compuesto de Arkez Invest. Ajusta aportes, tasa y plazo para comparar dos escenarios.",
+    primary: "calculadora de interés compuesto",
+    secondary: [],
+    intent: "informativa",
+  },
+  "/actualidad/": {
+    title: "Actualidad de economía y tecnología financiera | Arkez",
+    description: "Consulta fuentes oficiales de actualidad financiera sobre economía, mercados, tecnología y educación. Encuentra noticias originales y lecturas para aprender.",
+    primary: "actualidad financiera y económica",
+    secondary: [],
+    intent: "informativa",
+  },
+  "/ecosistema/": {
+    title: "Directorio de tecnología y mercados | Arkez Invest",
+    description: "Explora un directorio informativo con sitios oficiales de mercados, activos digitales, fintech y entidades de formación. Consulta sus herramientas y eventos.",
+    primary: "directorio de plataformas financieras",
+    secondary: [],
+    intent: "informativa",
   },
   "/servicios/": {
     title: "Formación y análisis de mercados financieros | Arkez",

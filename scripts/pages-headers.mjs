@@ -51,11 +51,10 @@ export function writePagesHeaders(directory, indexable) {
   }
 
   for (const file of htmlFiles) {
-    const paths = [`/${file}`];
-    if (file === "index.html") paths.push("/");
-    else if (file.endsWith("/index.html")) {
-      paths.push(`/${file.slice(0, -10)}`, `/${file.slice(0, -11)}`);
-    }
+    // Pages redirects explicit index.html requests before serving the extensionless document.
+    const paths = file === "index.html" ? ["/"]
+      : file.endsWith("/index.html") ? [`/${file.slice(0, -10)}`, `/${file.slice(0, -11)}`]
+      : [`/${file}`];
     const policy = contentPolicy([read(file)]);
     for (const path of paths) rules.push([path, "! Content-Security-Policy", `Content-Security-Policy: ${policy}`]);
   }

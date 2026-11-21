@@ -8,6 +8,10 @@ export const siteName = "Arkez Invest";
 export const siteDescription = "Arkez Invest es una empresa de educación, formación y consultoría financiera que aplica herramientas tecnológicas para desarrollar capacidades en personas y empresas.";
 export const siteUrl = "https://arkezinvest.com";
 export const innovationLink = { label: "Innovación", href: "/innovacion/" } as const;
+export const toolsLink = { label: "Herramientas", href: "/herramientas/" } as const;
+export const calculatorLink = { label: "Calculadora de interés compuesto", href: "/herramientas/interes-compuesto/" } as const;
+export const newsLink = { label: "Actualidad", href: "/actualidad/" } as const;
+export const ecosystemLink = { label: "Ecosistema", href: "/ecosistema/" } as const;
 export const contactLink = { label: "Contacto", href: "/contacto/" };
 export const serviceHref = (id: string) => `/servicios/${id}/`;
 export const educationLink = {
@@ -24,19 +28,22 @@ export const navigation: readonly NavigationGroup[] = [
     label: "Servicios",
     href: "/servicios/",
     children: [
-      educationLink,
+      { ...educationLink, label: "Invertir desde cero" },
       { label: "Análisis de mercados", href: serviceHref("analisis-de-mercados") },
-      { label: "Formación práctica", href: serviceHref("formacion-practica") },
+      { label: "Finanzas para empresas", href: "/para-quien/empresas/" },
       { label: "Consultoría financiera", href: serviceHref("consultoria-financiera") },
-      { label: "Metodología", href: "/servicios/metodologia/" },
+      { label: "Formación práctica", href: serviceHref("formacion-practica") },
+      { label: "Personas y empresas", href: "/para-quien/" },
     ],
   },
   {
-    label: "Para quién",
-    href: "/para-quien/",
+    ...toolsLink,
     children: [
-      { label: "Personas", href: "/para-quien/personas/" },
-      { label: "Empresas", href: "/para-quien/empresas/" },
+      calculatorLink,
+      { label: "Laboratorio financiero", href: "/herramientas/#laboratorio" },
+      { label: "Simulador de portafolios", href: "/innovacion/#simulador" },
+      innovationLink,
+      ecosystemLink,
     ],
   },
   {
@@ -58,6 +65,10 @@ export const navigation: readonly NavigationGroup[] = [
   },
 ];
 
+export const mainNavigation: readonly (NavigationGroup | SiteLink)[] = [
+  ...navigation.slice(0, 2), newsLink, ...navigation.slice(2),
+];
+
 export const legalLinks: readonly SiteLink[] = [
   { label: "Privacidad", href: "/legal/privacidad/" },
   { label: "Términos", href: "/legal/terminos/" },
@@ -68,6 +79,6 @@ export const legacyLinks = [
   { id: "mision", href: "/nosotros/mision-y-equipo/", label: "Misión y equipo" },
   { id: "portafolio", href: educationLink.href, label: educationLink.label },
   { id: "clientes", href: "/para-quien/", label: "Para quién" },
-  { id: "noticias", href: "/recursos/articulos/", label: "Artículos" },
+  { id: "noticias", href: newsLink.href, label: newsLink.label },
   { id: "contacto", href: contactLink.href, label: "Contacto" },
 ] as const;

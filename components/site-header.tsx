@@ -2,18 +2,24 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { ArrowRight, LibraryMark, BusinessMark, ChevronDown, CounselMark, Menu, X } from "@/components/arkez-icons";
+import { ArrowRight, LibraryMark, TechnologyMark, ChevronDown, CounselMark, Menu, X } from "@/components/arkez-icons";
 import { Brand } from "./brand";
-import { contactLink, innovationLink, navigation, type SiteLink } from "@/lib/navigation";
+import { contactLink, mainNavigation, type SiteLink } from "@/lib/navigation";
 
 const menuIntroductions: Partial<Record<string, { icon: typeof CounselMark; description: string }>> = {
   "/servicios/": { icon: CounselMark, description: "Formación, análisis y consultoría para desarrollar capacidades financieras." },
-  "/para-quien/": { icon: BusinessMark, description: "Encuentra el enfoque adecuado para tus decisiones o las de tu equipo." },
+  "/herramientas/": { icon: TechnologyMark, description: "Prueba calculadoras y ejercicios gratuitos con tus propios supuestos." },
   "/recursos/": { icon: LibraryMark, description: "Estudia con guías, artículos y herramientas listas para usar." },
   "/nosotros/": { icon: CounselMark, description: "Conoce nuestra misión, nuestro enfoque y cómo trabajamos." },
 };
 
 const menuDescriptions: Record<string, string> = {
+  "/herramientas/interes-compuesto/": "Calcula cuánto podrías acumular",
+  "/herramientas/#laboratorio": "Aprende con cuatro ejercicios",
+  "/innovacion/#simulador": "Compara dos carteras ficticias",
+  "/innovacion/": "Explora la tecnología en finanzas",
+  "/ecosistema/": "Consulta el directorio de plataformas",
+  "/para-quien/": "Encuentra formación para ti o para tu equipo",
   "/servicios/educacion-financiera/": "Bases para evaluar decisiones",
   "/servicios/analisis-de-mercados/": "Indicadores, fuentes y contexto",
   "/servicios/formacion-practica/": "Ejercicios y herramientas aplicadas",
@@ -78,12 +84,13 @@ export function SiteHeader() {
         <Brand />
         <nav aria-label="Navegación principal" className="desktop-nav">
           <a className="nav-link" href="/" aria-current={pathname === "/" ? "page" : undefined}>Inicio</a>
-          {navigation.map((group) => {
+          {mainNavigation.map((group) => {
+            if (!("children" in group)) return <a className="nav-link" key={group.href} href={group.href} aria-current={pathname === group.href ? "page" : undefined}>{group.label}</a>;
             const introduction = menuIntroductions[group.href] ?? { icon: CounselMark, description: group.label };
             const Icon = introduction.icon;
             return (
               <details className="nav-group" name="desktop-navigation" key={group.href}>
-                <summary className="nav-link" data-current={pathname.startsWith(group.href)}>
+                <summary className="nav-link" data-current={pathname.startsWith(group.href) || group.children.some(({ href }) => pathname === href)}>
                   {group.label}<ChevronDown size={14} aria-hidden="true" />
                 </summary>
                 <div className="nav-dropdown">
@@ -104,7 +111,6 @@ export function SiteHeader() {
               </details>
             );
           })}
-          <a className="nav-link" href={innovationLink.href} aria-current={pathname === innovationLink.href ? "page" : undefined}>{innovationLink.label}</a>
         </nav>
         <a className="button button-header desktop-contact" href={contactLink.href} aria-current={pathname === contactLink.href ? "page" : undefined}>
           {contactLink.label}
@@ -117,7 +123,7 @@ export function SiteHeader() {
           </summary>
           <nav aria-label="Navegación móvil" className="mobile-panel">
             <MenuLink link={{ label: "Inicio", href: "/" }} pathname={pathname} />
-            {navigation.map((group) => (
+            {mainNavigation.map((group) => "children" in group ? (
               <details className="mobile-group" name="mobile-navigation" key={group.href}>
                 <summary>{group.label}<ChevronDown size={16} aria-hidden="true" /></summary>
                 <ul>
@@ -125,8 +131,7 @@ export function SiteHeader() {
                   {group.children.map((link) => <li key={link.href}><MenuLink link={link} pathname={pathname} /></li>)}
                 </ul>
               </details>
-            ))}
-            <MenuLink link={innovationLink} pathname={pathname} />
+            ) : <MenuLink key={group.href} link={group} pathname={pathname} />)}
             <MenuLink link={contactLink} pathname={pathname} />
           </nav>
         </details>

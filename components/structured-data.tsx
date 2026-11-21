@@ -1,6 +1,7 @@
 import { breadcrumbs } from "@/lib/breadcrumbs";
 import type { ContentPage } from "@/lib/content";
-import { serviceHref, siteDescription, siteName, siteUrl } from "@/lib/navigation";
+import { calculatorLink, ecosystemLink, newsLink, serviceHref, siteDescription, siteName, siteUrl } from "@/lib/navigation";
+import { ecosystemSections, editorialNews } from "@/lib/external-directory";
 import { resources } from "@/lib/library";
 import { socialImage } from "@/lib/seo";
 import { services } from "@/lib/services";
@@ -74,6 +75,32 @@ export function StructuredData({ path, page }: { path: string; page?: ContentPag
             },
           }),
         },
+      })),
+    });
+  }
+
+  if (path === calculatorLink.href) {
+    graph.push({
+      "@type": "WebApplication",
+      name: calculatorLink.label,
+      url: `${siteUrl}${path}`,
+      applicationCategory: "FinanceApplication",
+      operatingSystem: "Web",
+      inLanguage: "es",
+      isAccessibleForFree: true,
+      publisher: organization,
+    });
+  }
+
+  if (path === newsLink.href || path === ecosystemLink.href) {
+    const items = path === newsLink.href
+      ? Object.values(editorialNews).map(({ title, href }) => ({ name: title, href }))
+      : ecosystemSections.flatMap(({ sources }) => sources.map(({ name, href }) => ({ name, href })));
+    graph.push({
+      "@type": "ItemList",
+      name: page?.title,
+      itemListElement: items.map(({ name, href }, index) => ({
+        "@type": "ListItem", position: index + 1, name, url: href,
       })),
     });
   }

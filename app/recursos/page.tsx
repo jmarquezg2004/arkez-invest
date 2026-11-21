@@ -1,3 +1,4 @@
+import { CommercialPages } from "@/components/commercial-pages";
 import { ContentPage } from "@/components/content-page";
 import { ResourceLibrary } from "@/components/resource-library";
 import { StructuredData } from "@/components/structured-data";
@@ -13,7 +14,7 @@ export default function ResourcesPage() {
   return (
     <>
       <StructuredData page={page} path={path} />
-      <ContentPage page={page} path={path}><ResourceLibrary /></ContentPage>
+      <ContentPage page={page} path={path}><CommercialPages path={path} /><ResourceLibrary /></ContentPage>
     </>
   );
 }

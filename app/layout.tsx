@@ -6,6 +6,8 @@ import "./innovation.css";
 import "./motion.css";
 import "./polish.css";
 import "./refinement.css";
+import "./commercial.css";
+import { CommercialEvents } from "@/components/commercial-events";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { siteDescription, siteName, siteUrl } from "@/lib/navigation";
@@ -31,6 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="es" className={manrope.variable}>
       <body>
         <a href="#contenido" className="skip-link">Saltar al contenido</a>
+        <CommercialEvents />
         <SiteHeader />
         <main id="contenido" tabIndex={-1}>{children}</main>
         <SiteFooter />
