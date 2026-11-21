@@ -6,6 +6,8 @@ import { AllocationMark, ArrowRight, BusinessMark, ChainMark, EducationMark } fr
 import { calculateCompound, compoundExample } from "@/lib/compound-interest";
 import { tiers } from "@/lib/experience-products";
 import { money } from "./format";
+import prisma from "./prisma.webp";
+import prismaMobile from "./prisma-movil.webp";
 
 const savings = calculateCompound(compoundExample);
 const icons = [EducationMark, AllocationMark, BusinessMark];
@@ -85,13 +87,19 @@ export function ExperienceHero() {
   }
 
   return <section className="ax-hero" aria-labelledby="ax-title">
-    <div className="ax-shell ax-hero-grid">
-      <div className="ax-hero-copy">
+    <div className="ax-hero-scene">
+      <picture className="ax-hero-art" aria-hidden="true">
+        <source media="(max-width: 650px)" srcSet={prismaMobile.src} />
+        <img src={prisma.src} width={prisma.width} height={prisma.height} alt="" fetchPriority="high" />
+      </picture>
+      <div className="ax-shell ax-hero-copy">
         <p className="ax-kicker">Educación, formación y consultoría</p>
         <h1 id="ax-title">Entiende tu dinero. Aprende a invertir. <em>Aprovecha la tecnología.</em></h1>
         <p>Prueba decisiones financieras con ejemplos y aprende a evaluar las herramientas que ya existen.</p>
-        <a className="ax-primary" href="#herramientas-arkez">Explorar las demostraciones<ArrowRight size={17} /></a>
+        <a className="ax-primary" href="#caminos-arkez">Explorar los tres caminos<ArrowRight size={17} /></a>
       </div>
+    </div>
+    <div className="ax-shell ax-hero-grid" id="caminos-arkez">
       <MotionConfig reducedMotion="user" transition={{ type: "spring", stiffness: 190, damping: 27 }}>
         <LayoutGroup id="arkez-paths">
           <div className="ax-console">
