@@ -27,7 +27,7 @@ export function AiMap() {
           })}
         </ol>
         <div className="ax-map-detail" id="ax-map-details">
-          <div role="status"><h3>{node.title}</h3><p>{node.note}</p></div>
+          <div role="status"><div key={node.id} data-inspector><h3>{node.title}</h3><p>{node.note}</p></div></div>
           <ul role="list">{relations.map(({ label, explanation, url, source }) => (
             <li key={url}><strong>{label}</strong><p>{explanation}</p><a href={url}>{source}<MoveUpRight size={14} /></a></li>
           ))}</ul>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BusinessMark, ScenarioMark } from "@/components/arkez-icons";
 import { projectProperty } from "@/lib/property-example";
 import { money, number } from "./format";
 
@@ -10,23 +11,36 @@ const controlDefinitions = [
   { key: "annualChange", label: "Cambio anual del valor", minimum: -8, maximum: 12, step: 1, unit: "%" },
 ] as const;
 
+const baseProperty = { price: 300, expenses: .6, annualChange: 4 };
+const scenarios = [
+  { label: "Baja", annualChange: -4 },
+  { label: "Base", annualChange: 4 },
+  { label: "Alza", annualChange: 8 },
+] as const;
+
 export function PropertyDemo() {
-  const [inputs, setInputs] = useState({ price: 300, expenses: .6, annualChange: 4 });
+  const [inputs, setInputs] = useState(baseProperty);
   const { future, operating, difference, years } = projectProperty(inputs);
   const scale = Math.max(inputs.price, future, operating);
   return <article id="inmuebles" className="ax-tool ax-property" aria-labelledby="ax-property-title">
-    <div className="ax-tool-header"><span>Aplica · Inmuebles</span><small>Demostración ficticia</small></div>
+    <div className="ax-tool-header"><span><BusinessMark size={19} /> Evaluador inmobiliario</span><small>Datos ficticios</small></div>
     <div className="ax-tool-body">
       <h3 id="ax-property-title">Antes de comprar, compara.</h3>
       <p>Prueba cuánto cambia el resultado si ajustas el precio, los gastos o el valor futuro que supones.</p>
+      <div className="ax-scenario-picker" role="group" aria-label="Escenarios de valor futuro">
+        {scenarios.map(({ label, annualChange }) => <button key={label} type="button"
+          aria-pressed={inputs.annualChange === annualChange}
+          onClick={() => setInputs({ ...inputs, annualChange })}>{label}</button>)}
+        <button type="button" className="ax-reset" onClick={() => setInputs(baseProperty)}>Restablecer</button>
+      </div>
       <div className="ax-property-layout">
         <div className="ax-property-controls">{controlDefinitions.map(({ key, label, minimum, maximum, step, unit }) => (
-          <label key={key}><span>{label}</span><output>{number.format(inputs[key])} {unit}</output>
-            <input type="range" aria-label={label} min={minimum} max={maximum} step={step} value={inputs[key]}
+          <label key={key}><span>{label}</span><span className="ax-input-value" aria-hidden="true">{number.format(inputs[key])} {unit}</span>
+            <input type="range" aria-label={label} aria-valuetext={`${number.format(inputs[key])} ${unit === "M COP" ? "millones de pesos colombianos" : "por ciento"}`} min={minimum} max={maximum} step={step} value={inputs[key]}
               onChange={(event) => setInputs({ ...inputs, [key]: Number(event.currentTarget.value) })} /></label>
         ))}</div>
         <div className="ax-property-results">
-          <span>Valor estimado en {years} años</span><strong>{money.format(future * 1e6)}</strong>
+          <span id="ax-property-estimate">Valor estimado en {years} años</span><strong aria-describedby="ax-property-estimate" aria-live="polite">{money.format(future * 1e6)}</strong>
           <div className="ax-property-bars" aria-hidden="true">
             <span>Precio<progress max={scale} value={inputs.price} /></span>
             <span>Valor futuro<progress max={scale} value={future} /></span>
@@ -55,7 +69,7 @@ export function LedgerDemo() {
   const rows = positions.filter(({ platform }) => filter === "Todas" || filter === platform);
   const amount = rows.reduce((total, { capital }) => total + capital, 0);
   return <article id="registro" className="ax-tool ax-ledger" aria-labelledby="ax-ledger-title">
-    <div className="ax-tool-header"><span>Aplica · Seguimiento</span><small>Demostración ficticia</small></div>
+    <div className="ax-tool-header"><span><ScenarioMark size={19} /> Registro de inversiones</span><small>Datos ficticios</small></div>
     <div className="ax-tool-body">
       <h3 id="ax-ledger-title">Mira tus posiciones juntas.</h3>
       <p>Consulta qué registraste y cuánto capital anotaste en cada plataforma.</p>

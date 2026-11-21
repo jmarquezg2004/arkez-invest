@@ -226,6 +226,10 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
         assert.ok(html.includes(label), label);
       }
       assert.match(html, /href="\/herramientas\/interes-compuesto\/"/);
+      assert.match(html, /href="#caminos-arkez"[^>]*>Explorar los tres caminos/);
+      assert.match(html, /href="#inmuebles"[^>]*>Probar el simulador/);
+      assert.match(html, /aria-label="Secciones de Arkez Experience"/);
+      assert.match(html, /aria-label="Escenarios de valor futuro"/);
       assert.doesNotMatch(html, /<script[^>]+src="https?:/);
     } else if (route === "/prototipos/design-system-premium/") {
       for (const name of ["dashboard", "ofertas", "herramientas-demo", "proyeccion", "recorrido", "iconografia", "lecturas"]) {

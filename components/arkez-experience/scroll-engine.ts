@@ -5,7 +5,11 @@ export function mountScrollSequence(stage: HTMLElement, onStep: (step: number) =
   gsap.registerPlugin(ScrollTrigger);
   let playback: gsap.core.Tween | undefined;
   let trigger: ScrollTrigger | undefined;
-  const headerHeight = () => document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
+  const headerHeight = () => {
+    const site = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
+    const section = document.querySelector(".ax-subnav")?.getBoundingClientRect().height ?? 0;
+    return site + section;
+  };
   const scrollTo = (top: number) => window.scrollTo({ top, behavior: "instant" });
   const context = gsap.context(() => {
     const timeline = gsap.timeline({
