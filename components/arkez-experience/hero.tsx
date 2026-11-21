@@ -42,7 +42,7 @@ function LevelVisual({ level }: { level: number }) {
   </>;
 }
 
-export function ExperiencePaths() {
+function ExperiencePaths() {
   const [level, setLevel] = useState(0);
   const [playing, setPlaying] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -87,15 +87,12 @@ export function ExperiencePaths() {
   }
 
   return <section className="ax-path-region" id="caminos-arkez" aria-labelledby="ax-path-title">
-    <div className="ax-shell ax-hero-grid">
-      <header className="ax-path-heading">
-        <h2 id="ax-path-title">Elige tu punto de partida.</h2>
-        <p>Empieza con una guía, compara un escenario o explora una herramienta para tu equipo.</p>
-      </header>
+    <div className="ax-hero-grid">
+      <h2 id="ax-path-title" className="sr-only">Elige tu punto de partida</h2>
       <MotionConfig reducedMotion="user" transition={{ type: "spring", stiffness: 190, damping: 27 }}>
         <LayoutGroup id="arkez-paths">
           <div className="ax-console">
-            <div className="ax-console-head"><span><ChainMark size={16} /> Laboratorio Arkez</span><small>Prototipo educativo</small></div>
+            <div className="ax-console-head"><span><ChainMark size={16} /> Laboratorio Arkez</span><small>Demostración educativa</small></div>
             <div className="ax-tabs" role="tablist" aria-label="Elige tu camino">
               {tiers.map(({ name }, index) => <button type="button" role="tab" id={`ax-level-${index}`} key={name}
                 aria-controls="ax-level-panel" aria-selected={level === index} tabIndex={level === index ? 0 : -1}
@@ -128,19 +125,24 @@ export function ExperiencePaths() {
 
 export function ExperienceHero() {
   return <section className="ax-hero" aria-labelledby="ax-title">
+    <link rel="preload" as="image" media="(max-width: 650px)" href={prismaMobile.src} fetchPriority="high" />
+    <link rel="preload" as="image" media="(min-width: 650.01px)" href={prisma.src} fetchPriority="high" />
     <div className="ax-hero-scene">
       <picture className="ax-hero-art" aria-hidden="true">
         <source media="(max-width: 650px)" srcSet={prismaMobile.src} />
         <img src={prisma.src} width={prisma.width} height={prisma.height} alt="" fetchPriority="high" />
       </picture>
-      <div className="ax-shell ax-hero-copy">
-        <p className="ax-kicker">Educación, formación y consultoría</p>
-        <h1 id="ax-title">Entiende tu dinero. Aprende a invertir. <em>Aprovecha la tecnología.</em></h1>
-        <p>Prueba decisiones financieras con ejemplos y aprende a evaluar las herramientas que ya existen.</p>
-        <div className="ax-hero-actions">
-          <a className="ax-primary" href="#caminos-arkez">Explorar los tres caminos<ArrowRight size={17} /></a>
-          <a className="ax-secondary" href="#inmuebles">Probar el simulador<ArrowRight size={17} /></a>
+      <div className="ax-shell ax-masthead">
+        <div className="ax-hero-copy">
+          <p className="ax-kicker">Educación financiera · Arkez Invest</p>
+          <h1 id="ax-title">Invierte en <em>tu criterio.</em></h1>
+          <p>Entiende tu dinero, compara escenarios y aprende a evaluar las herramientas que usas para invertir.</p>
+          <div className="ax-hero-actions">
+            <a className="ax-primary" href="#caminos-arkez">Explorar los tres caminos<ArrowRight size={17} /></a>
+            <a className="ax-secondary" href="#inmuebles">Probar el simulador<ArrowRight size={17} /></a>
+          </div>
         </div>
+        <ExperiencePaths />
       </div>
     </div>
   </section>;

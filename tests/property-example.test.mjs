@@ -18,3 +18,11 @@ test("un valor estable y una caída siguen descontando los gastos del periodo", 
   assert.ok(falling.future < 650 && falling.future > 0);
   assert.equal(falling.difference, falling.future - 650);
 });
+
+test("la trayectoria anual parte del precio inicial y evalúa periodos intermedios", () => {
+  const inputs = { price: 300, expenses: 0.6, annualChange: 4 };
+  assert.equal(projectProperty(inputs, 0).future, 300);
+  assert.equal(projectProperty(inputs, 0).operating, 0);
+  assert.ok(Math.abs(projectProperty(inputs, 2).future - 324.48) < 1e-8);
+  assert.ok(Math.abs(projectProperty(inputs, 2).operating - 14.4) < 1e-8);
+});

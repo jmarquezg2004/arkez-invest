@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BusinessMark, ScenarioMark } from "@/components/arkez-icons";
 import { projectProperty } from "@/lib/property-example";
 import { money, number } from "./format";
+import propertyArt from "./maqueta.webp";
 
 const controlDefinitions = [
   { key: "price", label: "Precio de compra", minimum: 120, maximum: 650, step: 5, unit: "M COP" },
@@ -21,12 +22,25 @@ const scenarios = [
 export function PropertyDemo() {
   const [inputs, setInputs] = useState(baseProperty);
   const { future, operating, difference, years } = projectProperty(inputs);
-  const scale = Math.max(inputs.price, future, operating);
+  const projection = Array.from({ length: years + 1 }, (_, year) => projectProperty(inputs, year).future);
+  const floor = Math.floor(Math.min(...projection) / 50) * 50 - 20;
+  const ceiling = Math.ceil(Math.max(...projection) / 50) * 50 + 20;
+  const coordinates = projection.map((value, year) => {
+    const x = 44 + year * 65;
+    const y = 115 - (value - floor) * 94 / (ceiling - floor);
+    return [x, y];
+  });
+  const line = coordinates.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x} ${y}`).join(" ");
   return <article id="inmuebles" className="ax-tool ax-property" aria-labelledby="ax-property-title">
-    <div className="ax-tool-header"><span><BusinessMark size={19} /> Evaluador inmobiliario</span><small>Datos ficticios</small></div>
+    <div className="ax-property-masthead">
+      <img src={propertyArt.src} width={propertyArt.width} height={propertyArt.height} alt="" loading="lazy" />
+      <div>
+        <p className="ax-kicker"><BusinessMark size={19} /> Evaluador inmobiliario</p>
+        <h3 id="ax-property-title">Antes de comprar, compara.</h3>
+        <p>Prueba cuánto cambia el resultado si ajustas el precio, los gastos o el valor futuro que supones.</p>
+      </div>
+    </div>
     <div className="ax-tool-body">
-      <h3 id="ax-property-title">Antes de comprar, compara.</h3>
-      <p>Prueba cuánto cambia el resultado si ajustas el precio, los gastos o el valor futuro que supones.</p>
       <div className="ax-scenario-picker" role="group" aria-label="Escenarios de valor futuro">
         {scenarios.map(({ label, annualChange }) => <button key={label} type="button"
           aria-pressed={inputs.annualChange === annualChange}
@@ -41,11 +55,19 @@ export function PropertyDemo() {
         ))}</div>
         <div className="ax-property-results">
           <span id="ax-property-estimate">Valor estimado en {years} años</span><strong aria-describedby="ax-property-estimate" aria-live="polite">{money.format(future * 1e6)}</strong>
-          <div className="ax-property-bars" aria-hidden="true">
-            <span>Precio<progress max={scale} value={inputs.price} /></span>
-            <span>Valor futuro<progress max={scale} value={future} /></span>
-            <span>Gastos<progress max={scale} value={operating} /></span>
-          </div>
+          <figure className="ax-property-chart">
+            <svg viewBox="0 0 390 145" aria-hidden="true">
+              {[ceiling, (ceiling + floor) / 2, floor].map((value, index) => <g key={value}>
+                <path className="ax-chart-grid" d={`M44 ${21 + 47 * index}H369`} />
+                <text x="0" y={25 + 47 * index}>{number.format(value)}</text>
+              </g>)}
+              <path className="ax-chart-fill" d={`${line} V115 H44 Z`} />
+              <path className="ax-chart-line" d={line} />
+              <circle cx={coordinates[years][0]} cy={coordinates[years][1]} r="4" />
+              <text x="44" y="138">Hoy</text><text x="369" y="138" textAnchor="end">Año {years}</text>
+            </svg>
+            <figcaption>Escenario ilustrativo · millones de pesos colombianos</figcaption>
+          </figure>
           <dl><div><dt>Gastos acumulados</dt><dd>{money.format(operating * 1e6)}</dd></div>
             <div><dt>Cambio tras gastos</dt><dd>{money.format(difference * 1e6)}</dd></div></dl>
         </div>
