@@ -7,6 +7,7 @@ import "./motion.css";
 import "./polish.css";
 import "./refinement.css";
 import "./commercial.css";
+import "./home-showcase.css";
 import { CommercialEvents } from "@/components/commercial-events";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";

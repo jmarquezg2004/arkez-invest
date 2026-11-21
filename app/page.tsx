@@ -1,13 +1,29 @@
 import type { Metadata } from "next";
-import { AllocationMark, BusinessMark, EducationMark, MarketMark, TechnologyMark } from "@/components/arkez-icons";
+import { ArrowDown, ArrowRight, BusinessMark, ChainMark, EducationMark, MarketMark, MoveUpRight, TechnologyMark } from "@/components/arkez-icons";
+import { MarketTrace } from "@/components/charts/financial-graphics";
+import { CompactCompound } from "@/components/compact-compound";
+import { HomeServiceArt } from "@/components/home-service-art";
+import { InnovationPreview } from "@/components/innovation/innovation-preview";
+import { LearningLabDisclosure } from "@/components/learning-lab-disclosure";
 import { RevealSections } from "@/components/reveal-sections";
 import { StructuredData } from "@/components/structured-data";
 import { offers } from "@/lib/commercial-offers";
-import { calculatorLink, ecosystemLink, innovationLink, newsLink } from "@/lib/navigation";
+import { ecosystemSections, editorialNews } from "@/lib/external-directory";
+import { calculatorLink, ecosystemLink, newsLink } from "@/lib/navigation";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("/");
 const serviceIcons = [EducationMark, MarketMark, BusinessMark];
+const serviceActions = ["Explorar el curso", "Ver la formación", "Ver opciones para empresas"];
+const featuredPlatforms = [
+  { ...ecosystemSections[0].sources[0], icon: MarketMark, category: "Mercados" },
+  { ...ecosystemSections[1].sources[0], icon: ChainMark, category: "Activos digitales" },
+  { ...ecosystemSections[2].sources[0], icon: TechnologyMark, category: "Fintech" },
+  { ...ecosystemSections[3].sources[0], icon: EducationMark, category: "Formación" },
+];
+const mobileHeroSources = "/brand/prisma-540.webp 540w, /brand/prisma-720.webp 720w";
+const desktopHeroSources = `${mobileHeroSources}, /brand/prisma-980.webp 980w`;
+const readingDate = new Intl.DateTimeFormat("es-CO", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 const benefits = [
   { title: "Practica antes de decidir", text: "Compara alternativas con casos y datos de ejemplo." },
   { title: "Haz mejores preguntas", text: "Identifica qué costos, plazos y riesgos conviene revisar." },
@@ -17,6 +33,8 @@ const benefits = [
 export default function Home() {
   return (
     <>
+      <link rel="preload" as="image" media="(max-width: 760px)" imageSrcSet={mobileHeroSources} imageSizes="100vw" fetchPriority="high" />
+      <link rel="preload" as="image" media="(min-width: 760.01px)" imageSrcSet={desktopHeroSources} imageSizes="58vw" fetchPriority="high" />
       <StructuredData path="/" />
       <RevealSections />
       <section className="experience-hero commercial-hero" aria-labelledby="home-title">
@@ -31,51 +49,64 @@ export default function Home() {
             </div>
           </div>
           <div className="hero-art">
-            <img src="/brand/prisma-980.webp" srcSet="/brand/prisma-540.webp 540w, /brand/prisma-720.webp 720w, /brand/prisma-980.webp 980w" sizes="(max-width: 760px) 100vw, 58vw" width="980" height="784" alt="" fetchPriority="high" />
+            <picture>
+              <source media="(max-width: 760px)" srcSet={mobileHeroSources} sizes="100vw" />
+              <img src="/brand/prisma-980.webp" srcSet={desktopHeroSources} sizes="58vw" width="980" height="784" alt="" fetchPriority="high" />
+            </picture>
             <div className="hero-light" aria-hidden="true" />
             <svg className="hero-register" viewBox="0 0 900 650" aria-hidden="true" preserveAspectRatio="none">
               <path d="M140 494H260L371 414H517L662 303H824"/>
               <path d="M306 500H448L503 461H635L718 401H870"/>
             </svg>
+            <figure className="hero-plot">
+              <figcaption><span>Lectura de mercados</span><span>Serie ficticia</span></figcaption>
+              <div className="hero-market-close"><strong>114</strong><span>puntos de índice · base 100</span></div>
+              <MarketTrace readings={[100, 104, 102, 109, 106, 112, 108, 114]} />
+              <a href="#laboratorio">Probar un ejercicio<ArrowDown size={15} aria-hidden="true" /></a>
+            </figure>
           </div>
         </div>
       </section>
 
-      <section className="container-shell experience-services section-spacing" id="portafolio" aria-labelledby="learn-title">
-        <figure className="services-photo" data-reveal>
-          <img src="/brand/estudio-980.webp" srcSet="/brand/estudio-540.webp 540w, /brand/estudio-980.webp 980w" sizes="(max-width: 880px) 90vw, 42vw" width="980" height="1200" alt="" loading="lazy" />
-        </figure>
-        <div data-reveal>
+      <section className="container-shell home-services section-spacing" id="portafolio" aria-labelledby="learn-title">
+        <div className="home-services-heading" data-reveal>
           <h2 id="learn-title">Elige qué quieres aprender</h2>
-          <ul className="experience-service-list" role="list">
-            {offers.slice(0, 3).map(({ href, title, summary }, index) => {
-              const Icon = serviceIcons[index];
-              return <li key={href}>
-                <a href={href}>
-                  <Icon size={22} />
-                  <div><h3>{title}</h3><p>{summary}</p></div>
-                </a>
-              </li>;
-            })}
-          </ul>
           <a className="commercial-text-link" href="/servicios/consultoria-financiera/">Consultar por acompañamiento financiero</a>
         </div>
+        <ul className="home-service-grid" role="list" data-reveal>
+          {offers.slice(0, 3).map(({ href, title, summary }, index) => {
+            const Icon = serviceIcons[index];
+            return <li key={href} className="home-service-card" data-service-tone={index}>
+              <div className="home-service-visual">
+                <span className="home-service-icon"><Icon size={26} /></span>
+                <HomeServiceArt index={index} />
+              </div>
+              <div className="home-service-copy">
+                <h3>{title}</h3>
+                <p>{summary}</p>
+                <a href={href}>{serviceActions[index]}<ArrowRight size={17} aria-hidden="true" /></a>
+              </div>
+            </li>;
+          })}
+        </ul>
       </section>
 
-      <section className="commercial-tool section-spacing" id="laboratorio" aria-labelledby="home-tool-title">
-        <div className="container-shell commercial-split" data-reveal>
-          <div>
-            <p className="eyebrow">Herramienta gratuita</p>
-            <h2 id="home-tool-title">Calculadora de interés compuesto</h2>
-            <p>Descubre cómo pueden crecer tus ahorros con el tiempo. Prueba cuánto cambia el resultado si ajustas tus aportes, el plazo o la tasa.</p>
+      <section className="commercial-tool home-tool section-spacing" id="laboratorio" aria-labelledby="home-tool-title">
+        <div className="container-shell">
+          <div className="home-tool-grid">
+            <div className="home-tool-copy" data-reveal>
+              <p className="eyebrow">Herramienta gratuita</p>
+              <h2 id="home-tool-title">Calcula cómo podrían crecer tus ahorros</h2>
+              <p>Cambia el aporte o el plazo y mira cómo evoluciona el resultado.</p>
+              <a className="button button-gold" href={calculatorLink.href}>Abrir calculadora completa</a>
+            </div>
+            <CompactCompound />
           </div>
-          <div className="commercial-tool-action">
-            <AllocationMark size={38} />
-            <a className="button button-gold" href={calculatorLink.href}>Probar calculadora</a>
-            <a href="/herramientas/#laboratorio">Abrir el laboratorio financiero</a>
-          </div>
+          <LearningLabDisclosure />
         </div>
       </section>
+
+      <InnovationPreview compact />
 
       <section className="experience-audiences section-spacing" id="clientes" aria-labelledby="audience-title">
         <div className="container-shell" data-reveal>
@@ -91,36 +122,47 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="experience-library section-spacing" id="noticias" aria-labelledby="home-library-title">
-        <div className="container-shell library-feature">
-          <div data-reveal>
-            <h2 id="home-library-title">Noticias, guías y plantillas</h2>
-            <p className="experience-section-description">Consulta fuentes de actualidad o practica a tu ritmo con los recursos de Arkez.</p>
-            <div className="hero-actions">
-              <a className="button button-dark" href={newsLink.href}>Ver actualidad</a>
-              <a className="button button-outline" href="/recursos/">Explorar recursos</a>
-            </div>
+      <section className="home-reading section-spacing" id="noticias" aria-labelledby="home-library-title">
+        <div className="container-shell">
+          <div className="home-services-heading" data-reveal>
+            <h2 id="home-library-title">Actualidad y recursos</h2>
+            <a className="commercial-text-link" href={newsLink.href}>Ver toda la actualidad</a>
           </div>
-          <div className="library-showcase" data-reveal>
-            <a href="/recursos/guias/primeros-pasos/" aria-label="Leer Primeros pasos para invertir"><img src="/recursos/portadas/primeros-pasos-para-invertir.webp" alt="" width="240" height="340" loading="lazy" /></a>
-            <a href="/recursos/guias/#comparar-escenarios" aria-label="Consultar el Laboratorio financiero en Excel"><img src="/recursos/portadas/laboratorio-financiero.webp" alt="" width="240" height="340" loading="lazy" /></a>
-            <a href="/recursos/articulos/#lectura-de-mercados" aria-label="Leer Cómo leer un movimiento de mercado"><img src="/recursos/portadas/lectura-de-mercados.webp" alt="" width="240" height="340" loading="lazy" /></a>
+          <div className="home-reading-grid" data-reveal>
+            <ul className="home-news-list" role="list">
+              {Object.values(editorialNews).slice(0, 2).map(({ title, href, date, source }) => (
+                <li key={href}>
+                  <p>{source} · <time dateTime={date}>{readingDate.format(new Date(date))}</time></p>
+                  <h3><a href={href}>{title}<MoveUpRight size={17} aria-hidden="true" /></a></h3>
+                </li>
+              ))}
+            </ul>
+            <article className="home-resource">
+              <img src="/recursos/portadas/primeros-pasos-para-invertir.webp" alt="" width="240" height="340" loading="lazy" />
+              <div>
+                <h3>Guías y plantillas</h3>
+                <a href="/recursos/guias/primeros-pasos/">Leer Primeros pasos para invertir</a>
+                <a className="commercial-text-link" href="/recursos/">Explorar recursos</a>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      <section className="container-shell commercial-ecosystem section-spacing" id="innovacion" aria-labelledby="home-ecosystem-title">
-        <div className="commercial-split" data-reveal>
-          <div>
-            <h2 id="home-ecosystem-title">Explora el ecosistema financiero</h2>
-            <p>Encuentra fuentes, plataformas de información y eventos del sector en un directorio de sitios oficiales.</p>
-          </div>
-          <div className="commercial-ecosystem-links">
-            <TechnologyMark size={34} />
-            <a className="commercial-text-link" href={ecosystemLink.href} id="explorar-innovacion">Consultar el directorio</a>
-            <a className="commercial-text-link" href={innovationLink.href} id="practicar-innovacion">Visitar Innovation Hub</a>
-          </div>
+      <section className="container-shell home-platforms section-spacing" id="ecosistema" aria-labelledby="home-ecosystem-title">
+        <div className="home-services-heading" data-reveal>
+          <h2 id="home-ecosystem-title">Explora el ecosistema financiero</h2>
+          <a className="commercial-text-link" href={ecosystemLink.href}>Consultar el directorio</a>
         </div>
+        <ul className="home-platform-list" role="list" data-reveal>
+          {featuredPlatforms.map(({ name, href, icon: Icon, category }) => (
+            <li key={href}><a href={href}>
+              <span className="home-platform-mark"><Icon size={25} /></span>
+              <span><strong>{name}</strong><small>{category}</small></span>
+              <MoveUpRight size={16} aria-hidden="true" />
+            </a></li>
+          ))}
+        </ul>
       </section>
 
       <section className="commercial-contact section-spacing" id="contacto" aria-labelledby="home-contact-title">

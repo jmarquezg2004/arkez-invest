@@ -14,6 +14,10 @@ export type CompoundScenario = {
   compounds: number;
 };
 
+export const compoundExample = {
+  principal: 1_000_000, monthly: 100_000, years: 10, annualRate: 6, compounds: 12,
+} as const satisfies CompoundScenario;
+
 export function validateScenario({ principal, monthly, years, annualRate, compounds }: CompoundScenario) {
   if (!Number.isFinite(principal) || principal < 0 || principal > 1e12
     || !Number.isFinite(monthly) || monthly < 0 || monthly > 1e12) return "Ingresa montos entre 0 y 1 billón (1.000.000.000.000).";

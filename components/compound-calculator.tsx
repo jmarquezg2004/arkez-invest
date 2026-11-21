@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { calculateCompound, frequencies, validateScenario, type CompoundScenario } from "@/lib/compound-interest";
+import { calculateCompound, compoundExample as initial, frequencies, validateScenario, type CompoundScenario } from "@/lib/compound-interest";
 import { recordCommercialEvent } from "@/lib/commercial-events";
 
-const initial = { principal: 1000000, monthly: 100000, years: 10, annualRate: 6, compounds: 12 };
 const currencies = ["COP", "USD", "EUR"] as const;
 type Currency = typeof currencies[number];
 type Draft = { [Key in keyof CompoundScenario]: string };

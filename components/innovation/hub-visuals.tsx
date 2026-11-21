@@ -4,16 +4,16 @@ import type { InnovationTopic } from "@/lib/innovation";
 import { academyPath, ecosystemPaths } from "@/lib/innovation-modules";
 import { InstrumentControl } from "./instrument-control";
 
-export function InnovationArtwork({ priority = false }: { priority?: boolean }) {
+export function InnovationArtwork({ priority = false, showTrace = true }: { priority?: boolean; showTrace?: boolean }) {
   return (
-    <figure className="innovation-artwork">
-      <figcaption className="sr-only">Serie ficticia de mercado: el índice pasa de 100 a 115 puntos.</figcaption>
+    <figure className="innovation-artwork" aria-hidden={showTrace ? undefined : true}>
+      {showTrace && <figcaption className="sr-only">Serie ficticia de mercado: el índice pasa de 100 a 115 puntos.</figcaption>}
       <img src="/brand/estratos-900.webp" srcSet="/brand/estratos-580.webp 580w, /brand/estratos-900.webp 900w" sizes="(max-width: 760px) 94vw, 48vw" width="900" height="600" alt="" fetchPriority={priority ? "high" : undefined} loading={priority ? "eager" : "lazy"} />
-      <div className="artwork-trace">
+      {showTrace && <div className="artwork-trace">
         <p className="artwork-caption">Lectura de una señal <span>Datos ficticios</span></p>
         <MarketTrace readings={[100, 106, 104, 113, 109, 115]} />
         <p>100 → 115 <span>puntos de índice</span></p>
-      </div>
+      </div>}
     </figure>
   );
 }

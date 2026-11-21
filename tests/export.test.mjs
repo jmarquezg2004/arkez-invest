@@ -78,6 +78,15 @@ test("la portada prioriza servicios y calculadora y el laboratorio conserva sus 
   assert.match(html, /href="\/servicios\/">Explorar servicios/);
   assert.match(html, /href="\/herramientas\/interes-compuesto\/">Probar calculadora/);
   assert.match(html, /brand\/prisma-980\.webp/);
+  assert.match(html, /class="hero-plot"/);
+  assert.match(html, /Lectura de mercados/);
+  assert.match(html, /class="quick-calc"/);
+  assert.match(html, /class="quick-trace"/);
+  assert.match(html, /Probar el laboratorio financiero/);
+  assert.match(html, /hub-preview hub-preview-home/);
+  assert.match(html, /Filtra la fuente de datos/);
+  assert.equal((html.match(/class="home-service-card"/g) ?? []).length, 3);
+  assert.equal((html.match(/<time dateTime="/gi) ?? []).length, 2);
   assert.doesNotMatch(html, /role="tab"/);
   const tools = read("/herramientas/");
   for (const capability of ["Análisis de mercados", "Diversificación de inversiones", "Gestión del riesgo", "Tecnología aplicada"]) {

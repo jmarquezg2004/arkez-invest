@@ -1,10 +1,35 @@
 import { ArrowDown, ArrowRight, ScenarioMark } from "@/components/arkez-icons";
 import { innovationPath } from "@/lib/innovation";
+import { InstrumentControl } from "./instrument-control";
 import { InnovationArtwork } from "./hub-visuals";
 import { PortfolioLab } from "./portfolio-lab";
 import { TopicExplorer } from "./topic-explorer";
 
-export function InnovationPreview() {
+export function InnovationPreview({ compact = false }: { compact?: boolean } = {}) {
+  if (compact) return (
+    <section className="hub-preview hub-preview-home" id="innovacion" aria-labelledby="innovation-heading">
+      <div className="container-shell hub-home-layout">
+        <div className="hub-copy" data-reveal>
+          <p className="eyebrow">Arkez Innovation Hub</p>
+          <h2 id="innovation-heading">Entiende lo que cambia <em>en las finanzas</em></h2>
+          <p>Explora la IA, la tokenización y las nuevas formas de analizar datos.</p>
+          <div className="hub-actions">
+            <a className="button button-gold" href={innovationPath}>Conocer Innovation Hub</a>
+            <a className="hub-light-link" href={`${innovationPath}#simulador`} id="practicar-innovacion">Comparar portafolios</a>
+          </div>
+        </div>
+        <div className="hub-home-stage">
+          <InnovationArtwork showTrace={false} />
+          <section className="hub-home-instrument" id="explorar-innovacion" aria-labelledby="hub-home-signal">
+            <h3 id="hub-home-signal">¿Qué cambia según la fuente?</h3>
+            <InstrumentControl kind="ia" />
+          </section>
+        </div>
+      </div>
+    </section>
+  );
+
+
   return (
     <section className="hub-preview" id="innovacion" aria-labelledby="innovation-heading">
       <div className="hub-intro">

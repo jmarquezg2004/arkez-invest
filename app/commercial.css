@@ -16,11 +16,8 @@
 .commercial-text-link { display: inline-flex; align-items: center; min-height: 44px; color: #183755; font-weight: 760; text-underline-offset: .24em; text-decoration: underline; }
 .commercial-tool { background: #13253f; color: #fff; }
 .commercial-contact { background: var(--experience-night); color: #fff; }
-.commercial-tool .eyebrow, .commercial-tool-action > svg { color: var(--experience-gold); }
-.commercial-tool p:not(.eyebrow), .commercial-contact p { color: #deebfa; }
-.commercial-tool-action, .commercial-ecosystem-links { display: flex; align-items: flex-start; flex-direction: column; gap: .45rem; }
-.commercial-tool-action > a:not(.button) { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: .22em; }
-.commercial-ecosystem-links > svg { color: #8a6127; }
+.commercial-tool .eyebrow { color: var(--experience-gold); }
+.commercial-contact p { color: #deebfa; }
 .commercial-contact .hero-actions { margin-top: 0; }
 .commercial-contact a:focus-visible, .commercial-tool a:focus-visible { outline-color: var(--experience-gold); }
 .commercial-offer, .tools-starter { border-block: 1px solid #c8ced5; padding-block: 1.6rem; }
@@ -86,7 +83,6 @@
   .commercial-hero .experience-intro { min-height: initial; }
   .commercial-hero .experience-copy h1 { font-size: clamp(2rem, 7.75vw, 3.65rem); max-width: 25ch; }
   .commercial-hero .hero-art { height: clamp(9rem, 38vw, 17rem); }
-  .experience-services .services-photo { grid-row: 2; }
   .commercial-split, .compound-workspace { grid-template-columns: minmax(0, 1fr); }
   .commercial-benefits, .commercial-offer-list, .commercial-offer dl { grid-template-columns: minmax(0, 1fr); }
 }
