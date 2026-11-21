@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ArrowRight, ChartNoAxesCombined, Layers3, Shield, SlidersHorizontal } from "lucide-react";
+import { AllocationBand, MarketTrace } from "@/components/charts/financial-graphics";
 import { evaluateScenario, scenarioKeys, type ScenarioKey } from "@/lib/learning-scenarios";
 
 const scenarios = {
@@ -21,10 +22,10 @@ const scenarios = {
   },
   riesgo: {
     tab: "Riesgo", title: "Gestión del riesgo", icon: Shield,
-    description: "Aplica una caída a una posición ficticia de $1.000.000 COP. Comparar la pérdida en pesos con el capital inicial ayuda a poner el porcentaje en contexto.",
-    control: "Caída del activo", initial: 15, min: 0, max: 60, step: 1,
+    description: "Prueba una caída o un alza sobre una posición ficticia de $1.000.000 COP y compara el resultado con un escenario sin cambios.",
+    control: "Caída del activo (un valor negativo representa un alza)", initial: 15, min: -60, max: 60, step: 1,
     result: "Cambio de la posición", unit: "COP", href: "/legal/riesgos/", link: "Entender el riesgo financiero",
-    first: "Capital inicial", last: "Capital restante", chart: "Valor de la posición antes y después de la caída",
+    first: "Capital inicial", last: "Capital restante", chart: "Valor de la posición según el escenario",
   },
   herramientas: {
     tab: "Herramientas", title: "Tecnología aplicada", icon: SlidersHorizontal,
@@ -44,38 +45,50 @@ function format(value: number, unit: string) {
 function Graph({ scenario, input, result }: { scenario: ScenarioKey; input: number; result: number }) {
   const { first, last, chart } = scenarios[scenario];
   if (scenario === "mercados") {
-    const endY = 93 - input * 2;
-    const path = `M 18 93 L 80 71 L 147 86 L 211 45 L 284 69 L 362 ${endY}`;
-    return (
-      <figure className="lab-chart">
-        <svg viewBox="0 0 380 147" role="img" aria-label={`${chart}: 100 puntos al inicio, ${format(result, "puntos")} al cierre.`}>
-          <path className="lab-grid" d="M18 26H362 M18 59H362 M18 93H362 M18 126H362" />
-          <path className="lab-area" d={`${path} L 362 138 H 18 Z`} />
-          <path className="lab-line" d={path} />
-          <circle className="lab-dot" cx="362" cy={endY} r="5" />
-        </svg>
-        <figcaption><span>{first}: 100</span><span>{last}: {number.format(result)}</span></figcaption>
-      </figure>
-    );
+    return <figure className="lab-chart lab-market">
+      <figcaption><strong>{chart}</strong><span>Puntos · datos ficticios</span></figcaption>
+      <MarketTrace readings={[100, 106, 102, 115, 108, result]} markers />
+      <div className="lab-chart-caption"><span>{first}: 100</span><span>{last}: {number.format(result)}</span></div>
+    </figure>;
   }
-  const [start, end, domain, unit] = scenario === "diversificacion"
-    ? [input, 100 - input, 100, "%"]
-    : scenario === "riesgo"
-      ? [1_000_000, 1_000_000 + result, 1_000_000, "COP"]
-      : [400_000, result, 1_200_000, "COP"];
-  const base = 80;
-  const width = (value: number) => Math.abs(value) / domain * 278;
-
-  return (
-    <figure className="lab-chart">
-      <svg viewBox="0 0 380 147" role="img" aria-label={`${chart}: ${first}, ${format(start, unit)}. ${last}, ${format(end, unit)}.`}>
-        <path className="lab-grid" d="M80 14V133 M150 14V133 M220 14V133 M290 14V133 M360 14V133" />
-        <rect className="lab-bar" x={base} y="31" width={width(start)} height="29" rx="4" />
-        <rect className={end < 0 ? "lab-bar negative" : "lab-bar comparison"} x={end < 0 ? base - width(end) : base} y="87" width={width(end)} height="29" rx="4" />
+  if (scenario === "diversificacion") {
+    return <figure className="lab-chart lab-allocation">
+      <figcaption><strong>{chart}</strong><span>% del total</span></figcaption>
+      <AllocationBand label="Distribución de activos" assets={[
+        { name: first, weight: input, tone: "gold" },
+        { name: last, weight: 100 - input, tone: "blue" },
+      ]} />
+      <p>Si la renta variable cae 20 %, el efecto ponderado es {format(result, "%")}.</p>
+    </figure>;
+  }
+  if (scenario === "riesgo") {
+    const values = [
+      { label: "Caída", value: 1_000_000 - Math.abs(result), state: "loss" },
+      { label: "Sin cambio", value: 1_000_000, state: "neutral" },
+      { label: "Alza", value: 1_000_000 + Math.abs(result), state: "gain" },
+    ];
+    return <figure className="lab-chart lab-risk">
+      <figcaption><strong>{chart}</strong><span>COP · variación de ±{format(Math.abs(input), "%")}</span></figcaption>
+      <svg viewBox="0 0 320 118" aria-hidden="true">
+        <path className="chart-grid" d="M0 26H320 M0 68H320 M0 109H320" />
+        {values.map(({state, value}, index) => {
+          const height = value / 16_000;
+          return <rect key={state} className="risk-column" data-tone={state} data-selected={state === (input > 0 ? "loss" : input < 0 ? "gain" : "neutral")} x={index * 105 + 23} y={109 - height} width="65" height={height} rx="4" />;
+        })}
       </svg>
-      <figcaption><span>{first}: {format(start, unit)}</span><span>{last}: {format(end, unit)}</span></figcaption>
-    </figure>
-  );
+      <div className="lab-risk-labels">{values.map(({label,value}) => <span key={label}>{label}<strong>{number.format(value)}</strong></span>)}</div>
+    </figure>;
+  }
+  return <figure className="lab-chart lab-cash">
+    <figcaption><strong>{chart}</strong><span>COP · datos ficticios</span></figcaption>
+    <dl>
+      <div><dt>Saldo inicial</dt><dd>{number.format(400_000)}</dd></div>
+      <div><dt>Ingresos</dt><dd>+{number.format(800_000)}</dd></div>
+      <div><dt>Pagos</dt><dd>−{number.format(input)}</dd></div>
+      <div data-negative={result < 0}><dt>Saldo final</dt><dd>{number.format(result)}</dd></div>
+    </dl>
+    <p>{result < 0 ? "Los pagos superan los fondos disponibles." : "Los fondos del período cubren los pagos."}</p>
+  </figure>;
 }
 
 export function LearningLab() {
@@ -128,7 +141,7 @@ export function LearningLab() {
               </div>
               <a href={scenario.href}>{scenario.link}<ArrowRight size={16} aria-hidden="true" /></a>
             </div>
-            <div className="lab-visual">
+            <div className="lab-visual" data-scenario={key}>
               <div className="lab-result" role="status" aria-atomic="true">
                 <span>{scenario.result}</span>
                 <strong>{format(result, scenario.unit)}</strong>

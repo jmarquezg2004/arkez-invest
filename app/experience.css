@@ -108,13 +108,9 @@
 .hero-plot figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .2rem .55rem; font-size: .89rem; font-weight: 820; }
 .hero-plot figcaption span + span { color: #d7e5fa; font-size: .76rem; font-weight: 660; }
 .hero-plot > svg { display: block; width: 100%; margin-block: .65rem .25rem; overflow: visible; }
-.hero-plot-grid { stroke: #4f688b; stroke-width: 1; fill: none; }
-.hero-plot-line { fill: none; stroke: #f7d38c; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; animation: plot-line 1.55s .12s ease-out both; }
-.hero-plot circle { fill: #f7d38c; }
 .hero-plot a { display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; color: #f8e2b5; font-size: .84rem; font-weight: 760; }
 .hero-plot a svg { flex: none; }
 .hero-plot a:hover { text-decoration: underline; }
-@keyframes plot-line { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 
 .section-spacing { padding-block: clamp(3.8rem, 7.7vw, 7.6rem); }
 .experience-section-heading { display: flex; justify-content: space-between; align-items: end; gap: 1.4rem 3rem; margin-bottom: clamp(1.6rem, 4vw, 3rem); }
@@ -158,12 +154,6 @@
 .lab-result strong { color: #f5d590; font-size: clamp(1.25rem, 3.85vw, 2.15rem); letter-spacing: -.04em; }
 .lab-chart svg { display: block; width: 100%; margin-top: .25rem; }
 .lab-chart figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .35rem .7rem; color: #d4e0ee; font-size: .78rem; line-height: 1.45; }
-.lab-grid { fill: none; stroke: #496583; stroke-width: 1; }
-.lab-area { fill: #244366; }
-.lab-line { fill: none; stroke: #f5d590; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-.lab-dot, .lab-bar.comparison { fill: #f5d590; }
-.lab-bar { fill: #9fc2ee; transition: width .25s ease, x .25s ease; }
-.lab-bar.negative { fill: #ffc0ad; }
 
 .experience-services { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr); align-items: center; gap: clamp(2rem, 6vw, 6.25rem); }
 .services-photo { min-width: 0; overflow: hidden; border-radius: .8rem; background: var(--experience-paper); }
@@ -254,5 +244,5 @@
   .library-showcase { gap: .42rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .section-enter, .hero-plot-line, .nav-group[open] > .nav-dropdown { animation: none; }
+  .section-enter, .nav-group[open] > .nav-dropdown { animation: none; }
 }

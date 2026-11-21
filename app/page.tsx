@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowDown, ArrowRight, BookOpen, Building2, Compass, Layers3, TrendingUp, Users } from "lucide-react";
 import { InnovationPreview } from "@/components/innovation/innovation-preview";
+import { MarketTrace } from "@/components/charts/financial-graphics";
 import { LearningLab } from "@/components/learning-lab";
 import { RevealSections } from "@/components/reveal-sections";
 import { StructuredData } from "@/components/structured-data";
@@ -56,14 +57,12 @@ export default function Home() {
             </div>
           </div>
           <div className="hero-art">
-            <img src="/brand/prisma-980.webp" srcSet="/brand/prisma-540.webp 540w, /brand/prisma-980.webp 980w" sizes="(max-width: 760px) 94vw, 52vw" width="980" height="784" alt="" fetchPriority="high" />
+            <img src="/brand/prisma-980.webp" srcSet="/brand/prisma-540.webp 540w, /brand/prisma-720.webp 720w, /brand/prisma-980.webp 980w" sizes="(max-width: 760px) 94vw, 52vw" width="980" height="784" alt="" fetchPriority="high" />
+            <div className="hero-light" aria-hidden="true" />
             <figure className="hero-plot">
               <figcaption><span>Lectura de mercados</span><span>Serie ficticia</span></figcaption>
-              <svg viewBox="0 0 320 86" aria-hidden="true">
-                <path className="hero-plot-grid" d="M0 14H320 M0 42H320 M0 70H320 M54 0V86 M109 0V86 M164 0V86 M219 0V86 M274 0V86" />
-                <path className="hero-plot-line" pathLength="1" d="M1 64 27 56 54 67 78 47 109 52 138 33 164 42 192 25 219 28 246 11 274 19 311 7" />
-                <circle cx="311" cy="7" r="4" />
-              </svg>
+              <div className="hero-market-close"><strong>114</strong><span>puntos de índice · base 100</span></div>
+              <MarketTrace readings={[100, 104, 102, 109, 106, 112, 108, 114]} />
               <a href="#laboratorio">Probar el ejercicio<ArrowDown size={15} aria-hidden="true" /></a>
             </figure>
           </div>

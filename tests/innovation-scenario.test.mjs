@@ -20,3 +20,10 @@ test("las dos carteras coinciden con peso cero y la híbrida reacciona al choque
   assert.equal(comparePortfolios(30, -50).diversifiedChange, -18.8);
   assert.equal(comparePortfolios(30, 25).diversifiedChange, 3.7);
 });
+
+test("los aportes en puntos porcentuales explican la variación de la cartera híbrida", () => {
+  for (const shock of [-50, -25, 0, 25]) {
+    const { contributions, diversifiedChange } = comparePortfolios(15, shock);
+    assert.ok(Math.abs(Object.values(contributions).reduce((sum, value) => sum + value, 0) - diversifiedChange) < 1e-10);
+  }
+});

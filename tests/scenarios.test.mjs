@@ -14,3 +14,9 @@ test("los cuatro ejercicios calculan valores de referencia y extremos", () => {
   assert.equal(evaluateScenario("herramientas", 1_200_000), 0);
   assert.equal(evaluateScenario("herramientas", 1_500_000), -300_000);
 });
+
+test("el ejercicio de riesgo distingue alza, neutralidad y caída sobre la misma posición", () => {
+  assert.equal(evaluateScenario("riesgo", -20), 200_000);
+  assert.equal(evaluateScenario("riesgo", 0), 0);
+  assert.equal(evaluateScenario("riesgo", 20), -200_000);
+});

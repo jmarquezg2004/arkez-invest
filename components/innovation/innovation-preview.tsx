@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowRight, FileSpreadsheet } from "lucide-react";
 import { innovationPath } from "@/lib/innovation";
-import { InnovationMap } from "./hub-visuals";
+import { InnovationArtwork } from "./hub-visuals";
 import { PortfolioLab } from "./portfolio-lab";
 import { TopicExplorer } from "./topic-explorer";
 
@@ -18,7 +18,7 @@ export function InnovationPreview() {
               <a className="hub-light-link" href="#explorar-innovacion">Explorar tecnologías<ArrowDown size={16} aria-hidden="true" /></a>
             </div>
           </div>
-          <InnovationMap />
+          <InnovationArtwork />
         </div>
       </div>
 

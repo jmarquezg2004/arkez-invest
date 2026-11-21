@@ -1,7 +1,8 @@
 import { ArrowRight, ChevronDown, ChevronRight } from "lucide-react";
 import { StructuredData } from "@/components/structured-data";
 import { RevealSections } from "@/components/reveal-sections";
-import { InnovationMap, TopicDiagram } from "@/components/innovation/hub-visuals";
+import { InnovationArtwork, TopicDiagram } from "@/components/innovation/hub-visuals";
+import { InvestmentJourney } from "@/components/innovation/investment-journey";
 import { PortfolioLab } from "@/components/innovation/portfolio-lab";
 import { innovationDescription, innovationFaq, innovationPath, innovationSources, innovationTitle, innovationTopics, innovationUpdated } from "@/lib/innovation";
 import { pageMetadata } from "@/lib/seo";
@@ -25,12 +26,14 @@ export default function InnovationPage() {
               <p className="eyebrow">Arkez Innovation Hub</p>
               <h1>{innovationTitle}</h1>
               <p>Para evaluar una tecnología financiera, empieza por los derechos que representa, los supuestos que usa y lo que puede fallar. Esta guía reúne cinco temas, con ejemplos para practicar esa evaluación.</p>
+              <a className="hub-light-link journey-anchor" href="#trayectoria">Recorrer el caso ilustrativo<ArrowRight size={16} aria-hidden="true" /></a>
               <p className="hub-byline">Por <a href="/nosotros/">Arkez Invest</a> · Actualizado el <time dateTime={innovationUpdated}>20 de noviembre de 2026</time></p>
             </div>
-            <InnovationMap />
+            <InnovationArtwork priority />
           </div>
         </div>
       </div>
+      <InvestmentJourney />
       <div className="hub-guide">
         <div className="container-shell hub-guide-layout">
           <nav aria-label="Temas de innovación" className="hub-guide-nav">

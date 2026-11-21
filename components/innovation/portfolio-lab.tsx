@@ -6,6 +6,12 @@ import { comparePortfolios } from "@/lib/innovation-scenario";
 
 const formatter = new Intl.NumberFormat("es-CO", { maximumFractionDigits: 1 });
 const percentage = (value: number) => `${formatter.format(value)} %`;
+const presets = [
+  { label: "Caída", shock: -25 },
+  { label: "Sin cambios", shock: 0 },
+  { label: "Alza", shock: 25 },
+] as const;
+
 const instruments = [
   { key: "equity", label: "Acciones" },
   { key: "bonds", label: "Bonos" },
@@ -17,7 +23,7 @@ export function PortfolioLab() {
   const [weight, setWeight] = useState(15);
   const [shock, setShock] = useState(-25);
   useEffect(() => setReady(true), []);
-  const { reference, diversified, referenceChange, diversifiedChange } = comparePortfolios(weight, shock);
+  const { reference, diversified, referenceChange, diversifiedChange, contributions } = comparePortfolios(weight, shock);
   const rows = [
     { label: "Cartera de referencia", weights: reference, value: referenceChange },
     { label: "Cartera híbrida", weights: diversified, value: diversifiedChange },
@@ -31,6 +37,9 @@ export function PortfolioLab() {
         <p className="portfolio-fixed">Supuestos fijos del escenario: acciones −8 %, bonos +1 %.</p>
         <fieldset disabled={!ready}>
           <legend className="sr-only">Ajusta los supuestos de la cartera híbrida</legend>
+          <div className="portfolio-presets" role="group" aria-label="Escenarios de activos digitales">
+            {presets.map((preset) => <button type="button" key={preset.label} aria-pressed={preset.shock === shock} onClick={() => setShock(preset.shock)}>{preset.label}</button>)}
+          </div>
           <label htmlFor="hub-weight">Peso de activos digitales <span aria-hidden="true">{percentage(weight)}</span></label>
           <input id="hub-weight" type="range" min="0" max="30" step="5" value={weight} aria-valuetext={percentage(weight)} onChange={(event) => setWeight(event.currentTarget.valueAsNumber)} />
           <label htmlFor="hub-shock">Variación de activos digitales <span aria-hidden="true">{percentage(shock)}</span></label>
@@ -71,6 +80,13 @@ export function PortfolioLab() {
               </div>
             ))}
           </div>
+        </figure>
+        <figure className="portfolio-contribution">
+          <figcaption>Aporte a la variación de la cartera híbrida <span>(puntos porcentuales)</span></figcaption>
+          <dl>
+            {instruments.map(({ key, label }) => <div key={key}><dt>{label}</dt><dd>{formatter.format(contributions[key])}</dd></div>)}
+          </dl>
+          <p>El aporte de cada activo es su peso por su variación. La suma explica el resultado de la cartera.</p>
         </figure>
       </div>
     </div>
