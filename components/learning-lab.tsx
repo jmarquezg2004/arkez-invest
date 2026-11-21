@@ -2,7 +2,8 @@
 
 import { useRef, useState } from "react";
 import { ArrowRight, MarketMark, AllocationMark, RiskMark, TechnologyMark } from "@/components/arkez-icons";
-import { AllocationBand, MarketTrace } from "@/components/charts/financial-graphics";
+import { FinancialRange } from "@/components/charts/financial-range";
+import { AllocationBand, MarketTrace, esNumber as number } from "@/components/charts/financial-graphics";
 import { evaluateScenario, scenarioKeys, type ScenarioKey } from "@/lib/learning-scenarios";
 
 const scenarios = {
@@ -23,7 +24,7 @@ const scenarios = {
   riesgo: {
     tab: "Riesgo", title: "Gestión del riesgo", icon: RiskMark,
     description: "Prueba una caída o un alza sobre una posición ficticia de $1.000.000 COP y compara el resultado con un escenario sin cambios.",
-    control: "Caída del activo (un valor negativo representa un alza)", initial: 15, min: -60, max: 60, step: 1,
+    control: "Magnitud de la caída", initial: 15, min: -60, max: 60, step: 1,
     result: "Cambio de la posición", unit: "COP", href: "/legal/riesgos/", link: "Entender el riesgo financiero",
     first: "Capital inicial", last: "Capital restante", chart: "Valor de la posición según el escenario",
   },
@@ -35,8 +36,6 @@ const scenarios = {
     first: "Saldo inicial", last: "Saldo final", chart: "Saldo de caja inicial y final",
   },
 } as const;
-
-const number = new Intl.NumberFormat("es-CO", { maximumFractionDigits: 1 });
 
 function format(value: number, unit: string) {
   return `${number.format(value)} ${unit}`;
@@ -70,10 +69,13 @@ function Graph({ scenario, input, result }: { scenario: ScenarioKey; input: numb
     return <figure className="lab-chart lab-risk">
       <figcaption><strong>{chart}</strong><span>COP · variación de ±{format(Math.abs(input), "%")}</span></figcaption>
       <svg viewBox="0 0 320 118" aria-hidden="true">
-        <path className="chart-grid" d="M0 26H320 M0 68H320 M0 109H320" />
+        {[["1,5 M", 18.25], ["1 M", 49.5], ["500 mil", 80.75], ["0", 112]].map(([label, y]) => <g key={label}>
+          <path className="chart-grid" d={`M40 ${y}H319`} />
+          <text className="chart-axis" x="34" y={Number(y) + 3} textAnchor="end">{label}</text>
+        </g>)}
         {values.map(({state, value}, index) => {
           const height = value / 16_000;
-          return <rect key={state} className="risk-column" data-tone={state} data-selected={state === (input > 0 ? "loss" : input < 0 ? "gain" : "neutral")} x={index * 105 + 23} y={109 - height} width="65" height={height} rx="4" />;
+          return <rect key={state} className="risk-column" data-tone={state} data-selected={state === (input > 0 ? "loss" : input < 0 ? "gain" : "neutral")} x={index * 93 + 55} y={112 - height} width="62" height={height} rx="4" />;
         })}
       </svg>
       <div className="lab-risk-labels">{values.map(({label,value}) => <span key={label}>{label}<strong>{number.format(value)}</strong></span>)}</div>
@@ -133,12 +135,13 @@ export function LearningLab() {
               <p>{scenario.description}</p>
               <label htmlFor={`value-${key}`}>{scenario.control}</label>
               <div className="lab-range">
-                <input id={`value-${key}`} type="range" min={scenario.min} max={scenario.max} step={scenario.step} value={value} aria-valuetext={controlValue} onChange={(event) => {
+                <FinancialRange id={`value-${key}`} min={scenario.min} max={scenario.max} step={scenario.step} value={value} valueText={controlValue} onChange={(event) => {
                   const nextValue = event.currentTarget.valueAsNumber;
                   setValues((previous) => ({ ...previous, [key]: nextValue }));
                 }} />
                 <span aria-hidden="true">{controlValue}</span>
               </div>
+              {key === "riesgo" && <p className="lab-input-note">Un valor negativo representa un alza.</p>}
               <a href={scenario.href}>{scenario.link}<ArrowRight size={16} aria-hidden="true" /></a>
             </div>
             <div className="lab-visual" data-scenario={key}>

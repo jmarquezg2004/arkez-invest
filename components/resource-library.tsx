@@ -1,6 +1,6 @@
 "use client";
 
-import { DocumentMark } from "@/components/arkez-icons";
+import { DocumentMark, LibraryMark } from "@/components/arkez-icons";
 import { useEffect, useState } from "react";
 import { resourceCategories, resources } from "@/lib/library";
 
@@ -33,7 +33,10 @@ export function ResourceLibrary() {
 
   return (
     <section className="resource-library" aria-labelledby="library-title">
-      <h2 className="section-title" id="library-title">Biblioteca de recursos</h2>
+      <div className="library-heading">
+        <span className="feature-icon"><LibraryMark size={24} /></span>
+        <h2 className="section-title" id="library-title">Biblioteca de recursos</h2>
+      </div>
       <div className="library-filters" role="search" aria-label="Buscar en la biblioteca">
         <div>
           <label htmlFor="resource-query">Buscar recursos</label>

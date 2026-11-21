@@ -2,14 +2,14 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { ArrowRight, EducationMark, BusinessMark, ChevronDown, CounselMark, Menu, X } from "@/components/arkez-icons";
+import { ArrowRight, LibraryMark, BusinessMark, ChevronDown, CounselMark, Menu, X } from "@/components/arkez-icons";
 import { Brand } from "./brand";
 import { contactLink, innovationLink, navigation, type SiteLink } from "@/lib/navigation";
 
 const menuIntroductions: Partial<Record<string, { icon: typeof CounselMark; description: string }>> = {
   "/servicios/": { icon: CounselMark, description: "Formación, análisis y consultoría para desarrollar capacidades financieras." },
   "/para-quien/": { icon: BusinessMark, description: "Encuentra el enfoque adecuado para tus decisiones o las de tu equipo." },
-  "/recursos/": { icon: EducationMark, description: "Estudia con guías, artículos y herramientas listas para usar." },
+  "/recursos/": { icon: LibraryMark, description: "Estudia con guías, artículos y herramientas listas para usar." },
   "/nosotros/": { icon: CounselMark, description: "Conoce nuestra misión, nuestro enfoque y cómo trabajamos." },
 };
 

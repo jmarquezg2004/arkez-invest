@@ -1,21 +1,26 @@
 import type { SVGProps } from "react";
 
 type IconProps = Omit<SVGProps<SVGSVGElement>, "children"> & { size?: number };
+// The functional glyphs share a 24-unit frame. Signals can take a secondary brand colour.
+const concepts = {
+  education: ["M3 5.5C6 4.7 9 5 12 7c3-2 6-2.3 9-1.5v12c-3-.8-6-.5-9 1.5-3-2-6-2.3-9-1.5zM12 7v12M6 9l3 .7m-3 3 3 .7", "m15 10 3-.8m-3 4 3-.8"],
+  market: ["M3 4v16h18M7 16v-4m5 4V9m5 7v-5", "m6 10 4-4 4 2 5-4m-3 0h3v3"],
+  allocation: ["M3 4h18v5H3zM3 10h18v5H3zM3 16h18v4H3z", "M13 4v5M9 10v5m8 1v4"],
+  advice: ["M4 5h15v14H4zM19 9h2v12H8v-2M7 9h9m-9 4h4", "m12 15 1.8 1.8L17 13"],
+  people: ["M4 20v-2a3 3 0 0 1 3-3h7a3 3 0 0 1 3 3v2M7 8a3 3 0 1 0 6 0 3 3 0 0 0-6 0z", "M17 5a3 3 0 0 1 0 6m2 4a3 3 0 0 1 2 3v2"],
+  business: ["M3 20h18M5 20V7l8-3v16m0-11 6 2v9M8 10h2m-2 4h2m6-1h1m-1 3h1", "M9 17v3"],
+  document: ["M5 3h9l5 5v13H5V3Zm9 0v5h5M8 12h8", "M8 16h5"],
+  dialogue: ["M4 5h16v11h-8l-5 4v-4H4zM8 9h8", "M8 12h5"],
+  risk: ["M12 3c2.6 2 5.1 3 8 3.5v6c0 3.5-4 6.8-8 8.5-4-1.7-8-5-8-8.5v-6C6.9 6 9.4 5 12 3Z", "M7 13h3l1.5-4 2 6 1-2H17"],
+  technology: ["M7 6h10v12H7zM3 9h4m-4 6h4m10-6h4m-4 6h4M10 3v3m4-3v3m-4 12v3m4-3v3", "M10 10h4v4h-4z"],
+  insight: ["M13 3H5v18h10m-7-5h4m-4-4h2m5-6 5 2.5v5l-5 2.5-5-2.5v-5z", "m15 9 1.7 2.5L15 14m2.6-2.5H20"],
+  chain: ["M3 7 7 5l4 2v5l-4 2-4-2zm10 5 4-2 4 2v5l-4 2-4-2zM7 9v5m10 0v5", "m11 10 2 1m-2 3 2 1M3 7l4 2 4-2m2 5 4 2 4-2"],
+  token: ["M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3zM4 7.5l8 4.5 8-4.5m-8 4.5v9", "m8 14.3 1.5 1.1m4.8-.6 2.2-1.3"],
+  scenario: ["M4 5h16v14H4zM4 10h16m-10 0v9", "M13 15h4m-2-2v4M6 14h2"],
+  library: ["M4 4h4v15H4zM10 4h4v15h-4zm6 1 3-.6 3 14-3 .6z", "M3 21h19"],
+} as const;
+
 const shapes = {
-  education: "M3 18.5 12 22l9-3.5V6l-9 3.5L3 6v12.5ZM12 9.5V22M6 4.5 12 2l6 2.5M6 10.5l3 1.2m-3 2.5 3 1.2m6-3.7 3-1.2",
-  market: "M3 3v17h18M6 14l4-4 4 2 5-6M16 6h3v3M6 17h2m3 0h2m3 0h3",
-  allocation: "M3 12 12 3l9 9-9 9-9-9Zm3 3 6-6 6 6m-6-6v12M3 12h6m6 0h6",
-  advice: "M3 4h10v6H3zm8 10h10v6H11zM7 10v7h4m2-10h4v7M6 7h4m4 10h4",
-  people: "M4 21v-3l4-3h8l4 3v3M3 21h18M12 4l4 4-4 4-4-4 4-4ZM6 5 3 8l3 3m12-6 3 3-3 3",
-  business: "M2.5 21h19M5 21V9l7-5v17m0-11 7 3v8M8 12v1m0 3v1m8-2v2m0 2v2",
-  document: "M5 3h9l5 5v13H5V3Zm9 0v5h5M8 12h8m-8 4h8",
-  dialogue: "M3 4h18v12h-9l-5 4v-4H3V4Zm4 5h10m-10 3h7",
-  risk: "M3 13 12 3l9 10-9 8-9-8Zm5 0h8m-4-5v9",
-  technology: "M3 6h18M3 12h18M3 18h18M7 4v4m9 2v4m-6 2v4",
-  insight: "M3 17h18M4 13l4-5 4 3 4-6 4 3M8 5v1m4 7v2m4-2v2m4-3v2",
-  chain: "M3 8h7v8H3zm11 0h7v8h-7zM10 12h4M6.5 5v3m11 8v3",
-  token: "M12 3 21 8v8l-9 5-9-5V8l9-5ZM3 8l9 5 9-5m-9 5v8m-4.5-15.5 9 5",
-  scenario: "M4 5h16v14H4zM4 10h16M9 10v9m6-9v9m-8-3h0m5-3h0m5 2h0",
   arrow: "M4 12h15m-5-5 5 5-5 5",
   arrowDown: "M12 4v15m-5-5 5 5 5-5",
   arrowOut: "M6 18 18 6M9 6h9v9",
@@ -25,10 +30,13 @@ const shapes = {
   close: "m6 6 12 12M18 6 6 18",
 } as const;
 
-function mark(name: keyof typeof shapes) {
+function mark(name: keyof typeof shapes | keyof typeof concepts) {
   return function ArkezMark({ size = 24, strokeWidth = 1.55, ...props }: IconProps) {
     return <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" focusable="false" aria-hidden="true" data-mark={name} {...props}>
-      <path d={shapes[name]} />
+      {name in concepts ? <>
+        <path d={concepts[name as keyof typeof concepts][0]} />
+        <path className="arkez-mark-signal" d={concepts[name as keyof typeof concepts][1]} />
+      </> : <path d={shapes[name as keyof typeof shapes]} />}
     </svg>;
   };
 }
@@ -47,6 +55,7 @@ export const InsightMark = mark("insight");
 export const ChainMark = mark("chain");
 export const TokenMark = mark("token");
 export const ScenarioMark = mark("scenario");
+export const LibraryMark = mark("library");
 export const ArrowRight = mark("arrow");
 export const ArrowDown = mark("arrowDown");
 export const MoveUpRight = mark("arrowOut");
