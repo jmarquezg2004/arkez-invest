@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight } from "@/components/arkez-icons";
 import { breadcrumbs } from "@/lib/breadcrumbs";
 import type { ContentPage as PageData } from "@/lib/content";
 import { siteName, type SiteLink } from "@/lib/navigation";

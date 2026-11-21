@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowDown, ArrowRight, BookOpen, Building2, Compass, Layers3, TrendingUp, Users } from "lucide-react";
+import { ArrowDown, ArrowRight, EducationMark, BusinessMark, CounselMark, AllocationMark, MarketMark, PeopleMark } from "@/components/arkez-icons";
 import { InnovationPreview } from "@/components/innovation/innovation-preview";
 import { MarketTrace } from "@/components/charts/financial-graphics";
 import { LearningLab } from "@/components/learning-lab";
@@ -11,7 +11,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("/");
 
-const serviceIcons = [BookOpen, TrendingUp, Layers3, Compass];
+const serviceIcons = [EducationMark, MarketMark, AllocationMark, CounselMark];
 
 const audiences = [
   {
@@ -24,7 +24,7 @@ const audiences = [
     ],
     href: "/para-quien/personas/",
     link: "Conoce el enfoque para personas",
-    icon: Users,
+    icon: PeopleMark,
   },
   {
     title: "Empresas",
@@ -36,7 +36,7 @@ const audiences = [
     ],
     href: "/para-quien/empresas/",
     link: "Conoce el enfoque para empresas",
-    icon: Building2,
+    icon: BusinessMark,
   },
 ] as const;
 
@@ -59,6 +59,10 @@ export default function Home() {
           <div className="hero-art">
             <img src="/brand/prisma-980.webp" srcSet="/brand/prisma-540.webp 540w, /brand/prisma-720.webp 720w, /brand/prisma-980.webp 980w" sizes="(max-width: 760px) 94vw, 52vw" width="980" height="784" alt="" fetchPriority="high" />
             <div className="hero-light" aria-hidden="true" />
+            <svg className="hero-register" viewBox="0 0 900 650" aria-hidden="true" preserveAspectRatio="none">
+              <path d="M140 494H260L371 414H517L662 303H824"/>
+              <path d="M306 500H448L503 461H635L718 401H870"/>
+            </svg>
             <figure className="hero-plot">
               <figcaption><span>Lectura de mercados</span><span>Serie ficticia</span></figcaption>
               <div className="hero-market-close"><strong>114</strong><span>puntos de índice · base 100</span></div>

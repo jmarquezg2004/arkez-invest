@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/arkez-icons";
 import { MarketTrace } from "@/components/charts/financial-graphics";
 import type { InnovationTopic } from "@/lib/innovation";
 import { academyPath, ecosystemPaths } from "@/lib/innovation-modules";

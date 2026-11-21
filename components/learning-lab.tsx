@@ -1,34 +1,34 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ArrowRight, ChartNoAxesCombined, Layers3, Shield, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, MarketMark, AllocationMark, RiskMark, TechnologyMark } from "@/components/arkez-icons";
 import { AllocationBand, MarketTrace } from "@/components/charts/financial-graphics";
 import { evaluateScenario, scenarioKeys, type ScenarioKey } from "@/lib/learning-scenarios";
 
 const scenarios = {
   mercados: {
-    tab: "Mercados", title: "Análisis de mercados", icon: ChartNoAxesCombined,
+    tab: "Mercados", title: "Análisis de mercados", icon: MarketMark,
     description: "Parte de un índice ficticio de 100 puntos y compara el inicio con el cierre. En una serie real, revisa el periodo y la fuente antes de interpretar el movimiento.",
     control: "Variación del periodo", initial: 12, min: -25, max: 25, step: 1,
     result: "Cierre del índice", unit: "puntos", href: "/servicios/analisis-de-mercados/", link: "Explorar el análisis de mercados",
     first: "Nivel inicial", last: "Nivel final", chart: "Trayectoria ilustrativa del índice",
   },
   diversificacion: {
-    tab: "Diversificación", title: "Diversificación de inversiones", icon: Layers3,
+    tab: "Diversificación", title: "Diversificación de inversiones", icon: AllocationMark,
     description: "Distribuye una cartera ficticia entre renta variable y un activo sin cambios en este escenario. La renta variable cae un 20 %. Observa cómo el peso de cada parte cambia el resultado.",
     control: "Peso en renta variable", initial: 60, min: 0, max: 100, step: 5,
     result: "Variación de la cartera", unit: "%", href: "/recursos/guias/primeros-pasos/", link: "Leer la guía para empezar a invertir",
     first: "Renta variable", last: "Activo sin cambios", chart: "Pesos de la cartera ilustrativa",
   },
   riesgo: {
-    tab: "Riesgo", title: "Gestión del riesgo", icon: Shield,
+    tab: "Riesgo", title: "Gestión del riesgo", icon: RiskMark,
     description: "Prueba una caída o un alza sobre una posición ficticia de $1.000.000 COP y compara el resultado con un escenario sin cambios.",
     control: "Caída del activo (un valor negativo representa un alza)", initial: 15, min: -60, max: 60, step: 1,
     result: "Cambio de la posición", unit: "COP", href: "/legal/riesgos/", link: "Entender el riesgo financiero",
     first: "Capital inicial", last: "Capital restante", chart: "Valor de la posición según el escenario",
   },
   herramientas: {
-    tab: "Herramientas", title: "Tecnología aplicada", icon: SlidersHorizontal,
+    tab: "Herramientas", title: "Tecnología aplicada", icon: TechnologyMark,
     description: "Practica un cálculo de caja con $400.000 COP iniciales e ingresos de $800.000 COP. Cambia los pagos y observa cuándo el saldo pasa a ser negativo.",
     control: "Pagos del periodo", initial: 700_000, min: 0, max: 1_500_000, step: 50_000,
     result: "Saldo al cierre", unit: "COP", href: "/recursos/guias/#comparar-escenarios", link: "Explorar el laboratorio en Excel",

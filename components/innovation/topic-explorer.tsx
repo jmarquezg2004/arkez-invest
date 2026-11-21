@@ -1,4 +1,4 @@
-import { ArrowRight, MoveUpRight } from "lucide-react";
+import { ArrowRight, MoveUpRight } from "@/components/arkez-icons";
 import { innovationPath, innovationTopics } from "@/lib/innovation";
 import { TopicDiagram } from "./hub-visuals";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText } from "lucide-react";
+import { DocumentMark } from "@/components/arkez-icons";
 import { useEffect, useState } from "react";
 import { resourceCategories, resources } from "@/lib/library";
 
@@ -61,7 +61,7 @@ export function ResourceLibrary() {
               <div className="library-card-summary">
                 <div className="library-cover">
                   {cover ? <img src={cover} alt="" width={310} height={438} loading="lazy" decoding="async" />
-                    : <span className="library-cover-text" aria-hidden="true"><FileText size={25} /></span>}
+                    : <span className="library-cover-text" aria-hidden="true"><DocumentMark size={25} /></span>}
                 </div>
                 <div>
                   <p className="eyebrow">{resourceCategories.find(({ id: key }) => key === kind)?.label}</p>

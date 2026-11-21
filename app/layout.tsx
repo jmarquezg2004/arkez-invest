@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
-import "@fontsource-variable/manrope";
+import localFont from "next/font/local";
 import "./globals.css";
 import "./experience.css";
 import "./innovation.css";
 import "./motion.css";
+import "./polish.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { siteDescription, siteName, siteUrl } from "@/lib/navigation";
+
+const manrope = localFont({
+  src: "../node_modules/@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2",
+  variable: "--arkez-face",
+  display: "swap",
+  weight: "200 800",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -19,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es">
+    <html lang="es" className={manrope.variable}>
       <body>
         <a href="#contenido" className="skip-link">Saltar al contenido</a>
         <SiteHeader />

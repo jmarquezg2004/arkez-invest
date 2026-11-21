@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
+import { ChainMark, InsightMark, TokenMark } from "@/components/arkez-icons";
 import { AllocationBand, MarketTrace } from "@/components/charts/financial-graphics";
 import { defiPaths, financeSeries, hybridAssets } from "@/lib/innovation-modules";
 
 const controls = {
-  portafolios: { label: "Examina una exposición", options: hybridAssets },
-  defi: { label: "Sigue una operación", options: defiPaths },
-  ia: { label: "Filtra la fuente de datos", options: financeSeries },
+  portafolios: { label: "Examina una exposición", options: hybridAssets, Mark: TokenMark },
+  defi: { label: "Sigue una operación", options: defiPaths, Mark: ChainMark },
+  ia: { label: "Filtra la fuente de datos", options: financeSeries, Mark: InsightMark },
 } as const;
 
 export function InstrumentControl({ kind }: { kind: keyof typeof controls }) {
@@ -15,10 +16,10 @@ export function InstrumentControl({ kind }: { kind: keyof typeof controls }) {
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
   const id = useId();
-  const { label, options } = controls[kind];
+  const { label, options, Mark } = controls[kind];
   return (
     <>
-      <label className="instrument-control" htmlFor={id}><span>{label}</span>
+      <label className="instrument-control" htmlFor={id}><span><Mark size={20} />{label}</span>
         <select id={id} disabled={!ready} value={index} onChange={(event) => setIndex(Number(event.currentTarget.value))}>
           {options.map(({ name }, index) => <option value={index} key={name}>{name}</option>)}
         </select>

@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronDown, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronRight } from "@/components/arkez-icons";
 import { StructuredData } from "@/components/structured-data";
 import { RevealSections } from "@/components/reveal-sections";
 import { InnovationArtwork, TopicDiagram } from "@/components/innovation/hub-visuals";

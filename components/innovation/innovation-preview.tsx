@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight, FileSpreadsheet } from "lucide-react";
+import { ArrowDown, ArrowRight, ScenarioMark } from "@/components/arkez-icons";
 import { innovationPath } from "@/lib/innovation";
 import { InnovationArtwork } from "./hub-visuals";
 import { PortfolioLab } from "./portfolio-lab";
@@ -41,7 +41,7 @@ export function InnovationPreview() {
           <PortfolioLab />
           <div className="hub-actions">
             <a className="button button-dark" href="/recursos/">Explorar la biblioteca<ArrowRight size={17} aria-hidden="true" /></a>
-            <a className="hub-file-link" href="/recursos/archivos/laboratorio-financiero.xlsx" download><FileSpreadsheet size={18} aria-hidden="true" /> Descargar laboratorio (XLSX)</a>
+            <a className="hub-file-link" href="/recursos/archivos/laboratorio-financiero.xlsx" download><ScenarioMark size={18} aria-hidden="true" /> Descargar laboratorio (XLSX)</a>
           </div>
         </div>
       </section>

@@ -22,16 +22,31 @@ export function AllocationBand({ assets, label }: { assets: readonly Allocation[
 export function MarketTrace({ readings, baseline = 100, markers = false }: {
   readings: readonly number[]; baseline?: number; markers?: boolean;
 }) {
-  const y = (value: number) => 96 - (value - baseline) * 2.6;
-  const x = (index: number) => 25 + index * 360 / (readings.length - 1);
+  const y = (value: number) => 88 - (value - baseline) * 2.55;
+  const labels = [baseline + 25, baseline, baseline - 25];
+  const start = 38;
+  const end = 395;
+  const x = (index: number) => start + index * (end - start) / Math.max(1, readings.length - 1);
   const line = readings.map((value, index) => `${x(index)} ${y(value)}`).join(" L");
   const close = readings.at(-1) ?? baseline;
-  return <svg className="market-trace" viewBox="0 0 410 170" aria-hidden="true">
-    <path className="chart-grid" d="M25 31H385 M25 63H385 M25 96H385 M25 129H385 M25 159H385 M25 16V159 M115 16V159 M205 16V159 M295 16V159 M385 16V159" />
-    <path className="trace-fill" d={`M${line} V159 H25 Z`} />
-    <path className="trace-baseline" d="M25 96H385" />
+  return <svg className="market-trace" viewBox="0 0 420 170" role={markers ? "group" : undefined} aria-label={markers ? "Índice ficticio en puntos" : undefined} aria-hidden={markers ? undefined : true}>
+    {labels.map((label) => <g key={label}>
+      <path className="chart-grid" d={`M${start} ${y(label)}H${end}`}/>
+      <text className="trace-axis" x="29" y={y(label) + 4} textAnchor="end">{esNumber.format(label)}</text>
+    </g>)}
+    <path className="trace-fill" d={`M${line} V152 H${start} Z`} />
+    <path className="trace-baseline" d={`M${start} 88H${end}`} />
     <path className="trace-line" pathLength="1" d={`M${line}`} />
-    {markers && readings.map((value, index) => <circle key={index} className="trace-marker" cx={x(index)} cy={y(value)} r="3" />)}
-    <circle className="trace-close" cx="385" cy={y(close)} r="5.5" />
+    {markers && readings.map((value, index) => <g key={index} className="trace-point" tabIndex={0} role="img" aria-label={`Observación ${index + 1}: ${esNumber.format(value)} puntos`}>
+      <circle cx={x(index)} cy={y(value)} r="12" className="trace-hit"/>
+      <circle className="trace-marker" cx={x(index)} cy={y(value)} r="3.5" />
+      <g className="trace-tooltip" aria-hidden="true">
+        <rect x={Math.min(350, Math.max(34, x(index) - 24))} y={Math.max(4, y(value) - 29)} width="48" height="21" rx="4" />
+        <text x={Math.min(374, Math.max(58, x(index)))} y={Math.max(4, y(value) - 29) + 14} textAnchor="middle">{esNumber.format(value)}</text>
+      </g>
+    </g>)}
+    {!markers && <circle className="trace-close" cx={end} cy={y(close)} r="4.5" />}
+    <text className="trace-axis" x={start} y="166">Inicio</text>
+    <text className="trace-axis" x={end} y="166" textAnchor="end">Cierre</text>
   </svg>;
 }

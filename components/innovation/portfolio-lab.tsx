@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FlaskConical } from "lucide-react";
+import { ScenarioMark } from "@/components/arkez-icons";
+import { esNumber as formatter, percent as percentage } from "@/components/charts/financial-graphics";
 import { comparePortfolios } from "@/lib/innovation-scenario";
 
-const formatter = new Intl.NumberFormat("es-CO", { maximumFractionDigits: 1 });
-const percentage = (value: number) => `${formatter.format(value)} %`;
 const presets = [
   { label: "Caída", shock: -25 },
   { label: "Sin cambios", shock: 0 },
@@ -32,7 +31,7 @@ export function PortfolioLab() {
   return (
     <div className="portfolio-lab">
       <div className="portfolio-controls">
-        <div className="portfolio-label"><FlaskConical size={19} aria-hidden="true" /> Simulación educativa</div>
+        <div className="portfolio-label"><ScenarioMark size={19} aria-hidden="true" /> Simulación educativa</div>
         <p>Ambas carteras tienen 50 % de acciones. En la híbrida, los activos digitales sustituyen parte de los bonos.</p>
         <p className="portfolio-fixed">Supuestos fijos del escenario: acciones −8 %, bonos +1 %.</p>
         <fieldset disabled={!ready}>
@@ -55,6 +54,7 @@ export function PortfolioLab() {
           <ul className="portfolio-legend" role="list">
             {instruments.map(({ key, label }) => <li key={key} data-instrument={key}>{label}</li>)}
           </ul>
+          <div className="portfolio-scale" aria-hidden="true"><span>0 %</span><span>50 %</span><span>100 %</span></div>
           {rows.map(({ label, weights }) => (
             <div className="portfolio-row" key={label}>
               <p>{label} <span>{instruments.map(({ key, label: asset }) => <span key={key}><span className="sr-only">{asset}: </span>{percentage(weights[key])}</span>)}</span></p>
@@ -71,8 +71,13 @@ export function PortfolioLab() {
           <div className="portfolio-scale" aria-hidden="true"><span>−20 %</span><span>0 %</span><span>+20 %</span></div>
           <div role="status" aria-atomic="true">
             {rows.map(({ label, value }) => (
-              <div className="portfolio-row" key={label}>
-                <p>{label} <strong>{percentage(value)}</strong></p>
+              <div className="portfolio-row portfolio-outcome-row" key={label}>
+                <p>{label} <span className="chart-value" tabIndex={0} aria-describedby={`portfolio-note-${label.endsWith("híbrida") ? "hybrid" : "reference"}`}>
+                  <strong>{percentage(value)}</strong>
+                  <span className="chart-tooltip" id={`portfolio-note-${label.endsWith("híbrida") ? "hybrid" : "reference"}`} role="tooltip">
+                    Variación ponderada bajo los supuestos de este escenario ficticio.
+                  </span>
+                </span></p>
                 <svg viewBox="0 0 100 4" preserveAspectRatio="none" aria-hidden="true">
                   <line x1="50" x2="50" y1="0" y2="4" />
                   <rect className="portfolio-result" data-negative={value < 0} x={Math.min(50, 50 + value * 2.5)} width={Math.abs(value) * 2.5} height="4" />

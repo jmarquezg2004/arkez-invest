@@ -2,15 +2,15 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { ArrowRight, BookOpen, Building2, ChevronDown, Compass, Menu, X } from "lucide-react";
+import { ArrowRight, EducationMark, BusinessMark, ChevronDown, CounselMark, Menu, X } from "@/components/arkez-icons";
 import { Brand } from "./brand";
 import { contactLink, innovationLink, navigation, type SiteLink } from "@/lib/navigation";
 
-const menuIntroductions: Partial<Record<string, { icon: typeof Compass; description: string }>> = {
-  "/servicios/": { icon: Compass, description: "Formación, análisis y consultoría para desarrollar capacidades financieras." },
-  "/para-quien/": { icon: Building2, description: "Encuentra el enfoque adecuado para tus decisiones o las de tu equipo." },
-  "/recursos/": { icon: BookOpen, description: "Estudia con guías, artículos y herramientas listas para usar." },
-  "/nosotros/": { icon: Compass, description: "Conoce nuestra misión, nuestro enfoque y cómo trabajamos." },
+const menuIntroductions: Partial<Record<string, { icon: typeof CounselMark; description: string }>> = {
+  "/servicios/": { icon: CounselMark, description: "Formación, análisis y consultoría para desarrollar capacidades financieras." },
+  "/para-quien/": { icon: BusinessMark, description: "Encuentra el enfoque adecuado para tus decisiones o las de tu equipo." },
+  "/recursos/": { icon: EducationMark, description: "Estudia con guías, artículos y herramientas listas para usar." },
+  "/nosotros/": { icon: CounselMark, description: "Conoce nuestra misión, nuestro enfoque y cómo trabajamos." },
 };
 
 const menuDescriptions: Record<string, string> = {
@@ -79,7 +79,7 @@ export function SiteHeader() {
         <nav aria-label="Navegación principal" className="desktop-nav">
           <a className="nav-link" href="/" aria-current={pathname === "/" ? "page" : undefined}>Inicio</a>
           {navigation.map((group) => {
-            const introduction = menuIntroductions[group.href] ?? { icon: Compass, description: group.label };
+            const introduction = menuIntroductions[group.href] ?? { icon: CounselMark, description: group.label };
             const Icon = introduction.icon;
             return (
               <details className="nav-group" name="desktop-navigation" key={group.href}>
