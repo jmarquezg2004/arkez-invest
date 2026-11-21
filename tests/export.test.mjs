@@ -211,13 +211,22 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
   const previews = indexable ? [] : [
     "/prototipos/editorial/", "/prototipos/editorial/innovacion/",
     "/prototipos/interactiva/", "/prototipos/interactiva/innovacion/",
+    "/prototipos/design-system-premium/",
   ];
   assert.deepEqual(found.sort(), [...routes, ...previews].sort());
   for (const route of previews) {
     const html = read(route);
     assert.match(html, /<meta name="robots" content="noindex, nofollow"/, route);
     assert.ok(!readFileSync(new URL("sitemap.xml", output), "utf8").includes(route), route);
-    assert.match(html, /href="\/prototipos\/preview\.css"/, route);
+    if (route === "/prototipos/design-system-premium/") {
+      for (const name of ["dashboard", "ofertas", "herramientas-demo", "proyeccion", "recorrido", "iconografia", "lecturas"]) {
+        assert.match(html, new RegExp(`id="${name}"`));
+      }
+      assert.equal((html.match(/class="px-service"/g) ?? []).length, 3);
+      assert.doesNotMatch(html, /<script[^>]+src="https?:/);
+    } else {
+      assert.match(html, /href="\/prototipos\/preview\.css"/, route);
+    }
   }
   for (const route of routes) assert.doesNotMatch(read(route), /href="\/prototipos\//, route);
 });
