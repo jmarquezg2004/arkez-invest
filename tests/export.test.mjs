@@ -211,14 +211,23 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
   const previews = indexable ? [] : [
     "/prototipos/editorial/", "/prototipos/editorial/innovacion/",
     "/prototipos/interactiva/", "/prototipos/interactiva/innovacion/",
-    "/prototipos/design-system-premium/",
+    "/prototipos/design-system-premium/", "/prototipos/arkez-experience/",
   ];
   assert.deepEqual(found.sort(), [...routes, ...previews].sort());
   for (const route of previews) {
     const html = read(route);
     assert.match(html, /<meta name="robots" content="noindex, nofollow"/, route);
     assert.ok(!readFileSync(new URL("sitemap.xml", output), "utf8").includes(route), route);
-    if (route === "/prototipos/design-system-premium/") {
+    if (route === "/prototipos/arkez-experience/") {
+      for (const id of ["ax-level-panel", "recorrido", "herramientas-arkez", "registro", "inmuebles", "mapa-ia"]) {
+        assert.match(html, new RegExp(`id="${id}"`));
+      }
+      for (const label of ["Empieza", "Aplica", "Expande", "Reproducir cambios", "Reiniciar caminos", "Reproducir secuencia", "Reiniciar secuencia"]) {
+        assert.ok(html.includes(label), label);
+      }
+      assert.match(html, /href="\/herramientas\/interes-compuesto\/"/);
+      assert.doesNotMatch(html, /<script[^>]+src="https?:/);
+    } else if (route === "/prototipos/design-system-premium/") {
       for (const name of ["dashboard", "ofertas", "herramientas-demo", "proyeccion", "recorrido", "iconografia", "lecturas"]) {
         assert.match(html, new RegExp(`id="${name}"`));
       }
