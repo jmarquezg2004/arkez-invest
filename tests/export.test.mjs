@@ -187,7 +187,18 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
   const found = files.filter((file) => file === "index.html" || file.endsWith("/index.html"))
     .map((file) => `/${file.replace(/index\.html$/, "")}`)
     .filter((route) => route !== "/404/" && route !== "/_not-found/");
-  assert.deepEqual(found.sort(), [...routes].sort());
+  const previews = indexable ? [] : [
+    "/prototipos/editorial/", "/prototipos/editorial/innovacion/",
+    "/prototipos/interactiva/", "/prototipos/interactiva/innovacion/",
+  ];
+  assert.deepEqual(found.sort(), [...routes, ...previews].sort());
+  for (const route of previews) {
+    const html = read(route);
+    assert.match(html, /<meta name="robots" content="noindex, nofollow"/, route);
+    assert.ok(!readFileSync(new URL("sitemap.xml", output), "utf8").includes(route), route);
+    assert.match(html, /href="\/prototipos\/preview\.css"/, route);
+  }
+  for (const route of routes) assert.doesNotMatch(read(route), /href="\/prototipos\//, route);
 });
 
 test("Innovation Hub exporta las cinco categorías, contenidos y referencias al simulador", () => {
