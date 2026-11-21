@@ -230,6 +230,9 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
       assert.match(html, /href="#inmuebles"[^>]*>Probar el simulador/);
       assert.match(html, /aria-label="Secciones de Arkez Experience"/);
       assert.match(html, /aria-label="Escenarios de valor futuro"/);
+      assert.match(html, /aria-label="Año de la simulación"/);
+      assert.match(html, /class="ax-chart-reference"/);
+      assert.match(html, /<dt>Gastos acumulados<\/dt>/);
       assert.doesNotMatch(html, /<script[^>]+src="https?:/);
     } else if (route === "/prototipos/design-system-premium/") {
       for (const name of ["dashboard", "ofertas", "herramientas-demo", "proyeccion", "recorrido", "iconografia", "lecturas"]) {

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { BusinessMark, ScenarioMark } from "@/components/arkez-icons";
 import { projectProperty } from "@/lib/property-example";
 import { money, number } from "./format";
-import propertyArt from "./maqueta.webp";
 
 const controlDefinitions = [
   { key: "price", label: "Precio de compra", minimum: 120, maximum: 650, step: 5, unit: "M COP" },
@@ -21,58 +20,70 @@ const scenarios = [
 
 export function PropertyDemo() {
   const [inputs, setInputs] = useState(baseProperty);
-  const { future, operating, difference, years } = projectProperty(inputs);
-  const projection = Array.from({ length: years + 1 }, (_, year) => projectProperty(inputs, year).future);
-  const floor = Math.floor(Math.min(...projection) / 50) * 50 - 20;
-  const ceiling = Math.ceil(Math.max(...projection) / 50) * 50 + 20;
-  const coordinates = projection.map((value, year) => {
-    const x = 44 + year * 65;
-    const y = 115 - (value - floor) * 94 / (ceiling - floor);
-    return [x, y];
-  });
-  const line = coordinates.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x} ${y}`).join(" ");
-  return <article id="inmuebles" className="ax-tool ax-property" aria-labelledby="ax-property-title">
-    <div className="ax-property-masthead">
-      <img src={propertyArt.src} width={propertyArt.width} height={propertyArt.height} alt="" loading="lazy" />
+  const [year, setYear] = useState(5);
+  const { years } = projectProperty(inputs);
+  const selected = projectProperty(inputs, year);
+  const referenceInputs = { ...inputs, annualChange: 0 };
+  const reference = projectProperty(referenceInputs, year);
+  const projection = Array.from({ length: years + 1 }, (_, step) => projectProperty(inputs, step).future);
+  const rateControl = controlDefinitions[2];
+  const lowerBound = projectProperty({ ...inputs, annualChange: rateControl.minimum }, years).future;
+  const upperBound = projectProperty({ ...inputs, annualChange: rateControl.maximum }, years).future;
+  const floor = Math.floor(lowerBound / 50) * 50;
+  const ceiling = Math.ceil(upperBound / 50) * 50;
+  const x = (step: number) => 44 + step * 65;
+  const y = (value: number) => 115 - (value - floor) * 94 / (ceiling - floor);
+  const line = projection.map((value, step) => `${step === 0 ? "M" : "L"}${x(step)} ${y(value)}`).join(" ");
+  const estimatedChange = selected.future - reference.future;
+  return <article id="inmuebles" className="ax-property" aria-labelledby="ax-property-title">
+    <header className="ax-shell ax-property-heading">
       <div>
-        <p className="ax-kicker"><BusinessMark size={19} /> Evaluador inmobiliario</p>
-        <h3 id="ax-property-title">Antes de comprar, compara.</h3>
-        <p>Prueba cuánto cambia el resultado si ajustas el precio, los gastos o el valor futuro que supones.</p>
+        <p className="ax-kicker"><BusinessMark size={19} /> Laboratorio inmobiliario</p>
+        <h2 id="ax-property-title">¿Qué cambia si <em>el precio no sube?</em></h2>
       </div>
-    </div>
-    <div className="ax-tool-body">
-      <div className="ax-scenario-picker" role="group" aria-label="Escenarios de valor futuro">
-        {scenarios.map(({ label, annualChange }) => <button key={label} type="button"
-          aria-pressed={inputs.annualChange === annualChange}
-          onClick={() => setInputs({ ...inputs, annualChange })}>{label}</button>)}
-        <button type="button" className="ax-reset" onClick={() => setInputs(baseProperty)}>Restablecer</button>
-      </div>
-      <div className="ax-property-layout">
+      <p>Ajusta un escenario y compáralo con el mismo inmueble sin apreciación. Selecciona un año para revisar ambos resultados.</p>
+    </header>
+    <div className="ax-shell ax-property-workspace">
+      <div className="ax-property-settings">
+        <h3>Supuestos del ejercicio</h3>
         <div className="ax-property-controls">{controlDefinitions.map(({ key, label, minimum, maximum, step, unit }) => (
           <label key={key}><span>{label}</span><span className="ax-input-value" aria-hidden="true">{number.format(inputs[key])} {unit}</span>
             <input type="range" aria-label={label} aria-valuetext={`${number.format(inputs[key])} ${unit === "M COP" ? "millones de pesos colombianos" : "por ciento"}`} min={minimum} max={maximum} step={step} value={inputs[key]}
               onChange={(event) => setInputs({ ...inputs, [key]: Number(event.currentTarget.value) })} /></label>
         ))}</div>
-        <div className="ax-property-results">
-          <span id="ax-property-estimate">Valor estimado en {years} años</span><strong aria-describedby="ax-property-estimate" aria-live="polite">{money.format(future * 1e6)}</strong>
-          <figure className="ax-property-chart">
-            <svg viewBox="0 0 390 145" aria-hidden="true">
-              {[ceiling, (ceiling + floor) / 2, floor].map((value, index) => <g key={value}>
-                <path className="ax-chart-grid" d={`M44 ${21 + 47 * index}H369`} />
-                <text x="0" y={25 + 47 * index}>{number.format(value)}</text>
-              </g>)}
-              <path className="ax-chart-fill" d={`${line} V115 H44 Z`} />
-              <path className="ax-chart-line" d={line} />
-              <circle cx={coordinates[years][0]} cy={coordinates[years][1]} r="4" />
-              <text x="44" y="138">Hoy</text><text x="369" y="138" textAnchor="end">Año {years}</text>
-            </svg>
-            <figcaption>Escenario ilustrativo · millones de pesos colombianos</figcaption>
-          </figure>
-          <dl><div><dt>Gastos acumulados</dt><dd>{money.format(operating * 1e6)}</dd></div>
-            <div><dt>Cambio tras gastos</dt><dd>{money.format(difference * 1e6)}</dd></div></dl>
-        </div>
       </div>
-      <p className="ax-note">El cambio es valor futuro menos precio de compra y gastos. El ejercicio no incluye alquiler, deuda, impuestos ni costos de venta.</p>
+      <div className="ax-property-results">
+        <div className="ax-scenario-picker" role="group" aria-label="Escenarios de valor futuro">
+          {scenarios.map(({ label, annualChange }) => <button key={label} type="button"
+            aria-pressed={inputs.annualChange === annualChange}
+            onClick={() => setInputs({ ...inputs, annualChange })}>{label}</button>)}
+          <button type="button" className="ax-reset" onClick={() => { setInputs(baseProperty); setYear(years); }}>Restablecer</button>
+        </div>
+        <span id="ax-property-estimate">{year === 0 ? "Valor inicial" : `Valor estimado · año ${year}`}</span><strong aria-describedby="ax-property-estimate" aria-live="polite">{money.format(selected.future * 1e6)}</strong>
+        <figure className="ax-property-chart">
+          <svg viewBox="0 0 390 145" aria-hidden="true">
+            {[ceiling, (ceiling + floor) / 2, floor].map((value, index) => <g key={value}>
+              <path className="ax-chart-grid" d={`M44 ${21 + 47 * index}H369`} />
+              <text x="0" y={25 + 47 * index}>{number.format(value)}</text>
+            </g>)}
+            <path className="ax-chart-fill" d={`${line} V${y(reference.future)} H44 Z`} />
+            <path className="ax-chart-reference" d={`M44 ${y(reference.future)}H369`} />
+            <path className="ax-chart-line" d={line} />
+            <path className="ax-chart-cursor" d={`M${x(year)} 21V115`} /><circle cx={x(year)} cy={y(selected.future)} r="4.5" />
+            <text x="44" y="138">Hoy</text><text x="369" y="138" textAnchor="end">Año {years}</text>
+          </svg>
+          <figcaption><span>Tu escenario</span><span>Sin apreciación</span><span>Millones de COP</span></figcaption>
+        </figure>
+        <div className="ax-years" role="group" aria-label="Año de la simulación">
+          {projection.map((_, step) => <button type="button" key={step} aria-pressed={year === step}
+            aria-label={step === 0 ? "Hoy" : `Año ${step}`} onClick={() => setYear(step)}>{step === 0 ? "Hoy" : step}</button>)}
+        </div>
+        <dl><div><dt>Valor sin apreciación</dt><dd>{money.format(reference.future * 1e6)}</dd></div>
+          <div><dt>Diferencia en valor</dt><dd>{money.format(estimatedChange * 1e6)}</dd></div>
+          <div><dt>Gastos acumulados</dt><dd>{money.format(selected.operating * 1e6)}</dd></div>
+          <div><dt>Cambio tras gastos</dt><dd>{money.format(selected.difference * 1e6)}</dd></div></dl>
+      </div>
+      <p className="ax-note">Simulación educativa. El cambio tras gastos resta el precio inicial y los gastos acumulados al valor estimado. Excluye alquiler, deuda, impuestos y costos de venta.</p>
     </div>
   </article>;
 }

@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 
 const sections = [
-  { id: "caminos-arkez", label: "Caminos" },
   { id: "herramientas-arkez", label: "Herramientas" },
+  { id: "caminos-arkez", label: "Caminos" },
   { id: "recorrido", label: "Recorrido" },
   { id: "mapa-ia", label: "Mapa de IA" },
 ] as const;
