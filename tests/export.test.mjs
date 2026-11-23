@@ -211,7 +211,7 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
   const previews = indexable ? [] : [
     "/prototipos/editorial/", "/prototipos/editorial/innovacion/",
     "/prototipos/interactiva/", "/prototipos/interactiva/innovacion/",
-    "/prototipos/design-system-premium/", "/prototipos/arkez-experience/",
+    "/prototipos/design-system-premium/", "/prototipos/arkez-experience/", "/prototipos/arkez-nexacore/",
   ];
   assert.deepEqual(found.sort(), [...routes, ...previews].sort());
   for (const route of previews) {
@@ -233,6 +233,14 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
       assert.match(html, /aria-label="Año de la simulación"/);
       assert.match(html, /class="ax-chart-reference"/);
       assert.match(html, /<dt>Gastos acumulados<\/dt>/);
+      assert.doesNotMatch(html, /<script[^>]+src="https?:/);
+    } else if (route === "/prototipos/arkez-nexacore/") {
+      for (const id of ["nx-servicios", "nx-metodo", "nx-caminos", "nx-herramientas", "nx-lab-3"]) {
+        assert.ok(html.includes(`id="${id}"`), id);
+      }
+      for (const label of ["Evaluador inmobiliario", "Mapa de infraestructura IA", "Panel de inversiones", "Simulador de interés compuesto"]) {
+        assert.ok(html.includes(label), label);
+      }
       assert.doesNotMatch(html, /<script[^>]+src="https?:/);
     } else if (route === "/prototipos/design-system-premium/") {
       for (const name of ["dashboard", "ofertas", "herramientas-demo", "proyeccion", "recorrido", "iconografia", "lecturas"]) {

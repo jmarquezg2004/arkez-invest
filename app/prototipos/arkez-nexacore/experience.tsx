@@ -1,0 +1,33 @@
+import { ArrowDown, ArrowRight } from "@/components/arkez-icons";
+import { Comparison, FloatingNav, LearningStages, PathExplorer, ServiceDeck } from "./interactions";
+import { FinancialLab } from "./lab";
+import poster from "./arquitectura.webp";
+import mobilePoster from "./arquitectura-movil.webp";
+
+export function NexaExperience() {
+  return <div className="nx">
+    <FloatingNav />
+    <section className="nx-hero" aria-labelledby="nx-title">
+      <picture>
+        <source media="(max-width: 650px)" srcSet={mobilePoster.src} />
+        <img className="nx-hero-image" src={poster.src} width={poster.width} height={poster.height} alt="" fetchPriority="high" />
+      </picture>
+      <div className="nx-hero-inner">
+        <p className="nx-kicker">Educación financiera aplicada</p>
+        <h1 id="nx-title">Entiende tu dinero.<br />Aprende a invertir.<br /><em>Aprovecha la tecnología.</em></h1>
+        <p>Formación, consultoría y simuladores para tomar decisiones con más criterio.</p>
+        <div className="nx-hero-actions"><a className="nx-button nx-button-light" href="#nx-herramientas">Probar herramientas <ArrowRight size={18} /></a><a href="#nx-caminos">Elegir mi nivel <ArrowDown size={17} /></a></div>
+      </div>
+    </section>
+    <ServiceDeck />
+    <Comparison />
+    <LearningStages />
+    <PathExplorer />
+    <FinancialLab />
+    <section className="nx-end nx-wrap" aria-labelledby="nx-end-title">
+      <div><h2 id="nx-end-title">¿Qué decisión quieres entender mejor?</h2><p>Conversemos sobre formación o consultoría para ti o tu equipo.</p></div>
+      <a className="nx-button" href="/contacto/">Hablar con Arkez <ArrowRight size={18} /></a>
+    </section>
+    <footer className="nx-footer"><div className="nx-wrap"><a href="/">Arkez Invest</a><a href="/legal/privacidad/">Privacidad</a></div></footer>
+  </div>;
+}
