@@ -1,5 +1,7 @@
-import { ArrowDown, ArrowRight } from "@/components/arkez-icons";
-import { Comparison, FloatingNav, LearningStages, PathExplorer, ServiceDeck } from "./interactions";
+import { ArrowDown, ArrowRight } from "lucide-react";
+import { FloatingNav, PathExplorer } from "./interactions";
+import { ServiceDeck } from "./product-scenes";
+import { Comparison, LearningStages } from "./narratives";
 import { FinancialLab } from "./lab";
 import poster from "./arquitectura.webp";
 import mobilePoster from "./arquitectura-movil.webp";
@@ -18,6 +20,7 @@ export function NexaExperience() {
         <p>Formación, consultoría y simuladores para tomar decisiones con más criterio.</p>
         <div className="nx-hero-actions"><a className="nx-button nx-button-light" href="#nx-herramientas">Probar herramientas <ArrowRight size={18} /></a><a href="#nx-caminos">Elegir mi nivel <ArrowDown size={17} /></a></div>
       </div>
+      <a className="nx-hero-index" href="#nx-servicios">Explorar servicios <ArrowDown size={16} /></a>
     </section>
     <ServiceDeck />
     <Comparison />
