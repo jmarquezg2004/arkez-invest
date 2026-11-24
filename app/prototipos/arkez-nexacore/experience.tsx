@@ -16,8 +16,12 @@ export function NexaExperience() {
       </picture>
       <div className="nx-hero-inner">
         <p className="nx-kicker">Educación financiera aplicada</p>
-        <h1 id="nx-title">Entiende tu dinero.<br />Aprende a invertir.<br /><em>Aprovecha la tecnología.</em></h1>
-        <p>Formación, consultoría y simuladores para tomar decisiones con más criterio.</p>
+        <h1 id="nx-title">
+          Entiende tu dinero.
+          <span className="nx-hero-middle">Aprende de los errores, el mercado no va en línea recta</span>
+          <em>Aprovecha la tecnología.</em>
+        </h1>
+        <p>Formación, guía y simuladores para tomar decisiones con más criterio y con menos afán.</p>
         <div className="nx-hero-actions"><a className="nx-button nx-button-light" href="#nx-herramientas">Probar herramientas <ArrowRight size={18} /></a><a href="#nx-caminos">Elegir mi nivel <ArrowDown size={17} /></a></div>
       </div>
       <a className="nx-hero-index" href="#nx-servicios">Explorar servicios <ArrowDown size={16} /></a>

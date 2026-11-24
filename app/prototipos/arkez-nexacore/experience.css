@@ -68,7 +68,8 @@ body:has(.nx) > :is(.site-header, .site-footer) { display: none; }
 .nx-hero-inner { width: min(100%, 60rem); margin-inline: auto; padding-bottom: min(8.5vw,8rem); }
 .nx-hero .nx-kicker, .nx-services .nx-kicker, .nx-paths .nx-kicker, .nx-lab .nx-kicker { color: var(--nx-gold); }
 .nx-hero h1 { margin: .9rem 0 1.15rem; font-size: clamp(2.8rem,6.5vw,7.6rem); font-weight: 640; letter-spacing: -.075em; line-height: .985; }
-.nx-hero h1 em { color: #efd5a7; font-style: normal; }
+.nx-hero-middle { display: block; margin-block: .38em; font-size: clamp(1.33rem,2.6vw,2.5rem); letter-spacing: -.038em; line-height: 1.15; text-wrap: balance; }
+.nx-hero h1 em { display: block; color: #efd5a7; font-style: normal; }
 .nx-hero-inner > p:not(.nx-kicker) { color: #f2eee7; max-width: 39ch; margin-inline: auto; font-size: clamp(1rem,1.55vw,1.25rem); }
 .nx-hero-actions { display: flex; align-items: center; justify-content: center; gap: .5rem 1.35rem; flex-wrap: wrap; margin-top: 1.65rem; }
 .nx-hero-actions a:last-child { min-height: 48px; display: inline-flex; align-items: center; gap: .45rem; font-weight: 800; font-size: .88rem; color: #fff8ea; text-decoration: underline; text-underline-offset: .27em; }
