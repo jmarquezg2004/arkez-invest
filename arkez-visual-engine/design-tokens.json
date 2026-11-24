@@ -1,0 +1,15 @@
+{
+  "navy": "#0D1E35",
+  "gold": "#EDC776",
+  "ivory": "#F8F5EC",
+  "white": "#FFFFFF",
+  "blue": "#3E9ADF",
+  "red": "#B9505F",
+  "yellow": "#F5C75C",
+  "green": "#6ABA7C",
+  "orange": "#D78E51",
+  "purple": "#A780ED",
+  "font": "Manrope Variable",
+  "radius": "1rem",
+  "motion": "280ms"
+}

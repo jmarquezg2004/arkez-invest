@@ -212,6 +212,8 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     "/prototipos/editorial/", "/prototipos/editorial/innovacion/",
     "/prototipos/interactiva/", "/prototipos/interactiva/innovacion/",
     "/prototipos/design-system-premium/", "/prototipos/arkez-experience/", "/prototipos/arkez-nexacore/",
+    "/prototipos/arkez-explore/", "/prototipos/arkez-explore/nubank/", "/prototipos/arkez-explore/ecosistema-ia/",
+    ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `/prototipos/arkez-explore/nubank/${slug}/`),
   ];
   assert.deepEqual(found.sort(), [...routes, ...previews].sort());
   for (const route of previews) {
@@ -242,6 +244,10 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
         assert.ok(html.includes(label), label);
       }
       assert.doesNotMatch(html, /<script[^>]+src="https?:/);
+    } else if (route.startsWith("/prototipos/arkez-explore/")) {
+      assert.match(html, /Navegación de Arkez Explore/);
+      assert.doesNotMatch(html, /<script[^>]+src="https?:/);
+      if (route.includes("/nubank/")) assert.match(html, /Resultados oficiales de 2024/);
     } else if (route === "/prototipos/design-system-premium/") {
       for (const name of ["dashboard", "ofertas", "herramientas-demo", "proyeccion", "recorrido", "iconografia", "lecturas"]) {
         assert.match(html, new RegExp(`id="${name}"`));
