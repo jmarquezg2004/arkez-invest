@@ -96,3 +96,15 @@ test("la ruta local de noticias devuelve JSON y admite únicamente GET", async (
     await new Promise((resolve) => server.close(resolve));
   }
 });
+
+test("las noticias toman los dos primeros del RSS antes de ordenarlos como el sitio original", async () => {
+  const news = createPreviewNews({ load: async (url) => Response.json({
+    status: "ok",
+    items: url.searchParams.get("rss_url").includes("investing.com") ? [
+      { title: "Primera", link: "https://es.investing.com/news/primera", pubDate: "2026-11-25 19:00:00" },
+      { title: "Segunda", link: "https://es.investing.com/news/segunda", pubDate: "2026-11-25 08:00:00" },
+      { title: "Tercera", link: "https://es.investing.com/news/tercera", pubDate: "2026-11-26 08:00:00" },
+    ] : [],
+  }) });
+  assert.deepEqual((await news()).map(({ title }) => title), ["Segunda", "Primera"]);
+});

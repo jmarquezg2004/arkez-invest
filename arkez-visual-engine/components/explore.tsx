@@ -35,7 +35,7 @@ function Shelf({ title, items, saved, onSave, onPreview }: {
   </section>;
 }
 
-export function Explore() {
+export function Explore({ market, onMarketPath }: { market?: React.ReactNode; onMarketPath?: string } = {}) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
   const [onlySaved, setOnlySaved] = useState(false);
@@ -76,8 +76,9 @@ export function Explore() {
         <div><p className="ve-kicker">Arkez Explore</p><h1>Descubre,<br />analiza y aprende.</h1><p>Explora empresas, sectores y cadenas de valor a través de casos de estudio.</p>
           <a className="ve-cta" href={base + "nubank/"}>Abrir el caso Nubank <ArrowUpRight size={18} /></a></div>
       </section>
+      {market}
       <div className="ve-filters">
-        <label className="ve-search"><Search size={20} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Buscar empresas, ticker, sector o tema" placeholder="Buscar empresa, ticker o tema…" /></label>
+        <label className="ve-search"><Search size={20} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Buscar en el catálogo por empresa, ticker, sector o tema" placeholder="Buscar empresa, ticker o tema…" /></label>
         <select aria-label="Categoría" value={category} onChange={(event) => filter(event.target.value)}><option value="">Todas las categorías</option>{categories.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select>
         <button type="button" aria-pressed={onlySaved} onClick={() => { setCategory(""); setOnlySaved(!onlySaved); }}><Bookmark size={17} /> Guardados ({saved.length})</button>
       </div>
@@ -93,6 +94,7 @@ export function Explore() {
       {selected && <>
         <div className="ve-dialog-art"><ArtImage art={selected.art} /></div>
         <div className="ve-dialog-copy"><p className="ve-kicker">{selected.ticker ?? "Guía educativa"}</p><h2 id="ve-preview-title">{selected.name}</h2><p>{selected.summary}</p>
+          {selected.ticker && onMarketPath && <a className="ve-cta" href={onMarketPath + "?ticker=" + encodeURIComponent(selected.ticker) + "#consultar-ticker"}>Consultar {selected.ticker} <ArrowUpRight size={17} /></a>}
           {selected.href && <a className="ve-cta" href={base + selected.href}>Abrir recurso <ArrowUpRight size={17} /></a>}</div>
       </>}
     </dialog>

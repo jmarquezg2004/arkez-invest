@@ -1,3 +1,5 @@
+import { ArtImage } from "@/arkez-visual-engine/components/art";
+import type { Art } from "@/arkez-visual-engine/catalog";
 import { notFound } from "next/navigation";
 import { pages } from "@/lib/content";
 import { ContentPage } from "@/components/content-page";
@@ -10,9 +12,15 @@ import { nubank } from "@/arkez-visual-engine/research-data";
 import { resourceTypes } from "@/arkez-visual-engine/schemas/research";
 import InnovationPage from "@/app/innovacion/page";
 import { base, learningPathRoute, publicRoutes, researchRoutes } from "../routes";
+import { MarketLookup } from "../market-lookup";
 import { PreviewNews } from "../news";
 import { LearningQuiz } from "../learning-quiz";
 import { OddityReport, ReportLibrary } from "../reports";
+
+const sectionArtwork: Record<string, Art> = {
+  servicios: "study", herramientas: "report", recursos: "report", nosotros: "globe",
+  actualidad: "globe", ecosistema: "chain", "para-quien": "study", contacto: "globe", legal: "security",
+};
 
 export const dynamicParams = false;
 
@@ -34,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
       <LearningQuiz base={base} />
     </div>
   </main>;
-  if (path === "/explore/") return <div className="ve"><Explore /></div>;
+  if (path === "/explore/") return <div className="ve"><Explore market={<MarketLookup />} onMarketPath={base + "/research/"} /></div>;
   if (path === "/explore/ecosistema-ia/") return <div className="ve"><AiChain /></div>;
   if (path === "/explore/nubank/") return <div className="ve"><ResearchIndex data={nubank} /></div>;
   if (ruta[0] === "explore" && ruta[1] === "nubank" && ruta.length === 3) {
@@ -44,13 +52,13 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
   if (path === "/research/") return <ReportLibrary />;
   if (path === "/research/oddity/") return <ReportLibrary companyOnly />;
   if (path === "/research/oddity/informe/" || path === "/research/oddity/modelo/") return <OddityReport model={path.endsWith("/modelo/")} />;
-  if (path === "/innovacion/") return <InnovationPage />;
+  if (path === "/innovacion/") return <main className="ai-inner"><InnovationPage /></main>;
   const page = pages[path];
   if (!page) notFound();
-  return <ContentPage page={page} path={path}>
+  return <main className="ai-inner"><ContentPage page={page} path={path} heroArt={<ArtImage art={sectionArtwork[ruta[0]] ?? "report"} eager />}>
     {path === "/actualidad/" && <PreviewNews directory={base + path} directoryPage />}
     <CommercialPages path={path} />
     {path === "/recursos/" && <ResourceLibrary />}
     {path === "/contacto/" && <p className="ai-contact-note">Vista previa para revisar el sitio. El envío de mensajes se habilita en la versión pública cuando esté disponible.</p>}
-  </ContentPage>;
+  </ContentPage></main>;
 }

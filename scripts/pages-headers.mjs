@@ -11,7 +11,7 @@ export const commonHeaders = {
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
 };
 
-export function contentPolicy(documents, { newsImages = false } = {}) {
+export function contentPolicy(documents, { newsImages = false, marketFrame = false } = {}) {
   const hashes = new Set();
   for (const html of documents) {
     for (const [, script] of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
@@ -25,11 +25,21 @@ export function contentPolicy(documents, { newsImages = false } = {}) {
     "style-src 'self'",
     ["img-src 'self' data:", ...newsImages ? newsImageHosts.map((host) => `https://${host}`) : []].join(" "),
     "connect-src 'self'",
+    ...(marketFrame ? ["frame-src https://s.tradingview.com"] : []),
     "object-src 'none'",
     "base-uri 'none'",
     "frame-ancestors 'none'",
     "form-action 'self'",
   ].join("; ");
+}
+
+export function previewPolicyOptions(path) {
+  const route = path.replace(/index\.html$/, "").replace(/\/?$/, "/");
+  const base = "/prototipos/arkez-integrado/";
+  return {
+    newsImages: route === base || route === base + "actualidad/",
+    marketFrame: route === base + "explore/" || route === base + "research/",
+  };
 }
 
 export function writePagesHeaders(directory, indexable) {
@@ -52,7 +62,7 @@ export function writePagesHeaders(directory, indexable) {
   }
 
   for (const file of htmlFiles) {
-    // The local review server sets the policy per response. Cloudflare builds exclude these pages.
+    // The integrated preview sets the policy per response.
     if (!indexable && process.env.ARKEZ_LOCAL_PREVIEW === "1" && file.startsWith("prototipos/arkez-integrado/")) continue;
     // Pages redirects explicit index.html requests before serving the extensionless document.
     const paths = file === "index.html" ? ["/"]

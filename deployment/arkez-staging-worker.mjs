@@ -1,6 +1,7 @@
 // The staging packager provides the CSP map and the shared news loader above this module.
 const integratedHome = "/prototipos/arkez-integrado/";
 const getHeadlines = createPreviewNews();
+const getMarket = createMarketLookup();
 const stagingHeaders = {
   "X-Robots-Tag": "noindex, nofollow",
   "X-Content-Type-Options": "nosniff",
@@ -14,6 +15,12 @@ export default {
     const url = new URL(request.url);
     if (request.method !== "GET" && request.method !== "HEAD") {
       return new Response(null, { status: 405, headers: { ...stagingHeaders, Allow: "GET, HEAD" } });
+    }
+    if (url.pathname === marketRoot) {
+      const result = await getMarket(url);
+      const headers = new Headers(result.headers);
+      for (const [name, value] of Object.entries(stagingHeaders)) headers.set(name, value);
+      return new Response(request.method === "HEAD" ? null : result.body, { status: result.status, headers });
     }
     if (url.pathname === "/api/noticias/preview") {
       const headers = { ...stagingHeaders, "Cache-Control": "public, max-age=60" };

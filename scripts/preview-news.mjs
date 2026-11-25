@@ -1,6 +1,6 @@
 const sources = [
   { name: "Investing España", feed: "https://es.investing.com/rss/news_285.rss", hosts: ["es.investing.com"] },
-  { name: "Cointelegraph en Español", feed: "https://es.cointelegraph.com/rss", hosts: ["es.cointelegraph.com", "cointelegraph.com"] },
+  { name: "Cointelegraph", feed: "https://es.cointelegraph.com/rss", hosts: ["es.cointelegraph.com", "cointelegraph.com"] },
   { name: "Yahoo Finanzas", feed: "https://es.finance.yahoo.com/news/rss", hosts: ["es.finance.yahoo.com", "finance.yahoo.com"] },
 ];
 export const newsImageHosts = ["content-media.investing.com", "images.cointelegraph.com", "s.yimg.com", "media.zenfs.com"];
@@ -48,7 +48,7 @@ async function readFeed(source, load) {
   }
   const data = JSON.parse(body + decoder.decode());
   if (data.status !== "ok" || !Array.isArray(data.items)) return [];
-  return data.items.flatMap((item) => {
+  return data.items.slice(0, 2).flatMap((item) => {
     if (typeof item?.title !== "string" || typeof item.link !== "string" || typeof item.pubDate !== "string") return [];
     const title = decodeHeadline(item.title);
     if (!title || title.length > 240 || /[<>]/.test(title) || !/^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/.test(item.pubDate)) return [];
@@ -60,7 +60,7 @@ async function readFeed(source, load) {
     href.hash = "";
     const media = headlineImage(item);
     return [{ title, href: href.href, date: new Date(date).toISOString(), source: source.name, ...(media ? { image: media } : {}) }];
-  }).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 2);
+  });
 }
 
 export function createPreviewNews({ load = fetch, now = Date.now } = {}) {
@@ -72,7 +72,7 @@ export function createPreviewNews({ load = fetch, now = Date.now } = {}) {
     request = Promise.allSettled(sources.map((source) => readFeed(source, load))).then((results) => {
       const seen = new Set();
       return results.flatMap((result) => result.status === "fulfilled" ? result.value : [])
-        .sort((a, b) => b.date.localeCompare(a.date))
+        .reverse().sort((a, b) => b.date.slice(0, 10).localeCompare(a.date.slice(0, 10)))
         .filter(({ href }) => {
           if (seen.has(href)) return false;
           seen.add(href);

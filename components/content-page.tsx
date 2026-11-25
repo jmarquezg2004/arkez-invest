@@ -16,13 +16,14 @@ const dateFormat = new Intl.DateTimeFormat("es-CO", {
   day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
 });
 
-export function ContentPage({ page, path, children }: { page: PageData; path: string; children?: ReactNode }) {
+export function ContentPage({ page, path, heroArt, children }: { page: PageData; path: string; heroArt?: ReactNode; children?: ReactNode }) {
   const trail = breadcrumbs(path);
   const Body = page.editorial ? "article" : "div";
 
   return (
     <>
       <section className="page-hero" data-group={trail[1]?.href.split("/")[1]}>
+        {heroArt && <div className="ai-inner-art">{heroArt}</div>}
         <div className="container-shell">
           <nav aria-label="Ruta de navegación" className="breadcrumbs">
             <ol>

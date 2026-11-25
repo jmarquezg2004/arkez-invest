@@ -10,7 +10,7 @@ type Story = { title: string; href: string; date: string; source: string; image?
 const fallback: Story[] = Object.values(editorialNews);
 const publishers = [
   ["Investing España", "https://es.investing.com/news/"],
-  ["Cointelegraph en Español", "https://es.cointelegraph.com/"],
+  ["Cointelegraph", "https://es.cointelegraph.com/"],
   ["Yahoo Finanzas", "https://es.finance.yahoo.com/"],
 ] as const;
 const dateFormat = new Intl.DateTimeFormat("es-CO", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
@@ -18,7 +18,7 @@ const dateFormat = new Intl.DateTimeFormat("es-CO", { day: "numeric", month: "lo
 function StoryCover({ story, index }: { story: Story; index: number }) {
   const [missing, setMissing] = useState(false);
   return <div className="ai-news-cover">
-    {story.image && !missing ? <img src={story.image} alt="" width="960" height="540" loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setMissing(true)} />
+    {story.image && !missing ? <img src={story.image} alt="" width="960" height="540" loading="lazy" decoding="async" onError={() => setMissing(true)} />
       : <><ArtImage art={index % 2 ? "study" : "globe"} /><small>Ilustración de Arkez</small></>}
     <span>{story.source}</span>
   </div>;
@@ -46,7 +46,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
       <p className="ai-news-status" role="status">{live === null ? "Buscando titulares recientes. Puedes consultar la selección editorial mientras tanto."
         : live.length ? "Titulares recientes de las fuentes disponibles." : "Los titulares automáticos no están disponibles. Consulta la selección editorial."}</p>
       <ul className="ai-news-stories" role="list">
-        {(live?.length ? live : fallback).slice(0, directoryPage ? 6 : 3).map((story, index) => { const { title, href, date } = story; return <li key={href}>
+        {(live?.length ? live : fallback).map((story, index) => { const { title, href, date } = story; return <li key={href}>
           <article>
             <a href={href}>
               <StoryCover key={story.image} story={story} index={index} />

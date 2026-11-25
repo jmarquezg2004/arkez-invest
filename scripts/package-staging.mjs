@@ -1,7 +1,7 @@
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { contentPolicy } from "./pages-headers.mjs";
+import { contentPolicy, previewPolicyOptions } from "./pages-headers.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const source = join(root, "out");
@@ -16,7 +16,7 @@ const policies = Object.fromEntries(readdirSync(source, { recursive: true })
   .filter((file) => file.endsWith(".html"))
   .map((file) => {
     const path = "/" + file.replace(/index\.html$/, "");
-    return [path, contentPolicy([read(join(source, file))], { newsImages: path === home || path === home + "actualidad/" })];
+    return [path, contentPolicy([read(join(source, file))], previewPolicyOptions(path))];
   }));
 const inPlace = process.argv.includes("--in-place");
 let destination = source;
@@ -26,8 +26,9 @@ if (!inPlace) {
   cpSync(source, destination, { recursive: true });
 }
 const news = read(join(root, "scripts", "preview-news.mjs"));
+const market = read(join(root, "scripts", "preview-market.mjs"));
 const worker = read(join(root, "deployment", "arkez-staging-worker.mjs"));
-const program = `const stagingPolicies = ${JSON.stringify(policies)};\n${news}\n${worker}`;
+const program = `const stagingPolicies = ${JSON.stringify(policies)};\n${news}\n${market}\n${worker}`;
 writeFileSync(join(destination, "_worker.js"), program);
 writeFileSync(join(destination, "_headers"), "/_next/static/*\n  Cache-Control: public, max-age=31536000, immutable\n");
 console.log(destination);
