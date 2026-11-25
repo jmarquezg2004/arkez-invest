@@ -6,9 +6,9 @@ import { FinancialLab } from "./lab";
 import poster from "./arquitectura.webp";
 import mobilePoster from "./arquitectura-movil.webp";
 
-export function NexaExperience() {
+export function NexaExperience({ standalone = true, children }: { standalone?: boolean; children?: React.ReactNode }) {
   return <div className="nx">
-    <FloatingNav />
+    {standalone && <FloatingNav />}
     <section className="nx-hero" aria-labelledby="nx-title">
       <picture>
         <source media="(max-width: 650px)" srcSet={mobilePoster.src} />
@@ -31,10 +31,11 @@ export function NexaExperience() {
     <LearningStages />
     <PathExplorer />
     <FinancialLab />
+    {children}
     <section className="nx-end nx-wrap" aria-labelledby="nx-end-title">
       <div><h2 id="nx-end-title">¿Qué decisión quieres entender mejor?</h2><p>Conversemos sobre formación o consultoría para ti o tu equipo.</p></div>
       <a className="nx-button" href="/contacto/">Hablar con Arkez <ArrowRight size={18} /></a>
     </section>
-    <footer className="nx-footer"><div className="nx-wrap"><a href="/">Arkez Invest</a><a href="/legal/privacidad/">Privacidad</a></div></footer>
+    {standalone && <footer className="nx-footer"><div className="nx-wrap"><a href="/">Arkez Invest</a><a href="/legal/privacidad/">Privacidad</a></div></footer>}
   </div>;
 }

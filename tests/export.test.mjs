@@ -214,6 +214,12 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     "/prototipos/design-system-premium/", "/prototipos/arkez-experience/", "/prototipos/arkez-nexacore/",
     "/prototipos/arkez-explore/", "/prototipos/arkez-explore/nubank/", "/prototipos/arkez-explore/ecosistema-ia/",
     ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `/prototipos/arkez-explore/nubank/${slug}/`),
+    ...(process.env.ARKEZ_LOCAL_PREVIEW === "1" ? [
+    ...routes.map((path) => `/prototipos/arkez-integrado${path}`),
+    ...["explore", "explore/ecosistema-ia", "explore/nubank", "research", "research/oddity", "research/oddity/informe", "research/oddity/modelo",
+      ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `explore/nubank/${slug}`),
+    ].map((slug) => `/prototipos/arkez-integrado/${slug}/`),
+    ] : []),
   ];
   assert.deepEqual(found.sort(), [...routes, ...previews].sort());
   for (const route of previews) {
@@ -244,6 +250,9 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
         assert.ok(html.includes(label), label);
       }
       assert.doesNotMatch(html, /<script[^>]+src="https?:/);
+    } else if (route.startsWith("/prototipos/arkez-integrado/")) {
+      assert.match(html, /Menú principal de Arkez/);
+      assert.equal((html.match(/<h1[\s>]/g) ?? []).length, 1, route);
     } else if (route.startsWith("/prototipos/arkez-explore/")) {
       assert.match(html, /Navegación de Arkez Explore/);
       assert.doesNotMatch(html, /<script[^>]+src="https?:/);

@@ -51,6 +51,8 @@ export function writePagesHeaders(directory, indexable) {
   }
 
   for (const file of htmlFiles) {
+    // The local review server sets the policy per response. Cloudflare builds exclude these pages.
+    if (!indexable && process.env.ARKEZ_LOCAL_PREVIEW === "1" && file.startsWith("prototipos/arkez-integrado/")) continue;
     // Pages redirects explicit index.html requests before serving the extensionless document.
     const paths = file === "index.html" ? ["/"]
       : file.endsWith("/index.html") ? [`/${file.slice(0, -10)}`, `/${file.slice(0, -11)}`]

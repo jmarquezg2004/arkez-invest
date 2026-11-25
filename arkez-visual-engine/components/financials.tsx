@@ -9,7 +9,7 @@ import type { Research } from "../schemas/research";
 const options = [["revenue", "Ingresos"], ["gross", "Beneficio bruto"], ["net", "Beneficio neto"], ["eps", "Beneficio por acción"]] as const;
 const amount = new Intl.NumberFormat("es-CO", { maximumFractionDigits: 1 });
 const perShare = new Intl.NumberFormat("es-CO", { minimumFractionDigits: 4, maximumFractionDigits: 4 });
-export function Financials({ data, company }: { data: Research["financials"]; company: string }) {
+export function Financials({ data, company, period = "Ejercicios 2023 y 2024", epsKind = "básico" }: { data: Research["financials"]; company: string; period?: string; epsKind?: string }) {
   const [metric, setMetric] = useState<(typeof options)[number][0]>("revenue");
   const eps = metric === "eps";
   const number = eps ? perShare : amount;
@@ -54,7 +54,7 @@ export function Financials({ data, company }: { data: Research["financials"]; co
     finally { URL.revokeObjectURL(url); }
   }
   return <section className="ve-stats">
-    <h2>Evolución financiera</h2><p>Ejercicios 2023 y 2024 · {unit}{eps ? " · EPS básico" : ""}.</p>
+    <h2>Evolución financiera</h2><p>{period} · {unit}{eps ? ` · EPS ${epsKind}` : ""}.</p>
     <div className="ve-segment" role="group" aria-label="Indicador financiero">{options.map(([id, label]) => <button type="button" key={id} onClick={() => setMetric(id)} aria-pressed={metric === id}>{label}</button>)}</div>
     <div className="ve-chart" ref={plot}>{width > 100 && <BarChart width={width} height={240} data={data} margin={{ top: 10, left: 5, right: 10, bottom: 4 }}>
       <CartesianGrid vertical={false} stroke="#dce1ed" strokeDasharray="4 4" />
@@ -63,7 +63,7 @@ export function Financials({ data, company }: { data: Research["financials"]; co
       <Tooltip formatter={(value) => value == null ? "" : `US$ ${number.format(Number(value))}${eps ? " por acción" : " M"}`} />
       <Bar dataKey={metric} name={options.find(([id]) => id === metric)?.[1]} fill="#7943bd" radius={[7, 7, 0, 0]} maxBarSize={110} isAnimationActive={!reduced} animationDuration={340} />
     </BarChart>}</div>
-    <table><caption>Valores para {options.find(([id]) => id === metric)?.[1].toLowerCase()}</caption><thead><tr><th scope="col">Ejercicio</th><th scope="col">{unit}</th></tr></thead><tbody>{data.map((row) => <tr key={row.year}><th scope="row">{row.year}</th><td>{number.format(row[metric])}</td></tr>)}</tbody></table>
+    <table><caption>Valores para {options.find(([id]) => id === metric)?.[1].toLowerCase()}</caption><thead><tr><th scope="col">Periodo</th><th scope="col">{unit}</th></tr></thead><tbody>{data.map((row) => <tr key={row.year}><th scope="row">{row.year}</th><td>{number.format(row[metric])}</td></tr>)}</tbody></table>
     <section className="ve-export" aria-label="Exportar"><button type="button" onClick={() => void save("svg")}><Download size={17} /> SVG del gráfico</button><button type="button" onClick={() => void save("png")}><Download size={17} /> PNG del gráfico</button><span role="status">{status}</span></section>
   </section>;
 }
