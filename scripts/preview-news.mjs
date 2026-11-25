@@ -22,7 +22,7 @@ function headlineImage(item) {
   const embedded = Array.from(markup.matchAll(/<img\b[^<>]*?\ssrc\s*=\s*(?:"([^"]+)"|'([^']+)')/gi),
     ([, doubleQuoted, singleQuoted]) => doubleQuoted ?? singleQuoted);
 
-  for (const candidate of [item.enclosure?.link, item.thumbnail, ...embedded]) {
+  for (const candidate of [item.enclosure?.link, ...embedded, item.thumbnail]) {
     if (typeof candidate !== "string" || candidate.length > 1024) continue;
     const image = URL.parse(decodeHeadline(candidate));
     if (image?.protocol === "https:" && !image.username && !image.password && !image.port
@@ -41,9 +41,12 @@ async function readFeed(source, load) {
   let size = 0;
   const decoder = new TextDecoder();
   let body = "";
-  for await (const chunk of response.body) {
+  const reader = response.body.getReader();
+  for (;;) {
+    const { done, value: chunk } = await reader.read();
+    if (done) break;
     size += chunk.byteLength;
-    if (size > maxBytes) return [];
+    if (size > maxBytes) { await reader.cancel(); return []; }
     body += decoder.decode(chunk, { stream: true });
   }
   const data = JSON.parse(body + decoder.decode());

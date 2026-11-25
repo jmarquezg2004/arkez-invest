@@ -241,7 +241,7 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     group: "Guías",
     description: "Una guía de formación con cinco preguntas para ordenar tu decisión antes de comparar instrumentos.",
     editorial: { updated: "2026-11-20", sources: [
-      { label: "Investor.gov: horizonte y asignación de activos", href: "https://www.investor.gov/introduction-investing/getting-started/asset-allocation" },
+      { label: "FINRA: riesgo de concentración", href: "https://syndication.finra.org/content/concentrate-concentration-risk-0" },
       { label: "Investor.gov: efecto de las comisiones y gastos", href: "https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins/updated" },
     ] },
     sections: [
@@ -270,7 +270,7 @@ export const pages: Readonly<Record<string, ContentPage>> = {
     description: "Diversificar consiste en repartir la exposición para depender menos de un único resultado. Este artículo explica cómo analizar esa exposición.",
     editorial: { updated: "2026-11-20", sources: [
       { label: "Investor.gov: diversificación de inversiones", href: "https://www.investor.gov/introduction-investing/investing-basics/save-and-invest/diversify-your-investments" },
-      { label: "Investor.gov: asignación de activos y diversificación", href: "https://www.investor.gov/introduction-investing/getting-started/asset-allocation" },
+      { label: "FINRA: cómo reconocer la concentración", href: "https://syndication.finra.org/content/concentrate-concentration-risk-0" },
     ] },
     sections: [
       { title: "Ejemplo de concentración oculta", body: "Imagina dos fondos con las mismas empresas principales. Si estas representan buena parte de ambos fondos, comprar los dos puede dejarte expuesto a los mismos movimientos. Compara las posiciones y sus pesos para detectar el solapamiento." },

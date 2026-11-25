@@ -15,7 +15,7 @@
         {"title":"Diversificación y escenario adverso","lead":"Distribuir el capital permite identificar concentraciones, pero distintas posiciones pueden caer juntas. El impacto de un escenario sobre una cartera se aproxima sumando el peso de cada posición multiplicado por su cambio supuesto.","figure":{"type":"bars","labels":["Acciones","ETF","Cripto"],"values":[40,50,10],"unit":"% del total"},"table":{"headers":["Posición","Peso","Choque hipotético","Contribución"],"rows":[["Acciones","40 %","−15 %","−6 %"],["ETF","50 %","−8 %","−4 %"],["Cripto","10 %","−40 %","−4 %"],["Total","100 %","Escenario conjunto","−14 %"]]},"exercise":"Compara la contribución de ETF y cripto. ¿Cuál de los dos representa menor proporción del capital en el ejemplo?","answer":"Ambos aportan −4 puntos porcentuales. Cripto pesa menos, pero el choque supuesto es mayor. El resultado no indica la probabilidad del escenario ni fija la pérdida máxima."}
       ],
       "conclusions":["Compara instrumentos sólo después de fijar objetivo, plazo y necesidad de liquidez.","Documenta costos y escenarios en la misma unidad. Incluye fuentes y fechas.","Una cartera con varios activos aún puede concentrarse en un sector, emisor o factor de riesgo."],
-      "sources":["risk","allocation","etf","crypto"]
+      "sources":["etf", "finra", "iosco"]
     },
     {
       "slug":"lectura-de-mercados",
@@ -31,7 +31,7 @@
         {"title":"Matriz de verificación y riesgo","lead":"Contrasta más de una hipótesis antes de atribuir una causa. Registra una evidencia a favor, una evidencia en contra y el dato faltante. La matriz ayuda a pensar en escenarios sin convertir el ejercicio en una señal de negociación.","figure":{"type":"flow","labels":["Observa","Formula hipótesis","Contrasta fuentes","Registra límites"]},"table":{"headers":["Hipótesis","Fuente que consultar","Dato decisivo"],"rows":[["Acontecimiento del emisor","Informe original","Hora y alcance del anuncio"],["Movimiento del sector","Serie referencial","Cambios en emisores comparables"],["Dato mal alineado","Proveedor de datos","Unidad, sesión y ajuste"]]},"exercise":"Si el precio del sector también cae, formula una explicación alternativa y señala un dato que podría refutarla.","answer":"Un movimiento sectorial es plausible, aunque no atribuye la causa por sí solo. Si los comparables no cayeron durante la misma ventana, revisa la hipótesis y verifica la alineación temporal."}
       ],
       "conclusions":["Un gráfico describe datos. La atribución de causas requiere fuentes y comparables.","Conserva una bitácora de período, moneda, unidad y ajustes.","Documenta una hipótesis alternativa y las condiciones que cambiarían tu conclusión."],
-      "sources":["etf","spread","crypto","risk"]
+      "sources":["etf-finra", "nyse", "cftc"]
     },
     {
       "slug":"liquidez-operativa",
@@ -47,15 +47,18 @@
         {"title":"Transfiere el caso al libro de trabajo","lead":"Usa el libro para separar entradas de resultados. Completa celdas editables con importes de una misma moneda y período. El Dashboard de los casos ficticios y el de los datos propios muestran indicadores separados.","figure":{"type":"flow","labels":["Presupuesto","Escenarios","Riesgo","Dashboard"]},"table":{"headers":["Hoja","Campos de partida","Salida que revisas"],"rows":[["Presupuesto","Saldo inicial, cobros y pagos","Flujo y saldo de cierre"],["Escenarios","Variables del caso base y alternativo","Cambio respecto del escenario base"],["Riesgo","Participaciones y cambios hipotéticos","Concentración e impacto"]]},"exercise":"Reproduce el caso del cobro aplazado en una copia del libro. Comprueba el resultado y luego modifica un solo importe.","answer":"El saldo alternativo debe dar −250 antes del cambio. Anota cuánto se mueve el saldo al modificar la entrada y compara esa variación con el gráfico. Conserva una copia de los supuestos."}
       ],
       "conclusions":["El saldo de cierre y el saldo mínimo del período responden a preguntas distintas.","Comparar escenarios requiere conservar unidad monetaria, calendario y supuestos de referencia.","Anota origen, fecha y responsable de revisión de cada dato crítico."],
-      "sources":["sba","risk","allocation"]
+      "sources":["sba", "ifrs", "bofa"]
     }
   ],
   "sources":{
-    "risk":{"name":"Investor.gov / SEC · What is Risk?","url":"https://www.investor.gov/introduction-investing/investing-basics/what-risk"},
-    "allocation":{"name":"Investor.gov / SEC · Asset Allocation and Diversification","url":"https://www.investor.gov/introduction-investing/getting-started/asset-allocation"},
     "etf":{"name":"Investor.gov / SEC · Exchange-Traded Funds (ETFs)","url":"https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-24"},
-    "crypto":{"name":"Investor.gov / SEC · Crypto Asset-Related Investments","url":"https://www.investor.gov/introduction-investing/investing-basics/investment-products/crypto-asset-related-investments"},
-    "spread":{"name":"Investor.gov / SEC · Bid Price / Ask Price","url":"https://www.investor.gov/introduction-investing/investing-basics/glossary/ask-price"},
-    "sba":{"name":"U.S. Small Business Administration · Manage your finances","url":"https://www.sba.gov/counseling/manage-your-business/"}
+    "sba":{"name":"U.S. Small Business Administration · Manage your finances","url":"https://www.sba.gov/counseling/manage-your-business/"},
+    "finra": {"name": "FINRA · Concentrate on Concentration Risk", "url": "https://syndication.finra.org/content/concentrate-concentration-risk-0"},
+    "iosco": {"name": "IOSCO · Recomendaciones sobre mercados de criptoactivos", "url": "https://www.iosco.org/library/pubdocs/pdf/IOSCOPD755.pdf"},
+    "nyse": {"name": "NYSE · Funcionamiento del mercado de acciones", "url": "https://www.nyse.com/trade/equities"},
+    "etf-finra": {"name": "FINRA · ETFs vs. Mutual Funds: Similarities and Differences", "url": "https://syndication.finra.org/content/etfs-vs-mutual-funds-similarities-and-differences"},
+    "ifrs": {"name": "IFRS Foundation · IAS 7 Statement of Cash Flows", "url": "https://www.ifrs.org/issued-standards/list-of-standards/ias-7-statement-of-cash-flows.html/"},
+    "cftc": {"name": "CFTC · Risks of Virtual Currency Trading", "url": "https://www.cftc.gov/LearnAndProtect/AdvisoriesAndArticles/understand_risks_of_virtual_currency.html"},
+    "bofa": {"name": "Bank of America · Cash flow management basics for businesses", "url": "https://business.bankofamerica.com/en/resources/cash-flow-management-basics-for-small-businesses"}
   }
 }

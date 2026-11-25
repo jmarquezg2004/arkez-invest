@@ -11,7 +11,7 @@ const stages = [
   { title: "Modelos y aplicaciones", art: "study", detail: "El software aplica los modelos a tareas y flujos concretos como resumir o clasificar información.", output: "Herramientas para personas y empresas", Icon: Code2 },
 ] as const;
 
-export function AiChain() {
+export function AiChain({ directory }: { directory?: React.ReactNode } = {}) {
   return <article className="ve-research ve-chain-page">
     <section className="ve-company-hero"><ArtImage art="chain" eager /><div className="ve-company-intro"><p className="ve-kicker">Ecosistemas y cadenas de valor</p><h1>De la energía a la IA</h1><p>Explora las siete etapas que conectan la infraestructura con las aplicaciones.</p></div></section>
     <div className="ve-research-body">
@@ -30,6 +30,7 @@ export function AiChain() {
         </section>)}
       </div>
       <p className="ve-source">Secuencia educativa de funciones de la industria. Los conectores describen un flujo conceptual.</p>
+      {directory}
     </div>
   </article>;
 }

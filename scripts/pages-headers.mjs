@@ -24,7 +24,7 @@ export function contentPolicy(documents, { newsImages = false, marketFrame = fal
     "script-src-attr 'none'",
     "style-src 'self'",
     ["img-src 'self' data:", ...newsImages ? newsImageHosts.map((host) => `https://${host}`) : []].join(" "),
-    "connect-src 'self'",
+    newsImages ? "connect-src 'self' https://api.rss2json.com" : "connect-src 'self'",
     ...(marketFrame ? ["frame-src https://s.tradingview.com"] : []),
     "object-src 'none'",
     "base-uri 'none'",

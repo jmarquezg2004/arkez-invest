@@ -6,6 +6,7 @@ import { ContentPage } from "@/components/content-page";
 import { CommercialPages } from "@/components/commercial-pages";
 import { ResourceLibrary } from "@/components/resource-library";
 import { Explore } from "@/arkez-visual-engine/components/explore";
+import { AiCompanies } from "@/arkez-visual-engine/components/ai-companies";
 import { AiChain } from "@/arkez-visual-engine/components/ai-chain";
 import { ResearchIndex, ResearchResource } from "@/arkez-visual-engine/templates/research";
 import { nubank } from "@/arkez-visual-engine/research-data";
@@ -13,6 +14,7 @@ import { resourceTypes } from "@/arkez-visual-engine/schemas/research";
 import InnovationPage from "@/app/innovacion/page";
 import { base, learningPathRoute, publicRoutes, researchRoutes } from "../routes";
 import { serviceEditorial } from "../service-editorial";
+import { Ecosystem } from "../ecosystem";
 import { MarketLookup } from "../market-lookup";
 import { PreviewNews } from "../news";
 import { LearningQuiz } from "../learning-quiz";
@@ -44,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
     </div>
   </main>;
   if (path === "/explore/") return <div className="ve"><Explore market={<MarketLookup />} onMarketPath={base + "/research/"} /></div>;
-  if (path === "/explore/ecosistema-ia/") return <div className="ve"><AiChain /></div>;
+  if (path === "/explore/ecosistema-ia/") return <div className="ve"><AiChain directory={<AiCompanies />} /></div>;
   if (path === "/explore/nubank/") return <div className="ve"><ResearchIndex data={nubank} /></div>;
   if (ruta[0] === "explore" && ruta[1] === "nubank" && ruta.length === 3) {
     const resource = resourceTypes.find(({ id }) => id === ruta[2]);
@@ -61,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
     heroArt={service?.hero ?? <ArtImage art={sectionArtwork[ruta[0]] ?? "report"} eager />}
     heroActions={service?.intro}>
     {path === "/actualidad/" && <PreviewNews directory={base + path} directoryPage />}
-    {service?.body ?? <CommercialPages path={path} />}
+    {path === "/ecosistema/" ? <Ecosystem /> : service?.body ?? <CommercialPages path={path} />}
     {path === "/recursos/" && <ResourceLibrary />}
     {path === "/contacto/" && <p className="ai-contact-note">Vista previa para revisar el sitio. El envío de mensajes se habilita en la versión pública cuando esté disponible.</p>}
   </ContentPage></main>;

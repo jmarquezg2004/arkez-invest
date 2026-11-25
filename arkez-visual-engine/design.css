@@ -233,3 +233,22 @@ body:has(.ve) > :is(.site-header,.site-footer) { display:none; }
  .ve-document .ve-indicators small { color:#233754; }
  .ve-document :is(.ve-stats,.ve-document-section) { break-inside:avoid; }
 }
+.ve-ai-companies { margin-top:2.6rem; padding:clamp(.9rem,3vw,1.8rem); border-radius:.9rem; color:#f8f5ec; background:#102842; }
+.ve-ai-companies h2 { display:flex; align-items:center; gap:.5rem; font-weight:830; font-size:clamp(1.3rem,3vw,2.2rem); line-height:1.1; margin-bottom:.6rem; }
+.ve-ai-companies h2 svg { color:#edc776; flex:none; }
+.ve-ai-search { display:flex; flex-wrap:wrap; gap:.55rem; margin:.8rem 0 .4rem; }
+.ve-ai-search label { min-width:min(12rem,100%); flex:1; font-size:.85rem; font-weight:750; }
+.ve-ai-search :is(span,select) { display:flex; width:100%; align-items:center; gap:.45rem; min-height:44px; padding:0 .5rem; color:#fff; background:#173958; border:1px solid #7594b3; border-radius:.45rem; }
+.ve-ai-search input { min-width:0; width:100%; background:none; }
+.ve-ai-search input::placeholder { color:#d0dfed; }
+.ve-ai-directory { display:grid; grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr); gap:.65rem; margin-top:.6rem; }
+.ve-ai-directory ul { max-height:17rem; overflow:auto; border:1px solid #52708b; border-radius:.45rem; }
+.ve-ai-directory button { width:100%; text-align:start; min-height:44px; padding:.32rem .55rem; border-bottom:1px solid #42627f; }
+.ve-ai-directory button[aria-pressed=true] { background:#254d73; color:#ffe1a7; font-weight:820; }
+.ve-ai-company { background:#f7f9fc; color:#102842; border-radius:.45rem; padding:clamp(.8rem,2vw,1.4rem); }
+.ve-ai-company h3 { font-size:1.32rem; font-weight:820; }
+.ve-ai-company h4 { font-weight:820; }
+.ve-ai-relation { border-top:1px solid #9fb1c3; margin-top:.65rem; padding-top:.65rem; }
+.ve-ai-relation :is(p,a) svg { display:inline-block; vertical-align:middle; }
+.ve-ai-relation a { display:inline-flex; align-items:center; gap:.3rem; min-height:44px; text-decoration:underline; text-underline-offset:.22em; }
+@media (max-width:700px) { .ve-ai-directory { grid-template-columns:minmax(0,1fr); } .ve-ai-directory ul { max-height:10rem; } }

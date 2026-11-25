@@ -141,3 +141,28 @@ body:has(.ai-preview) > :is(.site-header,.site-footer) { display:none; }
  .ai-inner[data-service-tone] .ai-inner-art::after { background:linear-gradient(90deg,#071628db 10%,#07162838 100%); }
 }
 .ai-news-cover[data-original=unavailable]:not(:has(img)) { aspect-ratio:auto; min-height:4.1rem; }
+
+.ai-eco-section { margin:1.7rem 0; }
+.ai-eco-section h2 { display:flex; align-items:center; gap:.6rem; margin-bottom:.65rem; font-size:clamp(1.45rem,3vw,2.45rem); font-weight:820; line-height:1.12; letter-spacing:-.044em; }
+.ai-eco-section h2 svg { color:#87601d; flex:none; }
+.ai-eco-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,17.5rem),1fr)); gap:.85rem; }
+.ai-eco-grid li { display:flex; flex-direction:column; background:#fff; border:1px solid #c8d8e8; border-top:3px solid #b88d49; border-radius:.65rem; padding:clamp(.9rem,2vw,1.4rem); }
+.ai-eco-grid h3 { font-size:1.18rem; font-weight:820; }
+.ai-eco-grid :is(p,dd) { color:#39526d; }
+.ai-eco-grid dl { margin:.65rem 0; }
+.ai-eco-grid dt { font-weight:820; }
+.ai-eco-grid dl > div { border-top:1px solid #dce4ed; padding:.4rem 0; }
+.ai-eco-grid li > a { margin-top:auto; }
+.ai-eco-grid a,.ai-eco-data-link { display:inline-flex; align-items:center; gap:.36rem; min-height:44px; text-decoration:underline; text-underline-offset:.22em; font-weight:770; }
+.ai-eco-grid a svg { flex:none; }
+.ai-eco-next { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(1rem,4vw,3rem); margin-top:1.45rem; padding:clamp(1rem,4vw,3rem); border-radius:1rem; background:linear-gradient(115deg,#0a1e34,#17465d); color:#fbf7eb; }
+.ai-eco-next h2 { font-size:clamp(1.65rem,4vw,3.35rem); font-weight:820; line-height:1.02; letter-spacing:-.05em; }
+.ai-eco-next h3 { font-weight:830; }
+.ai-eco-next p { margin:.54rem 0; color:#d8e7f4; }
+.ai-eco-next details { border-bottom:1px solid #5e778f; }
+.ai-eco-next summary { cursor:pointer; padding:.65rem 0; min-height:44px; font-weight:790; }
+.ai-eco-next .ve-cta { background:#edc776; color:#152437; }
+@media (max-width:700px) { .ai-eco-next { grid-template-columns:minmax(0,1fr); } }
+.ai-eco-demo form { padding:.35rem 0 1rem; }
+.ai-eco-demo :is(label,select) { display:block; }
+.ai-eco-demo select { color:#fff9e7; background:#143653; border:1px solid #8ba9c6; min-height:44px; border-radius:.4rem; width:100%; padding:0 .45rem; margin:.35rem 0 .65rem; }

@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { ArrowUpRight, Newspaper } from "lucide-react";
-import { ArtImage } from "@/arkez-visual-engine/components/art";
+import { createPreviewNews } from "@/scripts/preview-news.mjs";
 import { editorialNews } from "@/lib/external-directory";
 
 type Story = { title: string; href: string; date: string; source: string; image?: string };
 
+const readBrowserFeeds = createPreviewNews();
 const fallback: Story[] = Object.values(editorialNews);
 const publishers = [
   ["Investing España", "https://es.investing.com/news/"],
@@ -15,15 +16,14 @@ const publishers = [
 ] as const;
 const dateFormat = new Intl.DateTimeFormat("es-CO", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 
-function StoryCover({ story, index }: { story: Story; index: number }) {
+function StoryCover({ story }: { story: Story }) {
   const [attempt, setAttempt] = useState(0);
   const src = story.image && attempt < 2
     ? attempt === 0 ? story.image : `/api/noticias/imagen?url=${encodeURIComponent(story.image)}`
     : undefined;
   return <div className="ai-news-cover" data-original={src ? undefined : "unavailable"}>
     {src ? <img key={src} src={src} alt="" width="960" height="540" loading="lazy" decoding="async" onError={() => setAttempt((value) => value + 1)} />
-      : story.image ? <small>Foto original no disponible</small>
-      : <><ArtImage art={index % 2 ? "study" : "globe"} /><small>Ilustración de Arkez</small></>}
+      : <small>Foto original no disponible</small>}
     <span>{story.source}</span>
   </div>;
 }
@@ -33,10 +33,18 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/noticias/preview", { signal: controller.signal })
-      .then((response) => response.ok ? response.json() : [])
-      .then((stories: Story[]) => setLive(Array.isArray(stories) ? stories : []))
-      .catch(() => { if (!controller.signal.aborted) setLive([]); });
+    async function loadStories() {
+      try {
+        const response = await fetch("/api/noticias/preview", { signal: controller.signal });
+        const stories: unknown = response.ok ? await response.json() : null;
+        if (Array.isArray(stories) && stories.length && stories.some((story) => story?.image)) return stories as Story[];
+        const direct = await readBrowserFeeds();
+        return direct.length ? direct : Array.isArray(stories) ? stories as Story[] : [];
+      } catch {
+        return controller.signal.aborted ? [] : readBrowserFeeds();
+      }
+    }
+    void loadStories().then((stories) => { if (!controller.signal.aborted) setLive(stories); });
     return () => controller.abort();
   }, []);
 
@@ -50,10 +58,10 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
       <p className="ai-news-status" role="status">{live === null ? "Buscando titulares recientes. Puedes consultar la selección editorial mientras tanto."
         : live.length ? "Titulares recientes de las fuentes disponibles." : "Los titulares automáticos no están disponibles. Consulta la selección editorial."}</p>
       <ul className="ai-news-stories" role="list">
-        {(live?.length ? live : fallback).map((story, index) => { const { title, href, date } = story; return <li key={href}>
+        {(live?.length ? live : fallback).map((story) => { const { title, href, date } = story; return <li key={href}>
           <article>
             <a href={href}>
-              <StoryCover key={story.image} story={story} index={index} />
+              <StoryCover key={story.image} story={story} />
               <div className="ai-news-copy">
                 <p><time dateTime={date}>{dateFormat.format(new Date(date))}</time></p>
                 <h3>{title}</h3>
