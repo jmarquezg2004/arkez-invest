@@ -2,6 +2,7 @@ import { pages } from "@/lib/content";
 import { resourceTypes } from "@/arkez-visual-engine/schemas/research";
 
 export const base = "/prototipos/arkez-integrado";
+export const learningPathRoute = "/ruta-de-aprendizaje/";
 export const publicRoutes = [...new Set([...Object.keys(pages), "/innovacion/"])].filter((path) => path !== "/").sort();
 export const researchRoutes = [
   "/explore/", "/research/", "/explore/ecosistema-ia/",

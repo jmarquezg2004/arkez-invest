@@ -2,7 +2,7 @@ import { ArrowDownRight, ArrowUpRight, Compass, LibraryBig } from "lucide-react"
 import { Brand } from "@/components/brand";
 import { contactLink, legalLinks, mainNavigation, type SiteLink } from "@/lib/navigation";
 import { PreviewLinks } from "./preview-links";
-import { base, previewHref } from "./routes";
+import { base, learningPathRoute, previewHref } from "./routes";
 
 const library = [
   { label: "Catálogo Explore", href: base + "/explore/" },
@@ -11,7 +11,9 @@ const library = [
   { label: "Cadena de valor de la IA", href: base + "/explore/ecosistema-ia/" },
 ];
 const groups: readonly (SiteLink | (SiteLink & { children: readonly SiteLink[] }))[] = [
-  ...mainNavigation,
+  ...mainNavigation.map((group) => group.href === "/recursos/" && "children" in group
+    ? { ...group, children: [{ label: "Ruta de aprendizaje", href: base + learningPathRoute }, ...group.children] }
+    : group),
   { label: "Explore y Research", href: base + "/explore/", children: library },
 ];
 

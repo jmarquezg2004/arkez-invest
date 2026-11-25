@@ -5,6 +5,8 @@ import { extname, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { commonHeaders, contentPolicy } from "./pages-headers.mjs";
 
+import { createPreviewNews } from "./preview-news.mjs";
+
 const defaultRoot = fileURLToPath(new URL("../out/", import.meta.url));
 const contactPath = "/api/contacto/prueba";
 const maxBodyBytes = 256;
@@ -43,7 +45,7 @@ function limiter(max) {
   };
 }
 
-export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs = 800 } = {}) {
+export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs = 800, news = createPreviewNews() } = {}) {
   const contactChallenges = new Map();
   const allowIssue = limiter(24);
   const allowSubmit = limiter(8);
@@ -62,6 +64,10 @@ export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs
     try {
       const path = decodeURIComponent(new URL(request.url, origin).pathname);
       if (path.startsWith("//") || path.includes("\\") || path.includes("\0")) return reply(response, 400, { ok: false });
+      if (path === "/api/noticias/preview") {
+        if (request.method !== "GET") return reply(response, 405, { ok: false });
+        return reply(response, 200, await news());
+      }
       if (path === contactPath) {
         const fetchSite = request.headers["sec-fetch-site"];
         if (fetchSite && fetchSite !== "same-origin") return reply(response, 403, { ok: false });
@@ -128,7 +134,7 @@ export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs
       }
 
       const type = types[extname(file)];
-      if (type === "text/html") response.setHeader("Content-Security-Policy", contentPolicy([content.toString("utf8")]));
+      if (type === "text/html") response.setHeader("Content-Security-Policy", contentPolicy([content.toString("utf8")], { newsImages: status === 200 && ["/prototipos/arkez-integrado/", "/prototipos/arkez-integrado/actualidad/"].includes(path.replace(/index\.html$/, "")) }));
       response.writeHead(status, { "Content-Type": type.startsWith("text/") ? `${type}; charset=utf-8` : type, "Content-Length": content.length });
       response.end(request.method === "HEAD" ? undefined : content);
     } catch {

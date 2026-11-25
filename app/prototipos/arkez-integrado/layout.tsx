@@ -4,6 +4,7 @@ import "../arkez-nexacore/experience.css";
 import "../arkez-nexacore/v2.css";
 import "@/arkez-visual-engine/design.css";
 import "./integrated.css";
+import "./learning-quiz.css";
 import { IntegratedShell } from "./shell";
 
 export const metadata: Metadata = {

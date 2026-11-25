@@ -22,7 +22,7 @@ const benefits = [
   { title: "Aplica lo aprendido", text: "Usa guías y herramientas en tus finanzas o con tu equipo." },
 ];
 
-export function HomeSections() {
+export function HomeSections({ news }: { news?: React.ReactNode } = {}) {
   return <>
       <section className="container-shell home-services section-spacing" id="portafolio" aria-labelledby="learn-title">
         <div className="home-services-heading" data-reveal>
@@ -78,7 +78,7 @@ export function HomeSections() {
         </div>
       </section>
 
-      <section className="home-reading section-spacing" id="noticias" aria-labelledby="home-library-title">
+      {news ?? <section className="home-reading section-spacing" id="noticias" aria-labelledby="home-library-title">
         <div className="container-shell">
           <div className="home-services-heading" data-reveal>
             <h2 id="home-library-title">Actualidad y recursos</h2>
@@ -103,7 +103,7 @@ export function HomeSections() {
             </article>
           </div>
         </div>
-      </section>
+      </section>}
 
       <section className="container-shell home-platforms section-spacing" id="ecosistema" aria-labelledby="home-ecosystem-title">
         <div className="home-services-heading" data-reveal>

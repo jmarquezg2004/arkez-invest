@@ -11,6 +11,8 @@ Vista previa de diseño tecnoeditorial para educación financiera. Las rutas de 
 | Exportación | HTML local descargable por recurso. PDF mediante diálogo de impresión. PNG y SVG del gráfico financiero. |
 | Referencias | `references/README.md` analiza las cuatro piezas aprobadas. `assets/` contiene WebP originales para la vista previa. |
 
+La interfaz editorial usa azul marino y azul para navegación, gráficos y enlaces, con dorado para acciones y blanco para lectura. El violeta se reserva para la ilustración y el emblema del caso Nubank. El verde y el rojo identifican fortalezas y riesgos.
+
 Las imágenes WebP se generaron para esta revisión sin identidad de terceros incrustada. Los componentes emplean Lucide (ISC y atribuciones de Feather), Recharts (MIT) y Motion (MIT) ya instalados. El carrusel de shadcn/ui se consultó como patrón de navegación. La implementación de esta revisión usa desplazamiento nativo con CSS scroll snap y un diálogo HTML. El armazón y sus datos se sirven estáticamente. [Lucide](https://lucide.dev/license) · [Recharts](https://github.com/recharts/recharts) · [shadcn/ui](https://ui.shadcn.com/docs/components/carousel)
 
 Los datos de Nu corresponden a 2023 y 2024. La lectura usa el comunicado y los estados consolidados presentados ante la SEC. El gráfico de EPS básico utiliza dólares por acción. Las cifras agregadas financieras se expresan en millones de dólares. [Comunicado oficial](https://nu.com/en/newsroom/company/nu-holdings-ltd-reports-fourth-quarter-and-full-year-2024-financial-results) · [Estados financieros 6-K](https://www.sec.gov/Archives/edgar/data/1691493/000129281425000480/nufs4q24_6k.htm)

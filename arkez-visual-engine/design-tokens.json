@@ -8,7 +8,7 @@
   "yellow": "#F5C75C",
   "green": "#6ABA7C",
   "orange": "#D78E51",
-  "purple": "#A780ED",
+  "nubankPurple": "#A780ED",
   "font": "Manrope Variable",
   "radius": "1rem",
   "motion": "280ms"

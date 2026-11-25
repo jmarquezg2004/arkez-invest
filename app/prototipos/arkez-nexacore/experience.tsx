@@ -6,7 +6,7 @@ import { FinancialLab } from "./lab";
 import poster from "./arquitectura.webp";
 import mobilePoster from "./arquitectura-movil.webp";
 
-export function NexaExperience({ standalone = true, children }: { standalone?: boolean; children?: React.ReactNode }) {
+export function NexaExperience({ standalone = true, learningHref, children }: { standalone?: boolean; learningHref?: string; children?: React.ReactNode }) {
   return <div className="nx">
     {standalone && <FloatingNav />}
     <section className="nx-hero" aria-labelledby="nx-title">
@@ -22,7 +22,7 @@ export function NexaExperience({ standalone = true, children }: { standalone?: b
           <em>Aprovecha la tecnología.</em>
         </h1>
         <p>Formación, guía y simuladores para tomar decisiones con más criterio y con menos afán.</p>
-        <div className="nx-hero-actions"><a className="nx-button nx-button-light" href="#nx-herramientas">Probar herramientas <ArrowRight size={18} /></a><a href="#nx-caminos">Elegir mi nivel <ArrowDown size={17} /></a></div>
+        <div className="nx-hero-actions"><a className="nx-button nx-button-light" href="#nx-herramientas">Probar herramientas <ArrowRight size={18} /></a>{learningHref ? <a href={learningHref}>Encuentra tu ruta de aprendizaje <ArrowRight size={17} /></a> : <a href="#nx-caminos">Elegir mi nivel <ArrowDown size={17} /></a>}</div>
       </div>
       <a className="nx-hero-index" href="#nx-servicios">Explorar servicios <ArrowDown size={16} /></a>
     </section>

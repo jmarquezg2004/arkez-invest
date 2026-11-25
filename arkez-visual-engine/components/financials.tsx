@@ -61,7 +61,7 @@ export function Financials({ data, company, period = "Ejercicios 2023 y 2024", e
       <XAxis dataKey="year" tickLine={false} tick={{ fill: "#35465d" }} />
       <YAxis tickLine={false} axisLine={false} width={53} tick={{ fill: "#35465d", fontSize: 11 }} tickFormatter={(value: number) => number.format(value)} />
       <Tooltip formatter={(value) => value == null ? "" : `US$ ${number.format(Number(value))}${eps ? " por acción" : " M"}`} />
-      <Bar dataKey={metric} name={options.find(([id]) => id === metric)?.[1]} fill="#7943bd" radius={[7, 7, 0, 0]} maxBarSize={110} isAnimationActive={!reduced} animationDuration={340} />
+      <Bar dataKey={metric} name={options.find(([id]) => id === metric)?.[1]} fill="#286498" radius={[7, 7, 0, 0]} maxBarSize={110} isAnimationActive={!reduced} animationDuration={340} />
     </BarChart>}</div>
     <table><caption>Valores para {options.find(([id]) => id === metric)?.[1].toLowerCase()}</caption><thead><tr><th scope="col">Periodo</th><th scope="col">{unit}</th></tr></thead><tbody>{data.map((row) => <tr key={row.year}><th scope="row">{row.year}</th><td>{number.format(row[metric])}</td></tr>)}</tbody></table>
     <section className="ve-export" aria-label="Exportar"><button type="button" onClick={() => void save("svg")}><Download size={17} /> SVG del gráfico</button><button type="button" onClick={() => void save("png")}><Download size={17} /> PNG del gráfico</button><span role="status">{status}</span></section>

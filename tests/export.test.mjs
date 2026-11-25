@@ -216,7 +216,7 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `/prototipos/arkez-explore/nubank/${slug}/`),
     ...(process.env.ARKEZ_LOCAL_PREVIEW === "1" ? [
     ...routes.map((path) => `/prototipos/arkez-integrado${path}`),
-    ...["explore", "explore/ecosistema-ia", "explore/nubank", "research", "research/oddity", "research/oddity/informe", "research/oddity/modelo",
+    ...["ruta-de-aprendizaje", "explore", "explore/ecosistema-ia", "explore/nubank", "research", "research/oddity", "research/oddity/informe", "research/oddity/modelo",
       ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `explore/nubank/${slug}`),
     ].map((slug) => `/prototipos/arkez-integrado/${slug}/`),
     ] : []),

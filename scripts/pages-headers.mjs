@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { newsImageHosts } from "./preview-news.mjs";
 import { join, resolve, sep } from "node:path";
 
 export const commonHeaders = {
@@ -10,7 +11,7 @@ export const commonHeaders = {
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
 };
 
-export function contentPolicy(documents) {
+export function contentPolicy(documents, { newsImages = false } = {}) {
   const hashes = new Set();
   for (const html of documents) {
     for (const [, script] of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
@@ -22,7 +23,7 @@ export function contentPolicy(documents) {
     `script-src 'self' ${[...hashes].sort().join(" ")}`.trim(),
     "script-src-attr 'none'",
     "style-src 'self'",
-    "img-src 'self' data:",
+    ["img-src 'self' data:", ...newsImages ? newsImageHosts.map((host) => `https://${host}`) : []].join(" "),
     "connect-src 'self'",
     "object-src 'none'",
     "base-uri 'none'",
