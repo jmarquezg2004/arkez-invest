@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { learningPath, learningQuestions } from "../app/prototipos/arkez-integrado/learning-path.ts";
-import { createPreviewNews } from "../scripts/preview-news.mjs";
+import { createNewsPhoto, createPreviewNews } from "../scripts/preview-news.mjs";
 import { createPreviewServer } from "../scripts/preview.mjs";
 
 test("la ruta educativa valida las respuestas y selecciona recursos según el objetivo y el formato", () => {
@@ -107,4 +107,21 @@ test("las noticias toman los dos primeros del RSS antes de ordenarlos como el si
     ] : [],
   }) });
   assert.deepEqual((await news()).map(({ title }) => title), ["Segunda", "Primera"]);
+});
+
+
+test("la ruta de fotos conserva los bytes de la fuente y rechaza imágenes ajenas", async () => {
+  const original = "https://content-media.investing.com/news/original.jpg";
+  const bytes = Uint8Array.of(255, 216, 255, 217);
+  const photo = createNewsPhoto(async () => [{ image: original }], async (link, options) => {
+    assert.equal(link, original);
+    assert.equal(options.redirect, "error");
+    return new Response(bytes, { headers: { "Content-Type": "image/jpeg" } });
+  });
+  const request = (link) => photo(new URL("https://example.com/?url=" + encodeURIComponent(link)), "GET");
+  assert.equal((await request(original + "?different=1")).status, 404);
+  assert.equal((await request("https://example.com/news/original.jpg")).status, 404);
+  const response = await request(original);
+  assert.equal(response.status, 200);
+  assert.deepEqual(new Uint8Array(await response.arrayBuffer()), bytes);
 });

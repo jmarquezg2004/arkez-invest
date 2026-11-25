@@ -12,6 +12,7 @@ import { nubank } from "@/arkez-visual-engine/research-data";
 import { resourceTypes } from "@/arkez-visual-engine/schemas/research";
 import InnovationPage from "@/app/innovacion/page";
 import { base, learningPathRoute, publicRoutes, researchRoutes } from "../routes";
+import { serviceEditorial } from "../service-editorial";
 import { MarketLookup } from "../market-lookup";
 import { PreviewNews } from "../news";
 import { LearningQuiz } from "../learning-quiz";
@@ -55,9 +56,12 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
   if (path === "/innovacion/") return <main className="ai-inner"><InnovationPage /></main>;
   const page = pages[path];
   if (!page) notFound();
-  return <main className="ai-inner"><ContentPage page={page} path={path} heroArt={<ArtImage art={sectionArtwork[ruta[0]] ?? "report"} eager />}>
+  const service = serviceEditorial(path);
+  return <main className="ai-inner" data-service-tone={service?.tone}><ContentPage page={page} path={path}
+    heroArt={service?.hero ?? <ArtImage art={sectionArtwork[ruta[0]] ?? "report"} eager />}
+    heroActions={service?.intro}>
     {path === "/actualidad/" && <PreviewNews directory={base + path} directoryPage />}
-    <CommercialPages path={path} />
+    {service?.body ?? <CommercialPages path={path} />}
     {path === "/recursos/" && <ResourceLibrary />}
     {path === "/contacto/" && <p className="ai-contact-note">Vista previa para revisar el sitio. El envío de mensajes se habilita en la versión pública cuando esté disponible.</p>}
   </ContentPage></main>;

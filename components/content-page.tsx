@@ -16,7 +16,7 @@ const dateFormat = new Intl.DateTimeFormat("es-CO", {
   day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
 });
 
-export function ContentPage({ page, path, heroArt, children }: { page: PageData; path: string; heroArt?: ReactNode; children?: ReactNode }) {
+export function ContentPage({ page, path, heroArt, heroActions, children }: { page: PageData; path: string; heroArt?: ReactNode; heroActions?: ReactNode; children?: ReactNode }) {
   const trail = breadcrumbs(path);
   const Body = page.editorial ? "article" : "div";
 
@@ -39,6 +39,7 @@ export function ContentPage({ page, path, heroArt, children }: { page: PageData;
           <p className="eyebrow">{page.group}</p>
           <h1 id="page-title">{page.title}</h1>
           <p className="page-intro">{page.description}</p>
+          {heroActions}
         </div>
       </section>
 

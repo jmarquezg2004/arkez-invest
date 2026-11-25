@@ -101,3 +101,43 @@ body:has(.ai-preview) > :is(.site-header,.site-footer) { display:none; }
  .ai-inner-art { inset-inline-start:8%; opacity:.65; }
  .ai-inner-art::after { background:linear-gradient(90deg,#071628 2%,#071628a0 56%,#07162833 100%),linear-gradient(0deg,#071628 0%,transparent 70%); }
 }
+
+.ai-inner[data-service-tone] { --service-accent:#edc776; --service-wash:#163c55; }
+.ai-inner[data-service-tone=teal] { --service-wash:#143e40; --service-accent:#a5d9c9; }
+.ai-inner[data-service-tone=sand] { --service-wash:#41351f; }
+.ai-inner[data-service-tone] .page-hero { min-height:clamp(19rem,30vw,27rem); background:linear-gradient(110deg,#08192a,var(--service-wash)); }
+.ai-inner[data-service-tone] .page-hero h1 { font-size:clamp(2.3rem,5.5vw,5rem); max-width:16ch; }
+.ai-inner[data-service-tone] .page-hero .breadcrumbs { margin-bottom:clamp(.85rem,2vw,1.65rem); }
+.ai-inner[data-service-tone] .page-body { padding-top:clamp(1rem,3vw,2.45rem); }
+.ai-inner[data-service-tone] .ai-inner-art { inset-inline-start:33%; }
+.ai-inner[data-service-tone] .ai-inner-art::after { background:linear-gradient(90deg,#091b2dbf 5%,#091b2d7d 31%,transparent 79%),linear-gradient(0deg,#091b2da1 0%,transparent 38%); }
+.ai-service-actions { display:flex; align-items:center; flex-wrap:wrap; gap:.5rem 1rem; margin-top:1rem; }
+.ai-service-actions .ve-cta { background:#edc776; }
+.ai-service-actions > a:last-child { display:inline-flex; align-items:center; min-height:44px; color:#f6f3ea; text-decoration:underline; text-underline-offset:.25em; font-size:.88rem; font-weight:760; }
+.ai-service-overview { display:grid; grid-template-columns:minmax(0,1.22fr) minmax(0,.78fr); gap:clamp(1rem,3.6vw,3rem); padding-bottom:clamp(1.3rem,3vw,2.5rem); }
+.ai-service-summary { background:#fff; border:1px solid #ccd9e6; border-radius:.85rem; padding:clamp(1rem,2.65vw,2.15rem); }
+.ai-service-summary h2 { font-size:clamp(1.45rem,3vw,2.3rem); font-weight:820; line-height:1.1; letter-spacing:-.047em; }
+.ai-service-summary > p { margin-top:.55rem; color:#415671; }
+.ai-service-summary dl { margin:.95rem 0; }
+.ai-service-summary dl > div { display:grid; grid-template-columns:1.6rem minmax(0,1fr); align-items:start; gap:.12rem .6rem; border-top:1px solid #e0e8ef; padding:.5rem 0; }
+.ai-service-summary dl svg { grid-row:span 2; color:#285578; }
+.ai-service-summary dt { font-weight:820; }
+.ai-service-summary dd { color:#40536a; font-size:.92rem; }
+.ai-service-summary .button { gap:.45rem; }
+.ai-service-feature { position:relative; isolation:isolate; overflow:hidden; display:flex; align-items:end; min-height:15rem; padding:clamp(1rem,3.3vw,2.5rem); border-radius:.85rem; border:1px solid #4e6e86; color:#fff9ec; background:#13344f; box-shadow:0 .5rem 1.3rem #0d213530; }
+.ai-service-feature img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:65% center; z-index:-2; }
+.ai-service-feature::after { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(0deg,#071627 4%,#071627d9 33%,#07162721 83%); }
+.ai-service-feature h3 { font-size:clamp(1.45rem,3.25vw,2.65rem); font-weight:820; line-height:1.02; letter-spacing:-.048em; margin:.55rem 0; }
+.ai-service-feature :is(span,svg) { color:var(--service-accent); }
+.ai-service-feature span { display:inline-flex; align-items:center; gap:.4rem; text-decoration:underline; text-underline-offset:.25em; font-weight:770; }
+.ai-service-feature:focus-visible,.ai-service-actions a:focus-visible { outline:3px solid #bc8d39; outline-offset:3px; }
+@media (prefers-reduced-motion:no-preference) {
+ .ai-service-feature img { transition:transform 280ms ease-out; }
+ .ai-service-feature:is(:hover,:focus-visible) img { transform:scale(1.055); }
+}
+@media (max-width:700px) {
+ .ai-service-overview { grid-template-columns:minmax(0,1fr); }
+ .ai-inner[data-service-tone] .ai-inner-art { inset-inline-start:12%; opacity:.6; }
+ .ai-inner[data-service-tone] .ai-inner-art::after { background:linear-gradient(90deg,#071628db 10%,#07162838 100%); }
+}
+.ai-news-cover[data-original=unavailable]:not(:has(img)) { aspect-ratio:auto; min-height:4.1rem; }

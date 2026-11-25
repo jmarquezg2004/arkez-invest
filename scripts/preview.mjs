@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { commonHeaders, contentPolicy, previewPolicyOptions } from "./pages-headers.mjs";
 
 import { createMarketLookup } from "./preview-market.mjs";
-import { createPreviewNews } from "./preview-news.mjs";
+import { createNewsPhoto, createPreviewNews } from "./preview-news.mjs";
 
 const defaultRoot = fileURLToPath(new URL("../out/", import.meta.url));
 const contactPath = "/api/contacto/prueba";
@@ -46,7 +46,7 @@ function limiter(max) {
   };
 }
 
-export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs = 800, news = createPreviewNews(), market = createMarketLookup() } = {}) {
+export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs = 800, news = createPreviewNews(), newsPhoto = createNewsPhoto(news), market = createMarketLookup() } = {}) {
   const contactChallenges = new Map();
   const allowIssue = limiter(24);
   const allowSubmit = limiter(8);
@@ -70,6 +70,12 @@ export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs
         const result = await market(new URL(request.url, origin));
         response.writeHead(result.status, Object.fromEntries(result.headers));
         return response.end(await result.text());
+      }
+      if (path === "/api/noticias/imagen") {
+        if (request.method !== "GET" && request.method !== "HEAD") return reply(response, 405, { ok: false });
+        const photo = await newsPhoto(new URL(request.url, origin), request.method);
+        response.writeHead(photo.status, Object.fromEntries(photo.headers));
+        return response.end(photo.body ? Buffer.from(await photo.arrayBuffer()) : undefined);
       }
       if (path === "/api/noticias/preview") {
         if (request.method !== "GET") return reply(response, 405, { ok: false });

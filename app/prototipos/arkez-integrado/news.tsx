@@ -16,9 +16,13 @@ const publishers = [
 const dateFormat = new Intl.DateTimeFormat("es-CO", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 
 function StoryCover({ story, index }: { story: Story; index: number }) {
-  const [missing, setMissing] = useState(false);
-  return <div className="ai-news-cover">
-    {story.image && !missing ? <img src={story.image} alt="" width="960" height="540" loading="lazy" decoding="async" onError={() => setMissing(true)} />
+  const [attempt, setAttempt] = useState(0);
+  const src = story.image && attempt < 2
+    ? attempt === 0 ? story.image : `/api/noticias/imagen?url=${encodeURIComponent(story.image)}`
+    : undefined;
+  return <div className="ai-news-cover" data-original={src ? undefined : "unavailable"}>
+    {src ? <img key={src} src={src} alt="" width="960" height="540" loading="lazy" decoding="async" onError={() => setAttempt((value) => value + 1)} />
+      : story.image ? <small>Foto original no disponible</small>
       : <><ArtImage art={index % 2 ? "study" : "globe"} /><small>Ilustración de Arkez</small></>}
     <span>{story.source}</span>
   </div>;

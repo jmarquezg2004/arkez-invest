@@ -82,3 +82,34 @@ export function createPreviewNews({ load = fetch, now = Date.now } = {}) {
     return request;
   };
 }
+
+
+export function createNewsPhoto(getNews, load = fetch) {
+  return async (url, method) => {
+    const link = url.searchParams.get("url");
+    const reject = (status) => new Response(null, { status, headers: { "Cache-Control": "no-store" } });
+    if (!link || link.length > 1024 || !newsImageHosts.includes(URL.parse(link)?.hostname)) return reject(404);
+    // Only relay an original image attached to a story currently returned by the curated feeds.
+    if (!(await getNews()).some((story) => story.image === link)) return reject(404);
+    try {
+      const upstream = await load(link, { redirect: "error", signal: AbortSignal.timeout(4500) });
+      const type = upstream.headers.get("content-type")?.split(";")[0];
+      if (!upstream.ok || !upstream.body || !/^image\/(jpeg|png|webp|avif)$/.test(type ?? "")) return reject(502);
+      const reader = upstream.body.getReader();
+      const chunks = [];
+      let size = 0;
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        size += value.byteLength;
+        if (size > 2_000_000) { await reader.cancel(); return reject(502); }
+        chunks.push(value);
+      }
+      return new Response(method === "HEAD" ? null : new Blob(chunks), {
+        headers: { "Content-Type": type, "Content-Length": String(size), "Cache-Control": "public, max-age=300", "X-Content-Type-Options": "nosniff" },
+      });
+    } catch {
+      return reject(502);
+    }
+  };
+}
