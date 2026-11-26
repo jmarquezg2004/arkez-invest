@@ -23,7 +23,7 @@
   },
   "liquidez-operativa": {
     "title": "Caso de liquidez operativa",
-    "intro": "Ejercicio con cifras ficticias en la misma unidad monetaria. El objetivo es detectar una brecha de caja y observar qué supuesto la produce.",
+    "intro": "Ejercicio con cifras ficticias en dólares estadounidenses (USD). El objetivo es detectar una brecha de caja y observar qué supuesto la produce.",
     "topics": [
       { "title": "Construye el escenario base", "body": "Saldo inicial: 900. Cobros del período: 1.200. Pagos: 1.500. Suma saldo inicial y cobros, y resta los pagos. El saldo final es 600." },
       { "title": "Cambia un solo supuesto", "body": "Si un cobro de 850 se desplaza al período siguiente, quedan 350 de cobros actuales. Con los demás valores constantes, el saldo final es -250. Esa diferencia identifica una brecha en el período actual." },

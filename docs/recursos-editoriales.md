@@ -11,7 +11,7 @@ Edición del 20 de noviembre de 2026. Los importes, empresas y escenarios de los
 
 Los PDF incluyen portada institucional, índice enlazado, cinco casos con tablas y gráficos o diagramas, ejercicios con soluciones, conclusiones y enlaces a fuentes. La biblioteca conserva la vista PDF y la descarga. Las guías y artículos correspondientes ofrecen las ediciones completas en HTML, con tablas semánticas y los datos de los gráficos como texto. Los PDF contienen texto seleccionable e índices internos. La versión HTML es la alternativa semántica para tecnologías de asistencia.
 
-El XLSX reúne Instrucciones, Presupuesto, Escenarios, Inversiones, Riesgo y Dashboard. Las celdas doradas contienen datos ficticios editables. Las azules se reservan para datos propios y las grises muestran resultados de fórmulas. El selector B4 del Dashboard cambia el origen de cuatro indicadores y cuatro series entre ambos conjuntos. El libro usa COP y porcentajes, validación de entradas y tablas independientes por conjunto. Carece de macros y conexiones externas.
+El XLSX reúne Instrucciones, Presupuesto, Escenarios, Inversiones, Riesgo y Dashboard. Las celdas doradas contienen datos ficticios editables. Las azules se reservan para datos propios y las grises muestran resultados de fórmulas. El selector B4 del Dashboard cambia el origen de cuatro indicadores y cuatro series entre ambos conjuntos. El libro usa USD y porcentajes, validación de entradas y tablas independientes por conjunto. Carece de macros y conexiones externas.
 
 La biblioteca muestra portadas, formato, extensión, nivel y fecha. El acceso «Ver contenido» del Excel abre el tutorial y una captura del Dashboard renderizada desde el archivo real.
 

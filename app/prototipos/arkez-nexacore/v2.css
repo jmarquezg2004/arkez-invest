@@ -246,3 +246,5 @@
 .nx-service-brief dd { margin:.12rem 0 0; }
 
 .nx-comparison-scenario { display:flex; align-items:center; min-height:44px; padding:.45rem 1rem; gap:.55rem; font-weight:750; }
+
+.nx-service-brief > img { width:100%; aspect-ratio:16/8; object-fit:cover; border-radius:.45rem; }

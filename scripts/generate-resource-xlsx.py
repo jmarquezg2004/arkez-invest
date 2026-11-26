@@ -13,14 +13,14 @@ COVERS = ROOT / "public/recursos/portadas"
 WORKBOOK = FILES / "laboratorio-financiero.xlsx"
 NAVY, INK, GOLD = "#0D1E35", "#233B55", "#E6C376"
 BLUE, CREAM, LINE = "#E9F3FC", "#FCF2DA", "#D5DEE7"
-MONEY, PERCENT = '"COP " #,##0.00;[Red]("COP " #,##0.00);"-"', '0.00%;[Red](0.00%);0.00%'
+MONEY, PERCENT = '"USD " #,##0.00;[Red]("USD " #,##0.00);"-"', '0.00%;[Red](0.00%);0.00%'
 
 
 def create_workbook():
     FILES.mkdir(parents=True, exist_ok=True)
     with xlsxwriter.Workbook(WORKBOOK, {"strings_to_formulas": False, "strings_to_urls": False}) as book:
         book.set_properties({"title": "Laboratorio financiero de Arkez Invest", "author": "Arkez Invest",
-                             "comments": "Ejercicios ficticios y hojas de trabajo en COP.",
+                             "comments": "Ejercicios ficticios y hojas de trabajo en USD.",
                              "created": datetime(2026, 11, 20)})
         book.set_calc_mode("auto")
         bold = book.add_format({"bold": True, "font_color": NAVY, "bg_color": GOLD, "valign": "vcenter"})
@@ -74,15 +74,15 @@ def create_workbook():
         def warn(ws, cells):
             ws.conditional_format(cells, {"type": "cell", "criteria": "<", "value": 0, "format": status})
 
-        instructions = sheet("Instrucciones", "Edición 20/11/2026 · Unidades COP · Material educativo", [27, 37, 37, 30])
+        instructions = sheet("Instrucciones", "Edición 20/11/2026 · Unidades USD · Material educativo", [27, 37, 37, 30])
         instructions.merge_range("A4:D4", "Código de color", bold)
         instructions.write("A5", "Ejemplo ficticio", formats["example", "text"])
         instructions.write("B5", "Campo propio editable", formats["own", "text"])
         instructions.write("C5", "Resultado calculado", formats["result", "text"])
         notes = [
-            ("Empieza con una copia", "Revisa las filas ficticias antes de registrar tus cifras. Los bloques azules quedan vacíos. Conserva los importes en COP y el mismo período al comparar escenarios."),
+            ("Empieza con una copia", "Revisa las filas ficticias antes de registrar tus cifras. Los bloques azules quedan vacíos. Conserva los importes en USD y el mismo período al comparar escenarios."),
             ("Presupuesto", "Introduce el saldo inicial en el primer mes. Completa cobros y pagos de cada mes, incluso con 0 si no hubo movimiento. Cada saldo alimenta el siguiente período."),
-            ("Escenarios", "Completa un caso base y cambia un solo supuesto por alternativa. El ejemplo de cobro retrasado pasa de COP 600 a COP -250."),
+            ("Escenarios", "Completa un caso base y cambia un solo supuesto por alternativa. El ejemplo de cobro retrasado pasa de USD 600 a USD -250."),
             ("Inversiones", "Anota cantidad, precios de entrada y salida, y costos. El resultado supone que se vende toda la posición. No incluye dividendos, impuestos ni ajuste por inflación."),
             ("Riesgo", "Agrega el valor y el cambio hipotético por posición. Un -15 % se escribe como -15%. El impacto agregado sólo aparece al completar cada posición con valor positivo."),
             ("Dashboard", "Usa el selector en B4 para alternar entre ejemplos y datos propios. Los indicadores y las series se recalculan desde sus hojas. Los espacios sin entradas no representan resultados."),
@@ -174,7 +174,7 @@ def create_workbook():
         risk_examples = [("Acciones", 400, -.15), ("ETF", 500, -.08), ("Criptoactivos", 100, -.40)]
         for start, kind in ((7, "example"), (16, "own")):
             end = start + 2
-            block(risk, start - 2, "EJEMPLO FICTICIO" if kind == "example" else "MIS DATOS", ["Posición", "Valor de partida", "Cambio supuesto", "Peso", "Aporte al impacto", "Impacto COP"])
+            block(risk, start - 2, "EJEMPLO FICTICIO" if kind == "example" else "MIS DATOS", ["Posición", "Valor de partida", "Cambio supuesto", "Peso", "Aporte al impacto", "Impacto USD"])
             for i, (name, value, shock) in enumerate(risk_examples):
                 row = start + i
                 example = kind == "example"

@@ -260,3 +260,25 @@ body:has(.ve) > :is(.site-header,.site-footer) { display:none; }
 .ve-ai-network button { border:1px solid #677c91; border-radius:.35rem; min-height:44px; padding:.35rem .65rem; font-weight:750; }
 
 .ve-ai-network button[aria-pressed="true"] { background:#0f3556;color:white; }
+.ve-map-workspace { padding:clamp(.65rem,2vw,1.15rem); border-radius:.8rem; background:#101828; color:#eff4fb; margin:1rem 0 2rem; }
+.ve-map-controls,.ve-map-legend { display:flex; flex-wrap:wrap; align-items:end; gap:.55rem; margin:.5rem 0 .85rem; padding:0; list-style:none; }
+.ve-map-controls label { display:grid; gap:.22rem; flex:1 1 9rem; min-width:0; }
+.ve-map-controls :is(input,select,button),.ve-map-legend button { min-height:44px; max-width:100%; border:1px solid #536780; background:#1d2c43; color:#fff; border-radius:.4rem; padding:.33rem .55rem; }
+.ve-map-legend button { display:inline-flex; align-items:center; gap:.35rem; min-height:44px; }
+.ve-map-workspace button[aria-pressed="true"] { background:#f6d487; color:#111827; border-color:#f6d487; }
+.ve-map-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(12rem,23%); gap:.8rem; }
+.ve-map-canvas { min-width:0; overflow:auto; background:#0b111c; border:1px solid #3e5069; border-radius:.5rem; }
+.ve-map-svg { display:block; width:100%; min-width:640px; }
+.ve-map-svg[data-zoom="true"] { width:145%; min-width:870px; }
+.ve-map-svg g[role="button"] { cursor:pointer; }
+.ve-map-svg g:focus-visible circle { stroke:white; stroke-width:4; }
+.ve-map-svg text { fill:#fff; font:700 11px ui-monospace,monospace; paint-order:stroke; stroke:#0b111c; stroke-width:3px; }
+.ve-map-details { min-width:0; max-height:32rem; overflow:auto; padding:.7rem; background:#18263b; border-radius:.45rem; }
+.ve-map-details small { display:block; }
+.ve-map-details li { margin-bottom:.65rem; }
+.ve-map-workspace > p { margin:.65rem 0 0; }
+@media (prefers-reduced-motion:no-preference) {
+  .ve-map-signal { stroke-dasharray:5 8; animation:ve-map-flow 1.25s linear infinite; }
+  @keyframes ve-map-flow { to { stroke-dashoffset:-26; } }
+}
+@media (max-width:760px) { .ve-map-layout { grid-template-columns:minmax(0,1fr); } .ve-map-details { max-height:15rem; } }

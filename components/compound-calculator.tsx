@@ -93,7 +93,7 @@ export function CompoundCalculator() {
   const [first, setFirst] = useState(() => draft(initial));
   const [second, setSecond] = useState(() => draft({ ...initial, annualRate: 3 }));
   const [comparing, setComparing] = useState(false);
-  const [currency, setCurrency] = useState<Currency>("COP");
+  const [currency, setCurrency] = useState<Currency>("USD");
   const [results, setResults] = useState(() => [calculateCompound(initial)]);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");

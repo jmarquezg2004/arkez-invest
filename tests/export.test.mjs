@@ -272,6 +272,13 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     const chain = base + "explore/ecosistema-ia/";
     assert.ok(read(base).includes(`href="${chain}#empresas-cadena-ia"`));
     assert.match(read(chain), /id="empresas-cadena-ia"/);
+    assert.match(read(chain), /Red interactiva de empresas y relaciones/);
+    assert.match(read(chain), /76 nodos y 162 conexiones visibles/);
+    const research = read(base + "research/");
+    assert.match(research, /id="planes-research"/);
+    assert.match(research, /USD 5/);
+    assert.match(research, /USD 10/);
+    assert.match(read(base + "explore/"), /Megacaps y large caps/);
     assert.doesNotMatch(read(chain), /mapa-relaciones-ia\.zip/);
     assert.equal((read(chain).match(/>Descargar ficha de la etapa</g) ?? []).length, 7);
     const collectionPath = base + "research/visual-stories/";

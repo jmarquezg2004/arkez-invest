@@ -2,6 +2,7 @@ import { ArrowUpRight, FileChartColumn, Network } from "lucide-react";
 import { Financials } from "@/arkez-visual-engine/components/financials";
 import { ArtImage } from "@/arkez-visual-engine/components/art";
 import { ExportActions } from "@/arkez-visual-engine/renderers/exports";
+import { ResearchPlans } from "./research-plans";
 import { MarketLookup } from "./market-lookup";
 import { base, oddityStoryPath, visualStoriesPath } from "./routes";
 
@@ -24,6 +25,7 @@ export function ReportLibrary({ companyOnly = false }: { companyOnly?: boolean }
     </section>
     <div className="container-shell ai-library-body">
       {!companyOnly && <MarketLookup />}
+      {!companyOnly && <ResearchPlans />}
       {!companyOnly && <section className="ve-shelf"><header><h2>Nubank</h2></header><ul className="ve-track" role="list"><li className="ve-cover" data-palette="purple">
         <ArtImage art="bank" /><a className="ve-cover-open" href={base + "/explore/nubank/"}><span>NU</span><strong>Galería de Nubank</strong><small>Seis recursos de investigación</small><ArrowUpRight size={19} /></a>
       </li></ul></section>}

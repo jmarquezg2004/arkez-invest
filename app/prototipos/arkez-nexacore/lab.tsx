@@ -21,14 +21,14 @@ function Slider({ label, min, max, step = 1, value, onChange, unit }: {
 }) {
   return <label className="nx-slider">
     <span id={`nx-input-${label.replaceAll(" ", "-")}`}>{label}</span><b aria-hidden="true">{number.format(value)} {unit}</b>
-    <input aria-labelledby={`nx-input-${label.replaceAll(" ", "-")}`} aria-valuetext={`${number.format(value)} ${unit === "M COP" ? "millones de pesos colombianos" : unit}`} type="range" min={min} max={max} step={step} value={value} onChange={(event) => onChange(event.currentTarget.valueAsNumber)} />
+    <input aria-labelledby={`nx-input-${label.replaceAll(" ", "-")}`} aria-valuetext={`${number.format(value)} ${unit === "mil USD" ? "miles de dólares estadounidenses" : unit}`} type="range" min={min} max={max} step={step} value={value} onChange={(event) => onChange(event.currentTarget.valueAsNumber)} />
   </label>;
 }
 
 const propertyControls = [
-  ["price", "Precio de compra", 100, 900, 10, "M COP"],
-  ["expense", "Gastos mensuales", 0, 5, .1, "M COP"],
-  ["income", "Ingresos mensuales", 0, 8, .1, "M COP"],
+  ["price", "Precio de compra", 100, 900, 10, "mil USD"],
+  ["expense", "Gastos mensuales", 0, 5, .1, "mil USD"],
+  ["income", "Ingresos mensuales", 0, 8, .1, "mil USD"],
   ["appreciation", "Valorización anual", -8, 15, 1, "%"],
   ["inflation", "Inflación anual", 0, 14, 1, "%"],
   ["years", "Horizonte", 1, 20, 1, "años"],
@@ -43,14 +43,14 @@ function PropertyLab() {
   return <div className="nx-lab-columns">
     <div className="nx-lab-fields">{propertyControls.map(([key, label, min, max, step, unit]) => <Slider key={key} {...{ label, min, max, step, unit }} value={inputs[key]} onChange={(value) => setInputs({ ...inputs, [key]: value })} />)}</div>
     <div className="nx-lab-report">
-      <p className="nx-lab-caption">Valor del inmueble en pesos de hoy</p>
-      <output>{money.format(result.real * 1e6)}</output>
+      <p className="nx-lab-caption">Valor del inmueble en dólares de hoy</p>
+      <output>{money.format(result.real * 1e3)}</output>
       <div className="nx-switch nx-chart-switch" role="group" aria-label="Lectura del evaluador">
         <button type="button" aria-pressed={view === "value"} onClick={() => setView("value")}>Valor del inmueble</button>
         <button type="button" aria-pressed={view === "flow"} onClick={() => setView("flow")}>Flujo y resultado real</button>
       </div>
       {view === "value" ? <FinancialChart key="value" title="Valor del inmueble" periods={yearsLabels(scenario.length)} series={[
-        { name: "Real en pesos de hoy", values: scenario.map(({ real }) => real) },
+        { name: "Real en dólares de hoy", values: scenario.map(({ real }) => real) },
         { name: "Nominal al cierre", values: scenario.map(({ nominal }) => nominal) },
         { name: "Real sin valorización", values: reference.map(({ real }) => real) },
       ]} /> : <FinancialChart key="flow" title="Flujo acumulado y resultado" periods={yearsLabels(scenario.length)} series={[
@@ -58,9 +58,9 @@ function PropertyLab() {
         { name: "Resultado real total", values: scenario.map(({ realChange }) => realChange) },
       ]} />}
       <dl className="nx-metrics">
-        <div><dt>Flujo neto real acumulado</dt><dd>{money.format(result.discountedCashFlow * 1e6)}</dd></div>
-        <div><dt>Resultado real total</dt><dd>{money.format(result.realChange * 1e6)}</dd></div>
-        <div><dt>Valor nominal al cierre</dt><dd>{money.format(result.nominal * 1e6)}</dd></div>
+        <div><dt>Flujo neto real acumulado</dt><dd>{money.format(result.discountedCashFlow * 1e3)}</dd></div>
+        <div><dt>Resultado real total</dt><dd>{money.format(result.realChange * 1e3)}</dd></div>
+        <div><dt>Valor nominal al cierre</dt><dd>{money.format(result.nominal * 1e3)}</dd></div>
       </dl>
       <p className="nx-method-note">Simulación educativa. El flujo resta gastos a ingresos y descuenta cada año por inflación. Asume montos nominales constantes y excluye deuda, impuestos y costos de venta.</p>
     </div>
@@ -84,15 +84,15 @@ function PortfolioLab() {
       <p className="nx-lab-caption">Datos ficticios</p>
       <label><span id="nx-platform-label">Plataforma</span><select aria-labelledby="nx-platform-label" value={platform} onChange={(event) => setPlatform(event.currentTarget.value)}>{["Todas", ...positions.map(({ platform }) => platform)].map((item) => <option key={item}>{item}</option>)}</select></label>
       <label><span id="nx-period-label">Mes del registro</span><select aria-labelledby="nx-period-label" value={month} onChange={(event) => setMonth(Number(event.currentTarget.value))}>{periods.map((period, i) => <option key={period} value={i}>{period}</option>)}</select></label>
-      <p className="nx-method-note">Registro simulado de enero a junio. Los montos en pesos colombianos se definieron para este ejercicio y pueden incluir aportes. El panel suma los saldos del mes y calcula el peso de cada posición. No aplica tasas ni estima rentabilidad.</p>
+      <p className="nx-method-note">Registro simulado de enero a junio. Los montos en dólares estadounidenses se definieron para este ejercicio y pueden incluir aportes. El panel suma los saldos del mes y calcula el peso de cada posición. No aplica tasas ni estima rentabilidad.</p>
     </div>
     <div className="nx-lab-report">
       <p className="nx-lab-caption">Saldo registrado · {periods[month]}</p>
-      <output>{money.format(values[month] * 1e6)}</output>
+      <output>{money.format(values[month] * 1e3)}</output>
       <FinancialChart title="Historial del saldo" periods={periods.slice(0, month + 1)} series={[{ name: "Saldo registrado", values: values.slice(0, month + 1) }]} />
       <ul className="nx-allocation" role="list">{rows.map(({ name, platform, values: amounts }) => {
         const share = 100 * amounts[month] / values[month];
-        return <li key={name}><span>{name} · {platform}</span><strong>{money.format(amounts[month] * 1e6)} · {number.format(share)} %</strong><progress value={share} max="100" aria-label={`Distribución de ${name}`} /></li>;
+        return <li key={name}><span>{name} · {platform}</span><strong>{money.format(amounts[month] * 1e3)} · {number.format(share)} %</strong><progress value={share} max="100" aria-label={`Distribución de ${name}`} /></li>;
       })}</ul>
     </div>
   </div>;
@@ -103,12 +103,12 @@ function CompoundLab() {
   const [monthly, setMonthly] = useState(.2);
   const [years, setYears] = useState(8);
   const [rate, setRate] = useState(6);
-  const inputs = { principal: principal * 1e6, monthly: monthly * 1e6, years, annualRate: rate, compounds: 12 };
+  const inputs = { principal: principal * 1e3, monthly: monthly * 1e3, years, annualRate: rate, compounds: 12 };
   const scenario = calculateCompound(inputs);
   return <div className="nx-lab-columns">
     <div className="nx-lab-fields">
-      <Slider label="Capital inicial" min={0} max={30} step={.5} value={principal} onChange={setPrincipal} unit="M COP" />
-      <Slider label="Aporte mensual" min={0} max={3} step={.1} value={monthly} onChange={setMonthly} unit="M COP" />
+      <Slider label="Capital inicial" min={0} max={30} step={.5} value={principal} onChange={setPrincipal} unit="mil USD" />
+      <Slider label="Aporte mensual" min={0} max={3} step={.1} value={monthly} onChange={setMonthly} unit="mil USD" />
       <Slider label="Tasa nominal anual" min={-5} max={16} value={rate} onChange={setRate} unit="%" />
       <Slider label="Plazo de ahorro" min={1} max={30} value={years} onChange={setYears} unit="años" />
       <a className="nx-inline-link" href="/herramientas/interes-compuesto/">Abrir calculadora completa <ArrowRight size={16} /></a>
@@ -117,9 +117,9 @@ function CompoundLab() {
       <p className="nx-lab-caption">Saldo estimado</p>
       <output>{money.format(scenario.final.balance)}</output>
       <FinancialChart title="Evolución del ahorro" periods={yearsLabels(scenario.rows.length)} series={[
-        { name: "Con la tasa elegida", values: scenario.rows.map(({ balance }) => balance / 1e6) },
-        { name: "Solo aportes acumulados", values: scenario.rows.map(({ contributed }) => contributed / 1e6) },
-        { name: "Rendimiento hipotético", values: scenario.rows.map(({ growth }) => growth / 1e6) },
+        { name: "Con la tasa elegida", values: scenario.rows.map(({ balance }) => balance / 1e3) },
+        { name: "Solo aportes acumulados", values: scenario.rows.map(({ contributed }) => contributed / 1e3) },
+        { name: "Rendimiento hipotético", values: scenario.rows.map(({ growth }) => growth / 1e3) },
       ]} />
       <dl className="nx-metrics"><div><dt>Total aportado</dt><dd>{money.format(scenario.final.contributed)}</dd></div><div><dt>Diferencia frente a solo aportar</dt><dd>{money.format(scenario.final.growth)}</dd></div></dl>
       <p className="nx-method-note">Supuestos ilustrativos con capitalización mensual. Sin impuestos, comisiones ni inflación.</p>
@@ -128,7 +128,7 @@ function CompoundLab() {
 }
 
 const tools = [
-  { name: "Inmuebles", title: "Evaluador inmobiliario", text: "Compara el valor en pesos de hoy con un escenario sin valorización.", Component: PropertyLab },
+  { name: "Inmuebles", title: "Evaluador inmobiliario", text: "Compara el valor en dólares de hoy con un escenario sin valorización.", Component: PropertyLab },
   { name: "Infraestructura IA", title: "Mapa de infraestructura IA", text: "Selecciona un nodo para ver sus conexiones y fuentes técnicas.", Component: AiNetwork },
   { name: "Inversiones", title: "Panel de inversiones", text: "Cambia de plataforma o mes para ver saldos y distribución.", Component: PortfolioLab },
   { name: "Interés compuesto", title: "Simulador de interés compuesto", text: "Compara una tasa ilustrativa con un escenario de solo aportes.", Component: CompoundLab },

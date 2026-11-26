@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, ArrowUpRight, Network, Search } from "lucide-react";
 import directory from "../ai-attachment-directory.json";
+import { AiRelationGraph } from "./ai-relation-graph";
 
 type Company = [string, string, number | "T", boolean];
 const companies = directory as Company[];
@@ -28,6 +29,7 @@ export function AiCompanies() {
   const label = (ticker: string) => format(companies.find(([id]) => id === ticker)?.[1] ?? ticker);
   return <section id="empresas-cadena-ia" className="ve-ai-companies" aria-labelledby="empresas-ia-titulo">
     <h2 id="empresas-ia-titulo"><Network aria-hidden="true" /> Mapa de relaciones de IA</h2>
+    <AiRelationGraph />
     <p>Directorio del mapa aportado por Arkez. Los enlaces entre empresas se muestran cuando tienen fuente primaria.</p>
     <ul className="ve-ai-network" aria-label="Relaciones documentadas">{documented.map(({ from, to, title, href }) => <li key={href}>
       <button type="button" aria-pressed={selection === from} onClick={() => { setQuery(""); setStage(""); setChosen(from); }}>{label(from)}</button>

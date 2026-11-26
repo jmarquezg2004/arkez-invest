@@ -29,9 +29,9 @@ function useSequence(last: number) {
 }
 
 const sources = [
-  { type: "Ahorros", detail: "Cuenta de ahorros · disponible", money: "4,2 M", Icon: Wallet },
-  { type: "Inversiones", detail: "Portafolio · saldo registrado", money: "6,8 M", Icon: ChartPie },
-  { type: "Gastos", detail: "Registro mensual · salidas", money: "1,2 M", Icon: FileText },
+  { type: "Ahorros", detail: "Cuenta de ahorros · disponible", money: "4,2 mil", Icon: Wallet },
+  { type: "Inversiones", detail: "Portafolio · saldo registrado", money: "6,8 mil", Icon: ChartPie },
+  { type: "Gastos", detail: "Registro mensual · salidas", money: "1,2 mil", Icon: FileText },
 ];
 
 export function Comparison() {
@@ -54,21 +54,21 @@ export function Comparison() {
       </header>
       <MotionConfig reducedMotion="user"><LayoutGroup id="nx-comparison-v2">
         <div className="nx-consolidation" data-stage={active}>
-          <div className="nx-consolidation-top"><span><Layers2 size={18} />{["Fuentes separadas", "Conciliando por tipo", "Lectura consolidada"][active]}</span><small>Ejemplo ficticio · COP</small></div>
+          <div className="nx-consolidation-top"><span><Layers2 size={18} />{["Fuentes separadas", "Conciliando por tipo", "Lectura consolidada"][active]}</span><small>Ejemplo ficticio · USD</small></div>
           <div className="nx-consolidation-body">
             <div className="nx-origin-list">{sources.map(({ type, detail, money, Icon }) => <motion.div layout="position" className="nx-origin-row" key={type}><span className="nx-origin-icon"><Icon size={20} /></span><div><strong>{type}</strong><small>{detail}</small></div><b>{money}</b></motion.div>)}</div>
             {active > 0 && <motion.div layout="position" className="nx-consolidated" initial={false}>
-              <p>Capital total</p><strong>11,0 M COP</strong>
+              <p>Capital total</p><strong>11,0 mil USD</strong>
               <div className="nx-consolidated-meter" aria-hidden="true"><span /><span /></div>
-              <dl><div><dt>Ahorro disponible</dt><dd>4,2 M</dd></div><div><dt>Capital invertido</dt><dd>6,8 M</dd></div><div><dt>Gasto mensual</dt><dd>1,2 M</dd></div></dl>
+              <dl><div><dt>Ahorro disponible</dt><dd>4,2 mil</dd></div><div><dt>Capital invertido</dt><dd>6,8 mil</dd></div><div><dt>Gasto mensual</dt><dd>1,2 mil</dd></div></dl>
             </motion.div>}
           </div>
           {active === 2 && <label className="nx-comparison-scenario">
             <input type="checkbox" checked={repair} onChange={(event) => setRepair(event.currentTarget.checked)} />
-            Restar un gasto imprevisto de COP 1,8 M
+            Restar un gasto imprevisto de USD 1,8 mil
           </label>}
           <div className="nx-reading" aria-live="polite">
-            {active === 2 ? <><CircleCheck size={23} /><div><strong>El ahorro cubre {coverage} meses al gasto actual.</strong><small>{repair ? "Quedan COP 2,4 M después del imprevisto. " : ""}{repair ? "2,4 M" : "4,2 M"} disponibles ÷ 1,2 M al mes. El capital invertido queda fuera de ese cálculo.</small></div></>
+            {active === 2 ? <><CircleCheck size={23} /><div><strong>El ahorro cubre {coverage} meses al gasto actual.</strong><small>{repair ? "Quedan USD 2,4 mil después del imprevisto. " : ""}{repair ? "2,4 mil" : "4,2 mil"} disponibles ÷ 1,2 mil al mes. El capital invertido queda fuera de ese cálculo.</small></div></>
               : <span>{active === 1 ? "El gasto mensual queda separado del capital." : "Aún no hay una lectura conjunta. Cada fuente aporta un dato distinto."}</span>}
           </div>
         </div>

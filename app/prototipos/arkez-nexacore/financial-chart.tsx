@@ -6,7 +6,7 @@ import { ChartNoAxesCombined, ChevronLeft, ChevronRight } from "lucide-react";
 import { Area, CartesianGrid, ComposedChart, Line, ReferenceLine, Tooltip, XAxis, YAxis } from "recharts";
 
 export const number = new Intl.NumberFormat("es-CO", { maximumFractionDigits: 2 });
-export const money = new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", currencyDisplay: "code", maximumFractionDigits: 0 });
+export const money = new Intl.NumberFormat("es-CO", { style: "currency", currency: "USD", currencyDisplay: "code", maximumFractionDigits: 0 });
 const axisNumber = new Intl.NumberFormat("es-CO", { notation: "compact", maximumFractionDigits: 1 });
 
 type Series = { name: string; values: number[] };
@@ -23,7 +23,7 @@ export function FinancialChart({ series, periods, title }: { series: readonly Se
   const active = Math.min(cursor ?? periods.length - 1, periods.length - 1);
   const visible = series.filter(({ name }) => !hidden.includes(name));
   const count = visible.length;
-  const display = (value: number) => money.format(value * 1e6);
+  const display = (value: number) => money.format(value * 1e3);
   const rows = useMemo(() => periods.map((period, index) => ({
     period, ...Object.fromEntries(series.map(({ name, values }) => [name, values[index]])),
   })), [periods, series]);
@@ -45,7 +45,7 @@ export function FinancialChart({ series, periods, title }: { series: readonly Se
   }
 
   return <figure className="nx-viz" aria-label={title}>
-    <div className="nx-viz-heading"><span><ChartNoAxesCombined size={17} />{title}</span><small>Millones de COP</small></div>
+    <div className="nx-viz-heading"><span><ChartNoAxesCombined size={17} />{title}</span><small>Miles de USD</small></div>
     <div className="nx-viz-inspection" aria-live="off">
       <strong>{periods[active]}</strong>
       <dl>{visible.map(({ name, values }) => <div key={name}><dt>{name}</dt><dd>{display(values[active])}</dd></div>)}</dl>

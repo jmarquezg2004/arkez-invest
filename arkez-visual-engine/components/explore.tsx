@@ -76,6 +76,7 @@ export function Explore({ market, onMarketPath }: { market?: React.ReactNode; on
         <div><p className="ve-kicker">Arkez Explore</p><h1>Descubre,<br />analiza y aprende.</h1><p>Explora empresas, sectores y cadenas de valor a través de casos de estudio.</p>
           <a className="ve-cta" href={base + "nubank/"}>Abrir el caso Nubank <ArrowUpRight size={18} /></a></div>
       </section>
+      {!category && !query.trim() && !onlySaved && <Shelf title="Megacaps y large caps" items={catalog.filter(({ largeCompany }) => largeCompany)} saved={saved} onSave={save} onPreview={setSelected} />}
       {market}
       <div className="ve-filters">
         <label className="ve-search"><Search size={20} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Buscar en el catálogo por empresa, ticker, sector o tema" placeholder="Buscar empresa, ticker o tema…" /></label>

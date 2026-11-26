@@ -7,6 +7,7 @@ import { aiChainPath, aiMapPath, base, learningPathRoute, previewHref, visualSto
 const library = [
   { label: "Catálogo Explore", href: base + "/explore/" },
   { label: "Informes de empresas", href: base + "/research/" },
+  { label: "Planes de Research", href: base + "/research/#planes-research" },
   { label: "Arkez Visual Stories", href: visualStoriesPath },
   { label: "Recursos de Nubank", href: base + "/explore/nubank/" },
   { label: "Cadena de valor de la IA", href: aiChainPath },

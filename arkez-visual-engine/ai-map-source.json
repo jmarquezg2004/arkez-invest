@@ -1,0 +1,1586 @@
+{
+  "nodes": [
+    {
+      "id": "GRID",
+      "name": "Red eléctrica",
+      "stage": "1",
+      "kind": 2,
+      "x": 199,
+      "y": 406
+    },
+    {
+      "id": "CEG",
+      "name": "Constellation Energy",
+      "stage": "1",
+      "kind": 1,
+      "x": 379,
+      "y": 467
+    },
+    {
+      "id": "VST",
+      "name": "Vistra",
+      "stage": "1",
+      "kind": 1,
+      "x": 106,
+      "y": 331
+    },
+    {
+      "id": "GEV",
+      "name": "GE Vernova",
+      "stage": "1",
+      "kind": 1,
+      "x": 170,
+      "y": 538
+    },
+    {
+      "id": "NEE",
+      "name": "NextEra Energy",
+      "stage": "1",
+      "kind": 1,
+      "x": 289,
+      "y": 313
+    },
+    {
+      "id": "ETN",
+      "name": "Eaton",
+      "stage": "1",
+      "kind": 1,
+      "x": 467,
+      "y": 401
+    },
+    {
+      "id": "SU.PA",
+      "name": "Schneider Electric",
+      "stage": "1",
+      "kind": 1,
+      "x": 514,
+      "y": 358
+    },
+    {
+      "id": "ABBN.SW",
+      "name": "ABB",
+      "stage": "1",
+      "kind": 1,
+      "x": 102,
+      "y": 521
+    },
+    {
+      "id": "VRT",
+      "name": "Vertiv",
+      "stage": "1",
+      "kind": 1,
+      "x": 541,
+      "y": 275
+    },
+    {
+      "id": "PWR",
+      "name": "Quanta Services",
+      "stage": "1",
+      "kind": 1,
+      "x": 62,
+      "y": 444
+    },
+    {
+      "id": "ENR.DE",
+      "name": "Siemens Energy",
+      "stage": "1",
+      "kind": 1,
+      "x": 71,
+      "y": 383
+    },
+    {
+      "id": "OKLO",
+      "name": "Oklo",
+      "stage": "1",
+      "kind": 1,
+      "x": 126,
+      "y": 458
+    },
+    {
+      "id": "ASML",
+      "name": "ASML",
+      "stage": "2",
+      "kind": 1,
+      "x": 783,
+      "y": 203
+    },
+    {
+      "id": "AMAT",
+      "name": "Applied Materials",
+      "stage": "2",
+      "kind": 1,
+      "x": 880,
+      "y": 340
+    },
+    {
+      "id": "LRCX",
+      "name": "Lam Research",
+      "stage": "2",
+      "kind": 1,
+      "x": 870,
+      "y": 289
+    },
+    {
+      "id": "KLAC",
+      "name": "KLA",
+      "stage": "2",
+      "kind": 1,
+      "x": 849,
+      "y": 141
+    },
+    {
+      "id": "TER",
+      "name": "Teradyne",
+      "stage": "2",
+      "kind": 1,
+      "x": 869,
+      "y": 207
+    },
+    {
+      "id": "SNPS",
+      "name": "Synopsys",
+      "stage": "2",
+      "kind": 1,
+      "x": 714,
+      "y": 306
+    },
+    {
+      "id": "CDNS",
+      "name": "Cadence",
+      "stage": "2",
+      "kind": 1,
+      "x": 723,
+      "y": 372
+    },
+    {
+      "id": "SIE.DE",
+      "name": "Siemens (EDA)",
+      "stage": "2",
+      "kind": 1,
+      "x": 928,
+      "y": 242
+    },
+    {
+      "id": "NVDA",
+      "name": "NVIDIA",
+      "stage": "3",
+      "kind": 1,
+      "x": 633,
+      "y": 368
+    },
+    {
+      "id": "AMD",
+      "name": "AMD",
+      "stage": "3",
+      "kind": 1,
+      "x": 665,
+      "y": 318
+    },
+    {
+      "id": "AVGO",
+      "name": "Broadcom",
+      "stage": "3",
+      "kind": 1,
+      "x": 619,
+      "y": 308
+    },
+    {
+      "id": "MRVL",
+      "name": "Marvell",
+      "stage": "3",
+      "kind": 1,
+      "x": 634,
+      "y": 258
+    },
+    {
+      "id": "ARM",
+      "name": "Arm Holdings",
+      "stage": "3",
+      "kind": 1,
+      "x": 677,
+      "y": 419
+    },
+    {
+      "id": "QCOM",
+      "name": "Qualcomm",
+      "stage": "3",
+      "kind": 1,
+      "x": 833,
+      "y": 429
+    },
+    {
+      "id": "TSM",
+      "name": "TSMC",
+      "stage": "4",
+      "kind": 1,
+      "x": 766,
+      "y": 283
+    },
+    {
+      "id": "005930.KS",
+      "name": "Samsung Electronics",
+      "stage": "4",
+      "kind": 1,
+      "x": 683,
+      "y": 221
+    },
+    {
+      "id": "GFS",
+      "name": "GlobalFoundries",
+      "stage": "4",
+      "kind": 1,
+      "x": 938,
+      "y": 495
+    },
+    {
+      "id": "INTC",
+      "name": "Intel",
+      "stage": "4",
+      "kind": 1,
+      "x": 730,
+      "y": 228
+    },
+    {
+      "id": "000660.KS",
+      "name": "SK hynix",
+      "stage": "4",
+      "kind": 1,
+      "x": 813,
+      "y": 261
+    },
+    {
+      "id": "MU",
+      "name": "Micron",
+      "stage": "4",
+      "kind": 1,
+      "x": 782,
+      "y": 334
+    },
+    {
+      "id": "AMKR",
+      "name": "Amkor",
+      "stage": "4",
+      "kind": 1,
+      "x": 770,
+      "y": 393
+    },
+    {
+      "id": "ASX",
+      "name": "ASE Technology",
+      "stage": "4",
+      "kind": 1,
+      "x": 718,
+      "y": 518
+    },
+    {
+      "id": "DELL",
+      "name": "Dell Technologies",
+      "stage": "5",
+      "kind": 1,
+      "x": 622,
+      "y": 532
+    },
+    {
+      "id": "HPE",
+      "name": "Hewlett Packard Enterprise",
+      "stage": "5",
+      "kind": 1,
+      "x": 749,
+      "y": 467
+    },
+    {
+      "id": "SMCI",
+      "name": "Super Micro",
+      "stage": "5",
+      "kind": 1,
+      "x": 669,
+      "y": 490
+    },
+    {
+      "id": "CLS",
+      "name": "Celestica",
+      "stage": "5",
+      "kind": 1,
+      "x": 475,
+      "y": 56
+    },
+    {
+      "id": "ANET",
+      "name": "Arista Networks",
+      "stage": "5",
+      "kind": 1,
+      "x": 494,
+      "y": 509
+    },
+    {
+      "id": "CSCO",
+      "name": "Cisco",
+      "stage": "5",
+      "kind": 1,
+      "x": 447,
+      "y": 545
+    },
+    {
+      "id": "COHR",
+      "name": "Coherent",
+      "stage": "5",
+      "kind": 1,
+      "x": 613,
+      "y": 182
+    },
+    {
+      "id": "LITE",
+      "name": "Lumentum",
+      "stage": "5",
+      "kind": 1,
+      "x": 545,
+      "y": 66
+    },
+    {
+      "id": "CRDO",
+      "name": "Credo",
+      "stage": "5",
+      "kind": 1,
+      "x": 319,
+      "y": 253
+    },
+    {
+      "id": "DC",
+      "name": "Construcción de DC",
+      "stage": "6",
+      "kind": 2,
+      "x": 365,
+      "y": 251
+    },
+    {
+      "id": "EQIX",
+      "name": "Equinix",
+      "stage": "6",
+      "kind": 1,
+      "x": 216,
+      "y": 257
+    },
+    {
+      "id": "DLR",
+      "name": "Digital Realty",
+      "stage": "6",
+      "kind": 1,
+      "x": 212,
+      "y": 193
+    },
+    {
+      "id": "CyrusOne",
+      "name": "CyrusOne (ex-CONE)",
+      "stage": "6",
+      "kind": 0,
+      "x": 293,
+      "y": 90
+    },
+    {
+      "id": "AMZN",
+      "name": "Amazon (AWS)",
+      "stage": "6",
+      "kind": 1,
+      "x": 494,
+      "y": 293
+    },
+    {
+      "id": "MSFT",
+      "name": "Microsoft",
+      "stage": "6",
+      "kind": 1,
+      "x": 533,
+      "y": 408
+    },
+    {
+      "id": "GOOGL",
+      "name": "Alphabet",
+      "stage": "6",
+      "kind": 1,
+      "x": 494,
+      "y": 214
+    },
+    {
+      "id": "ORCL",
+      "name": "Oracle",
+      "stage": "6",
+      "kind": 1,
+      "x": 587,
+      "y": 252
+    },
+    {
+      "id": "CRWV",
+      "name": "CoreWeave",
+      "stage": "6",
+      "kind": 1,
+      "x": 592,
+      "y": 478
+    },
+    {
+      "id": "NBIS",
+      "name": "Nebius",
+      "stage": "6",
+      "kind": 1,
+      "x": 580,
+      "y": 428
+    },
+    {
+      "id": "IREN",
+      "name": "IREN",
+      "stage": "6",
+      "kind": 1,
+      "x": 555,
+      "y": 555
+    },
+    {
+      "id": "APLD",
+      "name": "Applied Digital",
+      "stage": "6",
+      "kind": 1,
+      "x": 624,
+      "y": 629
+    },
+    {
+      "id": "USERS",
+      "name": "Usuarios y empresas",
+      "stage": "7",
+      "kind": 2,
+      "x": 421,
+      "y": 312
+    },
+    {
+      "id": "OpenAI",
+      "name": "OpenAI",
+      "stage": "7",
+      "kind": 0,
+      "x": 573,
+      "y": 328
+    },
+    {
+      "id": "Anthropic",
+      "name": "Anthropic",
+      "stage": "7",
+      "kind": 0,
+      "x": 467,
+      "y": 343
+    },
+    {
+      "id": "META",
+      "name": "Meta (Llama)",
+      "stage": "7",
+      "kind": 1,
+      "x": 519,
+      "y": 458
+    },
+    {
+      "id": "IBM",
+      "name": "IBM (watsonx)",
+      "stage": "7",
+      "kind": 1,
+      "x": 335,
+      "y": 315
+    },
+    {
+      "id": "ADBE",
+      "name": "Adobe",
+      "stage": "7",
+      "kind": 1,
+      "x": 546,
+      "y": 201
+    },
+    {
+      "id": "PLTR",
+      "name": "Palantir",
+      "stage": "7",
+      "kind": 1,
+      "x": 412,
+      "y": 417
+    },
+    {
+      "id": "CRM",
+      "name": "Salesforce",
+      "stage": "7",
+      "kind": 1,
+      "x": 448,
+      "y": 261
+    },
+    {
+      "id": "JCI",
+      "name": "Johnson Controls",
+      "stage": "T",
+      "kind": 1,
+      "x": 264,
+      "y": 212
+    },
+    {
+      "id": "TT",
+      "name": "Trane Technologies",
+      "stage": "T",
+      "kind": 1,
+      "x": 249,
+      "y": 141
+    },
+    {
+      "id": "PANW",
+      "name": "Palo Alto Networks",
+      "stage": "T",
+      "kind": 1,
+      "x": 384,
+      "y": 159
+    },
+    {
+      "id": "CRWD",
+      "name": "CrowdStrike",
+      "stage": "T",
+      "kind": 1,
+      "x": 444,
+      "y": 160
+    },
+    {
+      "id": "FTNT",
+      "name": "Fortinet",
+      "stage": "T",
+      "kind": 1,
+      "x": 332,
+      "y": 439
+    },
+    {
+      "id": "ZS",
+      "name": "Zscaler",
+      "stage": "T",
+      "kind": 1,
+      "x": 293,
+      "y": 388
+    },
+    {
+      "id": "SNOW",
+      "name": "Snowflake",
+      "stage": "T",
+      "kind": 1,
+      "x": 382,
+      "y": 362
+    },
+    {
+      "id": "DDOG",
+      "name": "Datadog",
+      "stage": "T",
+      "kind": 1,
+      "x": 499,
+      "y": 164
+    },
+    {
+      "id": "MDB",
+      "name": "MongoDB",
+      "stage": "T",
+      "kind": 1,
+      "x": 411,
+      "y": 211
+    },
+    {
+      "id": "NTAP",
+      "name": "NetApp",
+      "stage": "T",
+      "kind": 1,
+      "x": 303,
+      "y": 154
+    },
+    {
+      "id": "WDC",
+      "name": "Western Digital",
+      "stage": "T",
+      "kind": 1,
+      "x": 344,
+      "y": 87
+    },
+    {
+      "id": "STX",
+      "name": "Seagate",
+      "stage": "T",
+      "kind": 1,
+      "x": 390,
+      "y": 90
+    },
+    {
+      "id": "P",
+      "name": "Everpure (ex-Pure Storage)",
+      "stage": "T",
+      "kind": 1,
+      "x": 496,
+      "y": 603
+    }
+  ],
+  "edges": [
+    {
+      "from": "GEV",
+      "to": "GRID",
+      "type": "energy",
+      "description": "Turbinas y equipos de red"
+    },
+    {
+      "from": "ENR.DE",
+      "to": "GRID",
+      "type": "energy",
+      "description": "Turbinas y transformadores"
+    },
+    {
+      "from": "PWR",
+      "to": "GRID",
+      "type": "energy",
+      "description": "Construye transmisión y subestaciones"
+    },
+    {
+      "from": "ABBN.SW",
+      "to": "GRID",
+      "type": "energy",
+      "description": "Electrificación"
+    },
+    {
+      "from": "CEG",
+      "to": "GRID",
+      "type": "energy",
+      "description": "Generación nuclear"
+    },
+    {
+      "from": "VST",
+      "to": "GRID",
+      "type": "energy",
+      "description": "Generación gas/nuclear"
+    },
+    {
+      "from": "NEE",
+      "to": "GRID",
+      "type": "energy",
+      "description": "Generación renovable y nuclear"
+    },
+    {
+      "from": "OKLO",
+      "to": "GRID",
+      "type": "energy",
+      "description": "SMR futuro (sin ingresos)"
+    },
+    {
+      "from": "CEG",
+      "to": "MSFT",
+      "type": "energy",
+      "description": "PPA 20 años: reactivación de Crane (Three Mile Island)"
+    },
+    {
+      "from": "CEG",
+      "to": "META",
+      "type": "energy",
+      "description": "PPA nuclear de Clinton (2025)"
+    },
+    {
+      "from": "NEE",
+      "to": "GOOGL",
+      "type": "energy",
+      "description": "Reactivación de Duane Arnold (oct-2025)"
+    },
+    {
+      "from": "GRID",
+      "to": "DC",
+      "type": "energy",
+      "description": "Energía para los data centers"
+    },
+    {
+      "from": "ETN",
+      "to": "DC",
+      "type": "supply",
+      "description": "Distribución eléctrica y UPS"
+    },
+    {
+      "from": "SU.PA",
+      "to": "DC",
+      "type": "supply",
+      "description": "Potencia y enfriamiento"
+    },
+    {
+      "from": "VRT",
+      "to": "DC",
+      "type": "supply",
+      "description": "Enfriamiento líquido y potencia"
+    },
+    {
+      "from": "JCI",
+      "to": "DC",
+      "type": "supply",
+      "description": "Enfriadores"
+    },
+    {
+      "from": "TT",
+      "to": "DC",
+      "type": "supply",
+      "description": "Enfriadores"
+    },
+    {
+      "from": "WDC",
+      "to": "DC",
+      "type": "supply",
+      "description": "HDD masivos para la nube"
+    },
+    {
+      "from": "STX",
+      "to": "DC",
+      "type": "supply",
+      "description": "HDD masivos para la nube"
+    },
+    {
+      "from": "NTAP",
+      "to": "DC",
+      "type": "supply",
+      "description": "Almacenamiento"
+    },
+    {
+      "from": "DC",
+      "to": "MSFT",
+      "type": "supply",
+      "description": "Capex de construcción"
+    },
+    {
+      "from": "DC",
+      "to": "AMZN",
+      "type": "supply",
+      "description": "Capex de construcción"
+    },
+    {
+      "from": "DC",
+      "to": "GOOGL",
+      "type": "supply",
+      "description": "Capex de construcción"
+    },
+    {
+      "from": "DC",
+      "to": "META",
+      "type": "supply",
+      "description": "Capex de construcción"
+    },
+    {
+      "from": "DC",
+      "to": "ORCL",
+      "type": "supply",
+      "description": "Capex de construcción"
+    },
+    {
+      "from": "DC",
+      "to": "EQIX",
+      "type": "supply",
+      "description": "Capex de construcción"
+    },
+    {
+      "from": "DC",
+      "to": "DLR",
+      "type": "supply",
+      "description": "Capex de construcción"
+    },
+    {
+      "from": "DC",
+      "to": "CyrusOne",
+      "type": "supply",
+      "description": "Capex de construcción"
+    },
+    {
+      "from": "VRT",
+      "to": "MSFT",
+      "type": "supply",
+      "description": "Enfriamiento y potencia"
+    },
+    {
+      "from": "VRT",
+      "to": "ORCL",
+      "type": "supply",
+      "description": "Enfriamiento y potencia"
+    },
+    {
+      "from": "NVDA",
+      "to": "VRT",
+      "type": "alliance",
+      "description": "Diseños de referencia de racks (800VDC, enfriamiento)"
+    },
+    {
+      "from": "NVDA",
+      "to": "ETN",
+      "type": "alliance",
+      "description": "Socio de arquitectura 800VDC"
+    },
+    {
+      "from": "NVDA",
+      "to": "SU.PA",
+      "type": "alliance",
+      "description": "Diseños de referencia de DC de IA"
+    },
+    {
+      "from": "ASML",
+      "to": "TSM",
+      "type": "supply",
+      "description": "Litografía EUV para 3nm/2nm"
+    },
+    {
+      "from": "ASML",
+      "to": "005930.KS",
+      "type": "supply",
+      "description": "Litografía EUV"
+    },
+    {
+      "from": "ASML",
+      "to": "INTC",
+      "type": "supply",
+      "description": "EUV y High-NA para 18A/14A"
+    },
+    {
+      "from": "ASML",
+      "to": "000660.KS",
+      "type": "supply",
+      "description": "EUV para DRAM/HBM"
+    },
+    {
+      "from": "ASML",
+      "to": "MU",
+      "type": "supply",
+      "description": "EUV para DRAM/HBM"
+    },
+    {
+      "from": "AMAT",
+      "to": "TSM",
+      "type": "supply",
+      "description": "Deposición, grabado e inspección"
+    },
+    {
+      "from": "AMAT",
+      "to": "MU",
+      "type": "supply",
+      "description": "Equipos para DRAM/HBM"
+    },
+    {
+      "from": "LRCX",
+      "to": "TSM",
+      "type": "supply",
+      "description": "Grabado y deposición"
+    },
+    {
+      "from": "LRCX",
+      "to": "000660.KS",
+      "type": "supply",
+      "description": "Grabado para memoria"
+    },
+    {
+      "from": "LRCX",
+      "to": "MU",
+      "type": "supply",
+      "description": "Grabado para memoria"
+    },
+    {
+      "from": "KLAC",
+      "to": "TSM",
+      "type": "supply",
+      "description": "Inspección y metrología"
+    },
+    {
+      "from": "TER",
+      "to": "TSM",
+      "type": "supply",
+      "description": "Equipos de prueba de chips"
+    },
+    {
+      "from": "TER",
+      "to": "000660.KS",
+      "type": "supply",
+      "description": "Prueba de HBM"
+    },
+    {
+      "from": "SNPS",
+      "to": "NVDA",
+      "type": "supply",
+      "description": "Software EDA e IP"
+    },
+    {
+      "from": "SNPS",
+      "to": "AMD",
+      "type": "supply",
+      "description": "Software EDA"
+    },
+    {
+      "from": "CDNS",
+      "to": "NVDA",
+      "type": "supply",
+      "description": "Software EDA y emulación"
+    },
+    {
+      "from": "CDNS",
+      "to": "AVGO",
+      "type": "supply",
+      "description": "Software EDA"
+    },
+    {
+      "from": "SIE.DE",
+      "to": "TSM",
+      "type": "supply",
+      "description": "Calibre: verificación física"
+    },
+    {
+      "from": "ARM",
+      "to": "NVDA",
+      "type": "supply",
+      "description": "Licencia Arm (CPU Grace)"
+    },
+    {
+      "from": "ARM",
+      "to": "AMZN",
+      "type": "supply",
+      "description": "Licencia Arm (Graviton)"
+    },
+    {
+      "from": "ARM",
+      "to": "QCOM",
+      "type": "supply",
+      "description": "Licencias Arm (en litigio)"
+    },
+    {
+      "from": "TSM",
+      "to": "NVDA",
+      "type": "supply",
+      "description": "Fabrica las GPUs y las empaqueta (CoWoS)"
+    },
+    {
+      "from": "TSM",
+      "to": "AMD",
+      "type": "supply",
+      "description": "Fabrica Instinct y EPYC"
+    },
+    {
+      "from": "TSM",
+      "to": "AVGO",
+      "type": "supply",
+      "description": "Fabrica ASICs a medida"
+    },
+    {
+      "from": "TSM",
+      "to": "MRVL",
+      "type": "supply",
+      "description": "Fabrica ASICs a medida"
+    },
+    {
+      "from": "TSM",
+      "to": "QCOM",
+      "type": "supply",
+      "description": "Chips Snapdragon"
+    },
+    {
+      "from": "GFS",
+      "to": "QCOM",
+      "type": "supply",
+      "description": "Chips RF y nodos maduros"
+    },
+    {
+      "from": "000660.KS",
+      "to": "NVDA",
+      "type": "supply",
+      "description": "Principal proveedor de HBM"
+    },
+    {
+      "from": "MU",
+      "to": "NVDA",
+      "type": "supply",
+      "description": "Memoria HBM"
+    },
+    {
+      "from": "MU",
+      "to": "AMD",
+      "type": "supply",
+      "description": "HBM para Instinct"
+    },
+    {
+      "from": "005930.KS",
+      "to": "AMD",
+      "type": "supply",
+      "description": "HBM"
+    },
+    {
+      "from": "005930.KS",
+      "to": "NVDA",
+      "type": "supply",
+      "description": "HBM (en calificación)"
+    },
+    {
+      "from": "AMKR",
+      "to": "NVDA",
+      "type": "supply",
+      "description": "Empaquetado avanzado (Arizona)"
+    },
+    {
+      "from": "ASX",
+      "to": "NVDA",
+      "type": "supply",
+      "description": "Empaquetado y prueba"
+    },
+    {
+      "from": "TSM",
+      "to": "AMKR",
+      "type": "alliance",
+      "description": "Empaquetado en Arizona"
+    },
+    {
+      "from": "NVDA",
+      "to": "DELL",
+      "type": "supply",
+      "description": "GPUs para servidores de IA"
+    },
+    {
+      "from": "NVDA",
+      "to": "HPE",
+      "type": "supply",
+      "description": "GPUs para servidores de IA"
+    },
+    {
+      "from": "NVDA",
+      "to": "SMCI",
+      "type": "supply",
+      "description": "GPUs para servidores"
+    },
+    {
+      "from": "DELL",
+      "to": "CRWV",
+      "type": "supply",
+      "description": "Servidores de IA"
+    },
+    {
+      "from": "DELL",
+      "to": "IREN",
+      "type": "supply",
+      "description": "Servidores GB300 (~US$5.8B)"
+    },
+    {
+      "from": "SMCI",
+      "to": "CRWV",
+      "type": "supply",
+      "description": "Servidores y racks"
+    },
+    {
+      "from": "CLS",
+      "to": "GOOGL",
+      "type": "supply",
+      "description": "Racks y switches a medida"
+    },
+    {
+      "from": "ANET",
+      "to": "MSFT",
+      "type": "supply",
+      "description": "Switches Ethernet para IA"
+    },
+    {
+      "from": "ANET",
+      "to": "META",
+      "type": "supply",
+      "description": "Switches; cliente principal"
+    },
+    {
+      "from": "CSCO",
+      "to": "MSFT",
+      "type": "supply",
+      "description": "Redes para DC"
+    },
+    {
+      "from": "COHR",
+      "to": "NVDA",
+      "type": "supply",
+      "description": "Transceptores ópticos"
+    },
+    {
+      "from": "COHR",
+      "to": "GOOGL",
+      "type": "supply",
+      "description": "Óptica para DC"
+    },
+    {
+      "from": "LITE",
+      "to": "GOOGL",
+      "type": "supply",
+      "description": "Láseres y switches ópticos (OCS)"
+    },
+    {
+      "from": "CRDO",
+      "to": "AMZN",
+      "type": "supply",
+      "description": "Cables AEC; cliente principal"
+    },
+    {
+      "from": "NVDA",
+      "to": "MSFT",
+      "type": "supply",
+      "description": "GPUs para Azure"
+    },
+    {
+      "from": "NVDA",
+      "to": "AMZN",
+      "type": "supply",
+      "description": "GPUs para AWS"
+    },
+    {
+      "from": "NVDA",
+      "to": "GOOGL",
+      "type": "supply",
+      "description": "GPUs para Google Cloud"
+    },
+    {
+      "from": "NVDA",
+      "to": "META",
+      "type": "supply",
+      "description": "GPUs para sus clusters"
+    },
+    {
+      "from": "NVDA",
+      "to": "ORCL",
+      "type": "supply",
+      "description": "GPUs para OCI/Stargate"
+    },
+    {
+      "from": "NVDA",
+      "to": "CRWV",
+      "type": "supply",
+      "description": "Mayor comprador neocloud"
+    },
+    {
+      "from": "NVDA",
+      "to": "NBIS",
+      "type": "supply",
+      "description": "GPUs para su nube"
+    },
+    {
+      "from": "AMD",
+      "to": "MSFT",
+      "type": "supply",
+      "description": "GPUs Instinct"
+    },
+    {
+      "from": "AMD",
+      "to": "META",
+      "type": "supply",
+      "description": "GPUs Instinct"
+    },
+    {
+      "from": "AMD",
+      "to": "ORCL",
+      "type": "supply",
+      "description": "GPUs Instinct en OCI"
+    },
+    {
+      "from": "AMD",
+      "to": "OpenAI",
+      "type": "supply",
+      "description": "6GW de GPUs (acuerdo oct-2025)"
+    },
+    {
+      "from": "AVGO",
+      "to": "GOOGL",
+      "type": "supply",
+      "description": "Co-diseña las TPU"
+    },
+    {
+      "from": "AVGO",
+      "to": "META",
+      "type": "supply",
+      "description": "ASIC MTIA y switches"
+    },
+    {
+      "from": "AVGO",
+      "to": "OpenAI",
+      "type": "supply",
+      "description": "Chip propio de OpenAI (~10GW)"
+    },
+    {
+      "from": "MRVL",
+      "to": "AMZN",
+      "type": "supply",
+      "description": "ASIC Trainium"
+    },
+    {
+      "from": "MRVL",
+      "to": "MSFT",
+      "type": "supply",
+      "description": "ASIC Maia"
+    },
+    {
+      "from": "OpenAI",
+      "to": "ORCL",
+      "type": "contract",
+      "description": "Contrato de cómputo ~US$300B (Stargate)"
+    },
+    {
+      "from": "OpenAI",
+      "to": "CRWV",
+      "type": "contract",
+      "description": "Contratos ~US$22B"
+    },
+    {
+      "from": "OpenAI",
+      "to": "AMZN",
+      "type": "contract",
+      "description": "Contrato AWS US$38B (nov-2025)"
+    },
+    {
+      "from": "OpenAI",
+      "to": "MSFT",
+      "type": "contract",
+      "description": "Compromiso adicional en Azure"
+    },
+    {
+      "from": "MSFT",
+      "to": "NBIS",
+      "type": "contract",
+      "description": "Contrato ~US$17-19B (sep-2025)"
+    },
+    {
+      "from": "MSFT",
+      "to": "CRWV",
+      "type": "contract",
+      "description": "Su mayor cliente"
+    },
+    {
+      "from": "MSFT",
+      "to": "IREN",
+      "type": "contract",
+      "description": "Contrato ~US$9.7B (nov-2025)"
+    },
+    {
+      "from": "META",
+      "to": "CRWV",
+      "type": "contract",
+      "description": "Contrato ~US$14B (sep-2025)"
+    },
+    {
+      "from": "META",
+      "to": "NBIS",
+      "type": "contract",
+      "description": "Contrato ~US$3B (nov-2025)"
+    },
+    {
+      "from": "CRWV",
+      "to": "APLD",
+      "type": "contract",
+      "description": "Arrienda el campus Polaris Forge"
+    },
+    {
+      "from": "Anthropic",
+      "to": "GOOGL",
+      "type": "contract",
+      "description": "Hasta 1M de TPU (oct-2025)"
+    },
+    {
+      "from": "Anthropic",
+      "to": "AMZN",
+      "type": "contract",
+      "description": "Trainium / Proyecto Rainier"
+    },
+    {
+      "from": "Anthropic",
+      "to": "MSFT",
+      "type": "contract",
+      "description": "Compromiso Azure US$30B (nov-2025)"
+    },
+    {
+      "from": "SNOW",
+      "to": "AMZN",
+      "type": "contract",
+      "description": "Corre sobre AWS (y Azure/GCP)"
+    },
+    {
+      "from": "MDB",
+      "to": "AMZN",
+      "type": "contract",
+      "description": "Atlas corre sobre hyperscalers"
+    },
+    {
+      "from": "CRWD",
+      "to": "AMZN",
+      "type": "contract",
+      "description": "Corre sobre AWS"
+    },
+    {
+      "from": "OpenAI",
+      "to": "DDOG",
+      "type": "contract",
+      "description": "Cliente grande de observabilidad"
+    },
+    {
+      "from": "META",
+      "to": "P",
+      "type": "contract",
+      "description": "Almacenamiento flash a escala"
+    },
+    {
+      "from": "ADBE",
+      "to": "OpenAI",
+      "type": "contract",
+      "description": "Integra modelos de terceros en Firefly"
+    },
+    {
+      "from": "CRM",
+      "to": "Anthropic",
+      "type": "alliance",
+      "description": "Claude en Agentforce"
+    },
+    {
+      "from": "CRM",
+      "to": "OpenAI",
+      "type": "alliance",
+      "description": "Integración con ChatGPT"
+    },
+    {
+      "from": "IBM",
+      "to": "Anthropic",
+      "type": "alliance",
+      "description": "Claude en el software de IBM (oct-2025)"
+    },
+    {
+      "from": "PLTR",
+      "to": "Anthropic",
+      "type": "alliance",
+      "description": "Claude para gobierno (con AWS)"
+    },
+    {
+      "from": "MSFT",
+      "to": "OpenAI",
+      "type": "invest",
+      "description": "Participación ~27% tras la reestructuración"
+    },
+    {
+      "from": "NVDA",
+      "to": "OpenAI",
+      "type": "invest",
+      "description": "Carta de intención hasta US$100B"
+    },
+    {
+      "from": "AMD",
+      "to": "OpenAI",
+      "type": "invest",
+      "description": "Warrants hasta ~10% de AMD por el pedido de 6GW"
+    },
+    {
+      "from": "NVDA",
+      "to": "CRWV",
+      "type": "invest",
+      "description": "Accionista + respaldo de capacidad no vendida"
+    },
+    {
+      "from": "NVDA",
+      "to": "NBIS",
+      "type": "invest",
+      "description": "Inversor desde 2024"
+    },
+    {
+      "from": "NVDA",
+      "to": "INTC",
+      "type": "invest",
+      "description": "Participación US$5B (sep-2025)"
+    },
+    {
+      "from": "AMZN",
+      "to": "Anthropic",
+      "type": "invest",
+      "description": "Inversión US$8B"
+    },
+    {
+      "from": "GOOGL",
+      "to": "Anthropic",
+      "type": "invest",
+      "description": "Inversión y participación"
+    },
+    {
+      "from": "NVDA",
+      "to": "Anthropic",
+      "type": "invest",
+      "description": "Hasta US$10B (nov-2025)"
+    },
+    {
+      "from": "MSFT",
+      "to": "Anthropic",
+      "type": "invest",
+      "description": "Hasta US$5B (nov-2025)"
+    },
+    {
+      "from": "USERS",
+      "to": "OpenAI",
+      "type": "monetize",
+      "description": "Suscripciones ChatGPT y API"
+    },
+    {
+      "from": "USERS",
+      "to": "Anthropic",
+      "type": "monetize",
+      "description": "Suscripciones Claude y API"
+    },
+    {
+      "from": "USERS",
+      "to": "MSFT",
+      "type": "monetize",
+      "description": "Azure, Office y Copilot"
+    },
+    {
+      "from": "USERS",
+      "to": "GOOGL",
+      "type": "monetize",
+      "description": "Publicidad, Cloud y Gemini"
+    },
+    {
+      "from": "USERS",
+      "to": "META",
+      "type": "monetize",
+      "description": "Publicidad"
+    },
+    {
+      "from": "USERS",
+      "to": "AMZN",
+      "type": "monetize",
+      "description": "AWS, retail y publicidad"
+    },
+    {
+      "from": "USERS",
+      "to": "ADBE",
+      "type": "monetize",
+      "description": "Suscripciones"
+    },
+    {
+      "from": "USERS",
+      "to": "CRM",
+      "type": "monetize",
+      "description": "Suscripciones"
+    },
+    {
+      "from": "USERS",
+      "to": "PLTR",
+      "type": "monetize",
+      "description": "Contratos gobierno/empresas"
+    },
+    {
+      "from": "USERS",
+      "to": "IBM",
+      "type": "monetize",
+      "description": "Software y consultoría"
+    },
+    {
+      "from": "USERS",
+      "to": "SNOW",
+      "type": "monetize",
+      "description": "Consumo de datos"
+    },
+    {
+      "from": "USERS",
+      "to": "PANW",
+      "type": "monetize",
+      "description": "Ciberseguridad"
+    },
+    {
+      "from": "USERS",
+      "to": "CRWD",
+      "type": "monetize",
+      "description": "Ciberseguridad"
+    },
+    {
+      "from": "USERS",
+      "to": "FTNT",
+      "type": "monetize",
+      "description": "Ciberseguridad"
+    },
+    {
+      "from": "USERS",
+      "to": "ZS",
+      "type": "monetize",
+      "description": "Ciberseguridad"
+    },
+    {
+      "from": "USERS",
+      "to": "DDOG",
+      "type": "monetize",
+      "description": "Observabilidad"
+    },
+    {
+      "from": "USERS",
+      "to": "MDB",
+      "type": "monetize",
+      "description": "Base de datos"
+    },
+    {
+      "from": "NVDA",
+      "to": "AMD",
+      "type": "compete",
+      "description": "GPU vs GPU"
+    },
+    {
+      "from": "NVDA",
+      "to": "AVGO",
+      "type": "compete",
+      "description": "GPU vs ASIC a medida"
+    },
+    {
+      "from": "AVGO",
+      "to": "MRVL",
+      "type": "compete",
+      "description": "ASICs a medida"
+    },
+    {
+      "from": "CRWV",
+      "to": "NBIS",
+      "type": "compete",
+      "description": "Neoclouds"
+    },
+    {
+      "from": "ANET",
+      "to": "CSCO",
+      "type": "compete",
+      "description": "Redes"
+    },
+    {
+      "from": "AMAT",
+      "to": "LRCX",
+      "type": "compete",
+      "description": "Equipos"
+    },
+    {
+      "from": "SNPS",
+      "to": "CDNS",
+      "type": "compete",
+      "description": "EDA"
+    },
+    {
+      "from": "INTC",
+      "to": "TSM",
+      "type": "compete",
+      "description": "Fundición"
+    },
+    {
+      "from": "000660.KS",
+      "to": "MU",
+      "type": "compete",
+      "description": "HBM"
+    },
+    {
+      "from": "MSFT",
+      "to": "AMZN",
+      "type": "compete",
+      "description": "Nube"
+    },
+    {
+      "from": "AMZN",
+      "to": "GOOGL",
+      "type": "compete",
+      "description": "Nube"
+    },
+    {
+      "from": "OpenAI",
+      "to": "Anthropic",
+      "type": "compete",
+      "description": "Modelos frontera"
+    },
+    {
+      "from": "PANW",
+      "to": "CRWD",
+      "type": "compete",
+      "description": "Ciberseguridad"
+    },
+    {
+      "from": "WDC",
+      "to": "STX",
+      "type": "compete",
+      "description": "HDD"
+    }
+  ]
+}
