@@ -3,7 +3,7 @@ import { Financials } from "@/arkez-visual-engine/components/financials";
 import { ArtImage } from "@/arkez-visual-engine/components/art";
 import { ExportActions } from "@/arkez-visual-engine/renderers/exports";
 import { MarketLookup } from "./market-lookup";
-import { base } from "./routes";
+import { base, oddityStoryPath, visualStoriesPath } from "./routes";
 
 const oddity = base + "/research/oddity/";
 const oddSource = "https://www.sec.gov/Archives/edgar/data/1907085/000110465926125812/tm2629351d1_ex99-1.htm";
@@ -19,6 +19,7 @@ export function ReportLibrary({ companyOnly = false }: { companyOnly?: boolean }
       <div><p className="ve-kicker">Arkez Research</p>
         <h1>{companyOnly ? "ODDITY Tech · ODD" : "Informes empresariales"}</h1>
         <p>{companyOnly ? "Entiende cómo vende ODDITY, quién le paga y qué pasó con sus márgenes." : "Elige un caso de estudio para leer sus cifras, entender el negocio y consultar las fuentes."}</p>
+        <a className="ve-cta" href={companyOnly ? oddityStoryPath : visualStoriesPath}>{companyOnly ? "Leer ODDITY en cuatro viñetas" : "Abrir Arkez Visual Stories"} <ArrowUpRight size={18} aria-hidden="true" /></a>
       </div>
     </section>
     <div className="container-shell ai-library-body">

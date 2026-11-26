@@ -216,7 +216,7 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `/prototipos/arkez-explore/nubank/${slug}/`),
     ...(process.env.ARKEZ_LOCAL_PREVIEW === "1" ? [
     ...routes.map((path) => `/prototipos/arkez-integrado${path}`),
-    ...["ruta-de-aprendizaje", "visual-stories", "explore", "explore/oddity", "explore/ecosistema-ia", "explore/nubank", "research", "research/oddity", "research/oddity/informe", "research/oddity/modelo",
+    ...["ruta-de-aprendizaje", "visual-stories", "explore", "explore/oddity", "explore/ecosistema-ia", "explore/nubank", "research", "research/visual-stories", "research/oddity", "research/oddity/historia", "research/oddity/informe", "research/oddity/modelo",
       ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `explore/nubank/${slug}`),
     ].map((slug) => `/prototipos/arkez-integrado/${slug}/`),
     ] : []),
@@ -273,23 +273,35 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     assert.ok(read(base).includes(`href="${chain}#empresas-cadena-ia"`));
     assert.match(read(chain), /id="empresas-cadena-ia"/);
     assert.match(read(chain), /Descargar el mapa original/);
-    const collection = read(base + "visual-stories/");
-    const storyLinks = [...new Set(Array.from(collection.matchAll(/href="([^"]+)#(historia-[a-z]+)"/g), ([, path, anchor]) => `${path}#${anchor}`))];
-    assert.equal(storyLinks.length, 8);
-    for (const link of storyLinks) {
-      const [path, anchor] = link.split("#");
-      assert.ok(read(path).includes(`id="${anchor}"`), link);
+    const collectionPath = base + "research/visual-stories/";
+    const oddityPath = base + "research/oddity/historia/";
+    const collection = read(collectionPath);
+    const storyLinks = Array.from(collection.matchAll(/href="#(historia-[a-z]+)"/g), ([, anchor]) => anchor);
+    assert.equal(new Set(storyLinks).size, 7);
+    for (const anchor of storyLinks) assert.ok(collection.includes(`id="${anchor}"`), anchor);
+    assert.equal((collection.match(/data-visual-story=/g) ?? []).length, 7);
+    assert.equal((collection.match(/>Ver reel</g) ?? []).length, 3);
+    for (const [, path, anchor] of collection.matchAll(/class="avs-reading-link" href="([^"#]+)(?:#([^"]+))?"/g)) {
+      const reading = read(path);
+      if (anchor) assert.ok(reading.includes(`id="${anchor}"`), `${path}#${anchor}`);
+    }
+    assert.ok(collection.includes(`href="${oddityPath}"`));
+    assert.ok(read(base + "research/").includes(`href="${collectionPath}"`));
+    assert.ok(read(base + "research/oddity/").includes(`href="${oddityPath}"`));
+    assert.ok(read(base + "visual-stories/").includes(`href="${collectionPath}"`));
+    assert.ok(read(base + "explore/oddity/").includes(`href="${oddityPath}"`));
+    for (const path of [...routes, ...previews]) {
+      if ([collectionPath, oddityPath].includes(path)) continue;
+      assert.doesNotMatch(read(path), /data-visual-story=|class="avs-cards"|>Ver reel</, path);
     }
     for (const name of ["caja", "diversificacion", "escenarios"]) {
       const reel = readFileSync(new URL(`prototipos/arkez-integrado/archivos/visual-stories/reel-${name}.mp4`, output));
       assert.equal(reel.subarray(4, 8).toString(), "ftyp");
     }
-    assert.match(read(base + "explore/"), /ODDITY en cuatro viñetas/);
-    const oddity = read(base + "explore/oddity/");
+    const oddity = read(oddityPath);
     assert.match(oddity, /data-panels="4"/);
     assert.match(oddity, /Dos escenarios a 3–5 años/);
     assert.ok(oddity.includes(`href="${base}research/oddity/modelo/"`));
-    assert.doesNotMatch(read(base + "research/"), /data-visual-story=/);
     const archive = readFileSync(new URL("prototipos/arkez-integrado/archivos/mapa-relaciones-ia.zip", output));
     assert.equal(archive.subarray(0, 2).toString(), "PK");
   }

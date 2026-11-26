@@ -7,13 +7,14 @@ import { aiChainPath, aiMapPath, base, learningPathRoute, previewHref, visualSto
 const library = [
   { label: "Catálogo Explore", href: base + "/explore/" },
   { label: "Informes de empresas", href: base + "/research/" },
+  { label: "Arkez Visual Stories", href: visualStoriesPath },
   { label: "Recursos de Nubank", href: base + "/explore/nubank/" },
   { label: "Cadena de valor de la IA", href: aiChainPath },
   { label: "Mapa de relaciones de IA", href: aiMapPath },
 ];
 const groups: readonly (SiteLink | (SiteLink & { children: readonly SiteLink[] }))[] = [
   ...mainNavigation.map((group) => group.href === "/recursos/" && "children" in group
-    ? { ...group, children: [{ label: "Ruta de aprendizaje", href: base + learningPathRoute }, { label: "Arkez Visual Stories", href: visualStoriesPath }, ...group.children] }
+    ? { ...group, children: [{ label: "Ruta de aprendizaje", href: base + learningPathRoute }, ...group.children] }
     : group),
   { label: "Explore y Research", href: base + "/explore/", children: library },
 ];

@@ -1,4 +1,4 @@
-.avs { --avs-ink:#122d43; --avs-paper:#f8f1e2; margin:1.7rem 0; padding:clamp(.8rem,2.4vw,1.7rem); border:1px solid #c4b394; border-radius:.6rem; background:var(--avs-paper); color:var(--avs-ink); }
+.avs { --avs-ink:#122d43; --avs-paper:#f8f1e2; margin:1.7rem 0; padding:clamp(.8rem,2.4vw,1.7rem); scroll-margin-top:6rem; border:1px solid #c4b394; border-radius:.6rem; background:var(--avs-paper); color:var(--avs-ink); }
 .avs header { display:flex; gap:.6rem 1rem; flex-wrap:wrap; justify-content:space-between; align-items:end; margin-bottom:.85rem; }
 .avs .avs-series { color:#725021; text-transform:uppercase; letter-spacing:.095em; font-size:.72rem; font-weight:830; margin:0 0 .28rem; }
 .avs :is(h2,h3) { font-family:Georgia,serif; font-size:clamp(1.55rem,3.4vw,2.55rem); letter-spacing:-.044em; line-height:1.05; font-weight:650; }
@@ -32,21 +32,20 @@
 .avs-reel video { width:min(100%,18rem); height:auto; aspect-ratio:9 / 16; }
 @media (prefers-reduced-motion:reduce) { .avs .avs-reel-toggle { display:inline-flex; } }
 
-.avs-library,.avs-shelf { color:#152f45; background:#f8f1e2; }
-.avs-library { padding-block:clamp(1.65rem,5vw,4.2rem); }
-.avs-library h1 { font-family:Georgia,serif; font-size:clamp(2.4rem,6vw,5rem); line-height:1.04; letter-spacing:-.052em; }
-.avs-library .eyebrow { color:#725021; }
-.avs-library h1 + p { margin:.85rem 0 1.5rem; max-width:54ch; }
-.avs-shelf { margin-block:1.5rem; padding:clamp(.95rem,3vw,1.65rem); border:1px solid #c4b394; border-radius:.6rem; }
-.avs-shelf header { display:flex; align-items:center; flex-wrap:wrap; justify-content:space-between; gap:.45rem 1rem; margin-bottom:.75rem; }
-.avs-shelf header h2 { font-family:Georgia,serif; font-size:clamp(1.55rem,3vw,2.45rem); line-height:1.05; }
-.avs-shelf header a { display:inline-flex; gap:.4rem; align-items:center; min-height:44px; font-weight:770; text-decoration:underline; text-underline-offset:.22em; }
+.avs-library { color:#152f45; background:#f3f6fa; }
+.avs-library > .container-shell { padding-block:clamp(1.65rem,5vw,4.2rem); }
+.avs-library-body { max-width:70rem; }
+.avs-library-body > section { margin-top:clamp(2.25rem,5vw,4rem); }
+.avs-library-body :is(nav,section) > h2 { margin:0 0 .9rem; font-size:clamp(1.45rem,3vw,2rem); font-weight:800; }
+.avs-library-body .avs { margin:1.1rem 0 .25rem; }
+.avs-library-body section > div + div { margin-top:1.4rem; }
+.avs-reading-link { display:inline-flex; align-items:center; gap:.35rem; min-height:44px; font-weight:700; text-decoration:underline; text-underline-offset:.22em; }
 .avs-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr)); gap:.8rem; margin:0; padding:0; }
 .avs-cards li { list-style:none; min-width:0; }
 .avs-cards a { display:grid; grid-template-columns:1fr auto; align-items:center; gap:.5rem; overflow:hidden; height:100%; border:1px solid #687d8c; border-radius:.45rem; background:#fffaf0; }
 .avs-cards a:is(:hover,:focus-visible) { color:#1d5076; text-decoration:underline; text-underline-offset:.2em; }
-.avs-cards a:focus-visible,.avs-shelf header a:focus-visible { outline:2px solid #20587c; outline-offset:2px; }
-.avs-cards img { grid-column:1/-1; width:100%; height:auto; border-bottom:1px solid #687d8c; }
+.avs-cards a:focus-visible,.avs-reading-link:focus-visible { outline:2px solid #20587c; outline-offset:2px; }
+.avs-cards img { grid-column:1/-1; width:100%; height:auto; aspect-ratio:3/1; object-fit:cover; object-position:center 24%; border-bottom:1px solid #687d8c; }
 .avs-cards span { display:grid; padding:0 .65rem .65rem; line-height:1.23; }
 .avs-cards small { line-height:1.35; color:#6b4e20; }
 .avs-cards svg { margin-right:.65rem; }
@@ -70,6 +69,3 @@
 .avs-company a { text-decoration:underline; text-underline-offset:.2em; }
 .avs-company-links a { display:inline-flex; align-items:center; min-height:44px; gap:.35rem; }
 @media (max-width:620px) { .avs[data-panels="4"] .avs-panels,.avs-outlook ul { grid-template-columns:minmax(0,1fr); } }
-
-.ve-explore-hero .ve-story-cta { margin-inline-start:.5rem; background:#17324d; color:#f6daa0; border:1px solid #a28b60; }
-@media (max-width:650px) { .ve-explore-hero .ve-story-cta { margin-inline-start:0; margin-inline-end:.5rem; } }

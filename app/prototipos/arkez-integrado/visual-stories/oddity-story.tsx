@@ -8,7 +8,7 @@ const filing = "https://www.sec.gov/Archives/edgar/data/1907085/0001104659260294
 export function OddityVisualStory() {
   return <main className="avs-company">
     <div className="container-shell">
-      <nav aria-label="Ruta de navegación"><a href={base + "/explore/"}>Explorar empresas</a></nav>
+      <nav aria-label="Ruta de navegación"><a href={report}>Recursos de ODDITY en Research</a></nav>
       <h1>ODDITY en cuatro viñetas</h1>
       <p>Una compra de maquillaje sirve para entender cómo funciona una marca que vende directamente por internet.</p>
       <StoryStrip story="oddity" />

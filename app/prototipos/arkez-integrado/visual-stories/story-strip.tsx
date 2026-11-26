@@ -6,8 +6,9 @@ import { stories, storyAnchor, type StoryKey } from "./stories";
 
 const motionPreference = "(prefers-reduced-motion: reduce)";
 
-export function StoryStrip({ story, reelDirectory }: { story: StoryKey; reelDirectory?: string }) {
-  const { title, panels, image, takeaway, heading: Heading } = stories[story];
+export function StoryStrip({ story, reelDirectory, heading }: { story: StoryKey; reelDirectory?: string; heading?: "h2" | "h3" }) {
+  const { title, panels, image, takeaway } = stories[story];
+  const Heading = heading ?? stories[story].heading;
   const titleId = useId();
   const strip = useRef<HTMLOListElement>(null);
   const animations = useRef<Animation[]>([]);

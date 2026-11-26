@@ -10,7 +10,7 @@ import payments from "./pago-y-abono.webp";
 
 export const stories = {
   caja: {
-    route: "/recursos/guias/",
+    route: "/recursos/guias/#liquidez-operativa",
     topic: "Flujo de caja",
     reel: "reel-caja.mp4",
     title: "Vendimos. ¿Y la caja?",
@@ -38,7 +38,7 @@ export const stories = {
     takeaway: "Diversificar reduce la dependencia de un solo resultado. Varias posiciones también pueden perder valor al mismo tiempo.",
   },
   escenarios: {
-    route: "/recursos/guias/",
+    route: "/recursos/guias/#comparar-escenarios",
     topic: "Comparación de escenarios",
     reel: "reel-escenarios.mp4",
     title: "Una cosa a la vez",
@@ -52,7 +52,7 @@ export const stories = {
     takeaway: "Usa la misma unidad y el mismo periodo. Cambia una variable por vez para entender su efecto.",
   },
   fuentes: {
-    route: "/recursos/guias/",
+    route: "/recursos/guias/#revisar-fuentes",
     topic: "Verificación de datos",
     title: "¿La misma cifra?",
     image: sources,
@@ -65,7 +65,7 @@ export const stories = {
     takeaway: "Antes de comparar dos cifras, confirma que se refieran al mismo concepto, periodo y unidad.",
   },
   inflacion: {
-    route: "/recursos/articulos/",
+    route: "/recursos/articulos/#inflacion",
     topic: "Poder adquisitivo",
     title: "El mismo dinero, una bolsa más pequeña",
     image: inflation,
@@ -78,7 +78,7 @@ export const stories = {
     takeaway: "La inflación mide el aumento general de precios. El cambio de precio de un solo producto no basta para medirla.",
   },
   plazos: {
-    route: "/recursos/guias/primeros-pasos/",
+    route: "/recursos/guias/primeros-pasos/#objetivo-fecha-fija",
     topic: "Plazos y disponibilidad",
     title: "El calendario también cuenta",
     image: timing,
@@ -91,7 +91,7 @@ export const stories = {
     takeaway: "Cuando una meta tiene fecha fija, compara el día en que necesitas pagar con el día en que el dinero estará disponible.",
   },
   pagos: {
-    route: "/ecosistema/",
+    route: "/ecosistema/#fintech",
     topic: "Tecnología de pagos",
     title: "El pitido y el abono",
     image: payments,
@@ -104,7 +104,6 @@ export const stories = {
     takeaway: "Autorización y abono son momentos distintos. El plazo depende del medio de pago y las condiciones del proveedor.",
   },
   oddity: {
-    route: "/explore/oddity/",
     topic: "Modelos de negocio",
     title: "¿Cómo gana dinero ODDITY?",
     image: oddity,
