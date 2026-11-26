@@ -12,6 +12,12 @@ test("la ruta educativa valida las respuestas y selecciona recursos según el ob
   assert.equal(learningPath(base).level, "Empieza");
   assert.equal(learningPath({ ...base, format: "lectura" }).first.path, "/recursos/guias/primeros-pasos/");
   assert.equal(learningPath({ ...base, topic: "ia" }), null);
+  const beginnerOptions = learningQuestions({ ...base, goal: "empresa" }).find(({ id }) => id === "topic").options;
+  assert.equal(beginnerOptions.filter(([key]) => ["bolsa", "cripto", "venture", "fondos", "inmuebles", "depositos", "cuentas", "fiduciarios", "pensiones", "privado", "crowdfunding"].includes(key)).length, 11);
+  const caseRoute = { ...base, topic: "crowdfunding", format: "caso" };
+  assert.equal(learningPath({ ...caseRoute, focus: "infraestructura" }), null);
+  assert.equal(learningPath({ ...caseRoute, focus: "infraestructura", company: "NVDA" }).first.path, "/explore/ecosistema-ia/?empresa=NVDA#empresas-cadena-ia");
+  assert.equal(learningPath({ ...caseRoute, focus: "historia", story: "crowdfunding" }).first.path, "/research/visual-stories/#historia-tema-crowdfunding");
   const company = { ...base, goal: "empresa", topic: "consumo", format: "visual" };
   assert.equal(learningQuestions(company).length, 6);
   assert.equal(learningPath(company), null);
@@ -26,14 +32,18 @@ test("cada combinación válida enlaza a tres recursos distintos con destinos y 
   function verify(answers, checked = []) {
     const next = learningQuestions(answers).find(({ id }) => !checked.includes(id));
     if (next) {
-      for (const [value] of next.options) verify({ ...answers, [next.id]: value }, [...checked, next.id]);
+      for (const [value] of next.options) verify({
+        ...answers, [next.id]: value,
+        ...(value === "infraestructura" ? { company: "NVDA" } : value === "historia" ? { story: "crowdfunding" } : {}),
+      }, [...checked, next.id]);
       return;
     }
     const result = learningPath(answers);
     const links = [result.first, ...result.next].map(({ path }) => path);
     assert.equal(new Set(links).size, 3);
     for (const link of links) {
-      const [route, anchor] = link.split("#");
+      const [routeWithQuery, anchor] = link.split("#");
+      const route = routeWithQuery.split("?")[0];
       const url = new URL(`../out/prototipos/arkez-integrado${route}index.html`, import.meta.url);
       const html = readFileSync(url, "utf8");
       if (anchor) assert.ok(html.includes(`id="${anchor}"`), link);

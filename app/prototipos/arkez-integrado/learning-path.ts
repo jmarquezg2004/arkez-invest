@@ -1,9 +1,71 @@
+export const beginnerTopics = {
+  bolsa: { label: "Bolsa de valores", art: "markets", panels: [
+    "Una acción representa una pequeña parte de una empresa. La bolsa reúne compradores y vendedores bajo unas reglas.",
+    "Inés ve una orden de compra por USD 10 y una de venta por USD 11. Mientras nadie acepte el precio de la otra parte, esas órdenes no se cruzan.",
+    "¿Qué sabes por el precio de una operación y qué tendrías que comprobar en los informes de la empresa?",
+  ] },
+  cripto: { label: "Criptomonedas", art: "payments", panels: [
+    "Un criptoactivo existe en una red digital. Sus usos y riesgos dependen del activo, de la red y de cómo se custodia.",
+    "Dos aplicaciones muestran el mismo activo. En una, el proveedor controla el acceso. En la otra, el usuario gestiona sus propias claves.",
+    "¿Quién podría recuperar el acceso en cada caso? ¿Tener acceso evita que cambie su precio?",
+  ] },
+  venture: { label: "Venture capital", art: "business", panels: [
+    "El capital de riesgo financia empresas jóvenes a cambio de una participación. Muchas aún están probando si tendrán clientes suficientes.",
+    "Una startup usa el capital para probar su producto. Si la prueba falla, la participación puede perder valor.",
+    "¿Qué evidencia mostraría que hay demanda? ¿Por qué puede ser difícil vender esa participación?",
+  ] },
+  fondos: { label: "Fondos de inversión", art: "basket", panels: [
+    "Un fondo reúne dinero de muchas personas y lo administra según una política. Cada partícipe tiene una parte del fondo.",
+    "Inés compara dos fondos con nombres distintos y descubre que ambos tienen las mismas empresas entre sus principales posiciones.",
+    "¿Qué se repite entre los fondos? ¿Qué cobran y cuándo permiten recuperar el dinero?",
+  ] },
+  inmuebles: { label: "Bienes raíces", art: "cash", panels: [
+    "Un inmueble puede generar alquiler y también exige gastos. Su precio de venta puede subir o bajar.",
+    "Un local ficticio cobra USD 600 de alquiler y cuesta USD 200 al mes en mantenimiento. Quedan USD 400 antes de otros costos.",
+    "Si pasa un mes vacío, ¿qué ingreso desaparece y qué gastos podrían continuar?",
+  ] },
+  depositos: { label: "Depósitos a plazo", art: "time", panels: [
+    "En un depósito a plazo se acuerdan una tasa y una fecha de vencimiento con una entidad.",
+    "Inés necesita pagar un curso en dos meses. El depósito del ejemplo vence en seis.",
+    "¿Qué condiciones de retiro tendría que leer para saber si el dinero estará disponible a tiempo?",
+  ] },
+  cuentas: { label: "Cuentas remuneradas", art: "payments", panels: [
+    "Una cuenta remunerada puede pagar intereses sobre parte del saldo. Las condiciones indican la tasa, los límites y si puede cambiar.",
+    "El anuncio destaca una tasa anual, pero solo la aplica a los primeros USD 500. El resto del saldo tiene otra condición.",
+    "¿Qué parte del saldo recibe esa tasa y durante cuánto tiempo? ¿Hay comisiones?",
+  ] },
+  fiduciarios: { label: "Derechos fiduciarios", art: "markets", panels: [
+    "Un contrato fiduciario establece cómo se administran ciertos bienes y qué derechos existen sobre ellos o sobre sus flujos.",
+    "En un proyecto ficticio, una persona recibe un derecho a participar en determinados flujos. El contrato explica cuándo se distribuyen.",
+    "¿Qué documento define el derecho? ¿Qué ocurre si el proyecto no genera los ingresos previstos?",
+  ] },
+  pensiones: { label: "Fondos de pensiones", art: "time", panels: [
+    "Un fondo de pensiones administra recursos para el retiro según las reglas del sistema. Las condiciones cambian según el país y el régimen.",
+    "Dos personas se retiran en momentos distintos. Sus aportes, reglas y condiciones pueden producir resultados diferentes.",
+    "¿Qué parte del resultado depende del tiempo, de los aportes y de las reglas aplicables?",
+  ] },
+  privado: { label: "Capital privado", art: "business", panels: [
+    "El capital privado puede tomar participaciones en empresas que no cotizan. Algunas operaciones financian expansión y otras cambian el control.",
+    "Un fondo adquiere parte de una empresa ya establecida y busca mejorar sus operaciones antes de vender su participación años más tarde.",
+    "¿Cómo verificarías la mejora si no hay un precio diario de bolsa? ¿Quién podría comprar esa participación?",
+  ] },
+  crowdfunding: { label: "Crowdfunding", art: "cash", panels: [
+    "El financiamiento colectivo reúne aportes de muchas personas para un proyecto. Puede funcionar como donación, recompensa, préstamo o participación.",
+    "Dos campañas reúnen USD 3.000. Una ofrece una recompensa. La otra promete devolver el dinero según un contrato de préstamo.",
+    "¿Qué recibe cada persona y qué pasa si el proyecto se retrasa o no puede cumplir?",
+  ] },
+} as const;
+
+export type BeginnerTopic = keyof typeof beginnerTopics;
+export const beginnerKeys = Object.keys(beginnerTopics) as BeginnerTopic[];
+export const beginnerStoryPath = (topic: BeginnerTopic) => `/research/visual-stories/#historia-tema-${topic}`;
+
 const resources = {
   basics: { title: "Primeros pasos", path: "/recursos/guias/primeros-pasos/", format: "Guía", task: "Identifica el objetivo, el plazo y los costos en el ejemplo." },
   growth: { title: "Calculadora de interés compuesto", path: "/herramientas/interes-compuesto/", format: "Simulador", task: "Compara el mismo aporte mensual con dos plazos ilustrativos." },
   diversification: { title: "Qué es diversificar", path: "/recursos/articulos/que-es-diversificar/", format: "Guía", task: "Identifica qué exposiciones comparten los activos del ejemplo." },
   tracker: { title: "Panel de inversiones", path: "/#nx-lab-2", format: "Simulador", task: "Alterna entre meses y plataformas del registro ficticio para detectar concentraciones." },
-  property: { title: "Evaluador inmobiliario", path: "/#nx-lab-0", format: "Simulador", task: "Cambia los gastos y compara ambos escenarios en pesos de hoy." },
+  property: { title: "Evaluador inmobiliario", path: "/#nx-lab-0", format: "Simulador", task: "Cambia los gastos y compara ambos escenarios en dólares de hoy." },
   scenarios: { title: "Cómo comparar dos escenarios", path: "/recursos/guias/#comparar-escenarios", format: "Guía", task: "Mantén el mismo plazo y cambia una sola variable a la vez." },
   markets: { title: "Análisis técnico y fundamental", path: "/recursos/articulos/#lectura-de-mercados", format: "Guía", task: "Separa la información sobre precios y volumen de los datos del negocio." },
   oddModel: { title: "Modelo de negocio de ODDITY", path: "/research/oddity/modelo/", format: "Caso empresarial", task: "Sigue el recorrido desde que un cliente descubre una marca hasta que paga." },
@@ -29,7 +91,8 @@ const topics = {
   liquidez: { label: "Flujo de caja y liquidez", title: "Distingue entre vender y tener efectivo disponible", lessons: ["cash", "scenarios", "growth"] },
 } as const satisfies Record<string, Topic>;
 
-type TopicKey = keyof typeof topics;
+type TopicKey = keyof typeof topics | BeginnerTopic;
+const introLessons = ["basics", "diversification"] as const;
 const goalTopics = {
   fundamentos: ["ahorro", "riesgo"],
   empresa: ["consumo", "banca"],
@@ -46,12 +109,16 @@ const businessFocus = {
 
 export type Answers = Partial<{
   goal: Goal; level: "inicio" | "bases" | "ejercicio"; topic: TopicKey;
-  time: "hoy" | "semanas"; format: "lectura" | "visual" | "practica"; focus: keyof typeof businessFocus;
+  time: "hoy" | "semanas"; format: "lectura" | "visual" | "practica" | "caso"; focus: keyof typeof businessFocus | "infraestructura" | "historia";
+  company: string; story: BeginnerTopic;
 }>;
-type Question = { id: keyof Answers; title: string; options: readonly (readonly [string, string])[] };
+type Question = { id: Exclude<keyof Answers, "company" | "story">; title: string; options: readonly (readonly [string, string])[] };
 
 export function learningQuestions(answers: Answers): Question[] {
-  const keys = goalTopics[answers.goal ?? "fundamentos"];
+  const goal = answers.goal ?? "fundamentos";
+  const keys = answers.level === "inicio" || goal === "fundamentos"
+    ? [...new Set<TopicKey>([...beginnerKeys, ...goalTopics[goal]])]
+    : goalTopics[goal];
   const questions: Question[] = [
     { id: "goal", title: "¿Qué quieres entender o resolver primero?", options: [
       ["fundamentos", "Entender los fundamentos y ordenar mis ideas"],
@@ -62,37 +129,58 @@ export function learningQuestions(answers: Answers): Question[] {
     { id: "level", title: "¿Qué tan familiar te sientes con estos temas?", options: [
       ["inicio", "Estoy empezando desde cero"], ["bases", "Conozco algunos conceptos"], ["ejercicio", "Ya he hecho ejercicios y quiero profundizar"],
     ] },
-    { id: "topic", title: "¿Qué tema te da más curiosidad?", options: keys.map((key) => [key, topics[key].label]) },
+    { id: "topic", title: "¿Qué tema te da más curiosidad?", options: keys.map((key) => [key, key in beginnerTopics ? beginnerTopics[key as BeginnerTopic].label : topics[key as keyof typeof topics].label]) },
     { id: "time", title: "¿Cuánto tiempo quieres dedicarle?", options: [
       ["hoy", "Resolver una duda hoy"], ["semanas", "Aprender en varias sesiones"],
     ] },
     { id: "format", title: "¿Cómo prefieres aprender?", options: [
-      ["lectura", "Leer una guía o un caso"], ["visual", "Explorar gráficos o diagramas"], ["practica", "Practicar con un ejercicio o simulador"],
+      ["lectura", "Leer una guía o un caso"], ["visual", "Explorar gráficos o diagramas"], ["practica", "Practicar con un ejercicio o simulador"], ["caso", "Entender un caso"],
     ] },
   ];
-  if (answers.goal === "empresa") questions.push({ id: "focus", title: "¿Qué parte del negocio quieres entender primero?", options: [
-    ["ingresos", "Cómo gana dinero"], ["relaciones", "Quiénes son sus clientes, socios y proveedores"], ["riesgos", "Qué riesgos enfrenta"],
-  ] });
+  if (answers.format === "caso" || answers.goal === "empresa") questions.push({
+    id: "focus", title: "¿Qué caso quieres estudiar?", options: [
+      ["infraestructura", "Una empresa de infraestructura de IA"], ["historia", "Una historia sobre un tema financiero"],
+      ...(answers.format === "caso" ? [] : [
+        ["ingresos", "Cómo gana dinero una empresa del caso"],
+        ["relaciones", "Quiénes son sus clientes, socios y proveedores"],
+        ["riesgos", "Qué riesgos enfrenta"],
+      ] as const),
+    ],
+  });
   return questions;
 }
 
 export function learningPath(answers: Answers) {
+  const focus = answers.format === "caso" || answers.goal === "empresa" ? answers.focus : undefined;
+  if (focus === "infraestructura" && !answers.company?.trim()) return null;
+  if (focus === "historia" && (!answers.story || !Object.hasOwn(beginnerTopics, answers.story))) return null;
   if (!learningQuestions(answers).every(({ id, options }) => options.some(([value]) => value === answers[id])) || !answers.topic) return null;
-  const topic = topics[answers.topic];
+  const beginner = answers.topic in beginnerTopics ? beginnerTopics[answers.topic as BeginnerTopic] : undefined;
+  const topic = beginner ? undefined : topics[answers.topic as keyof typeof topics];
   const format = answers.format === "visual" ? "Demostración visual" : answers.format === "practica" ? "Simulador" : "Guía";
-  const steps = topic.lessons.map((key) => resources[key]);
+  const story = (key: BeginnerTopic) => ({
+    title: beginnerTopics[key].label, path: beginnerStoryPath(key), format: "Visual Story", task: "Lee las tres viñetas y responde la pregunta de cierre.",
+  });
+  const steps = topic ? topic.lessons.map((key) => resources[key]) : [story(answers.topic as BeginnerTopic), ...introLessons.map((key) => resources[key])];
   const byFormat = steps.find((step) => step.format === format);
-  const first = answers.goal === "empresa" && answers.focus === "riesgos" ? steps[1]
-    : answers.goal === "empresa" && answers.focus === "relaciones" ? steps[0]
+  const first = focus === "infraestructura" && answers.company ? {
+    title: `Investiga ${answers.company} en la cadena de IA`,
+    path: `/explore/ecosistema-ia/?empresa=${encodeURIComponent(answers.company)}#empresas-cadena-ia`,
+    format: "Mapa interactivo",
+    task: "Identifica su etapa y revisa qué relaciones aparecen documentadas.",
+  } : focus === "historia" && answers.story ? story(answers.story)
+    : beginner ? steps[0]
+    : answers.goal === "empresa" && focus === "riesgos" ? steps[1]
+    : answers.goal === "empresa" && focus === "relaciones" ? steps[0]
     : byFormat ?? steps[0];
   const level = answers.goal === "equipo" ? "Expande" : answers.level === "inicio" ? "Empieza" : "Aplica";
   return {
-    title: topic.title,
+    title: focus === "infraestructura" || focus === "historia" ? first.title : beginner ? `Conoce ${beginner.label.toLocaleLowerCase("es")}` : topic!.title,
     level,
     session: answers.time === "hoy" ? "Una sesión breve" : "Tres sesiones a tu ritmo",
     prompt: answers.level === "inicio" ? "Empieza por describir con tus palabras lo que ves." : answers.level === "ejercicio" ? "Anota qué supuesto cambiarías y cómo comprobarías el resultado." : "Compara dos ejemplos y explica qué cambia entre ellos.",
-    focus: answers.goal === "empresa" && answers.focus ? businessFocus[answers.focus] : null,
+    focus: answers.goal === "empresa" && focus && focus in businessFocus ? businessFocus[focus as keyof typeof businessFocus] : null,
     first,
-    next: steps.filter((step) => step !== first),
+    next: steps.filter((step) => step.path !== first.path).slice(0, 2),
   } as const;
 }

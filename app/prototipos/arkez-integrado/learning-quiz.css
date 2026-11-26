@@ -54,3 +54,13 @@
  .ai-quiz-options label { transition:background-color 170ms ease,border-color 170ms ease; }
  @keyframes arkez-quiz-scene { from { opacity:0; transform:scale(1.055); } to { opacity:1; transform:none; } }
 }
+
+.ai-quiz-options[data-question="topic"] { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.5rem; }
+.ai-quiz-options[data-question="topic"] label { min-height:50px; padding:.42rem .5rem; }
+.ai-quiz-case { display:grid; gap:.45rem; margin-top:.85rem; }
+.ai-quiz-case label { font-weight:800; }
+.ai-quiz-case :is(input,select,button) { min-height:44px; border:1px solid #70869a; border-radius:.36rem; padding:.42rem .65rem; background:white; color:#142b43; }
+.ai-quiz-case :is(input,select):focus-visible { outline:2px solid #214c76; outline-offset:2px; }
+.ai-quiz-case ul { display:flex; flex-wrap:wrap; gap:.42rem; padding:0; list-style:none; }
+.ai-quiz-case button[aria-pressed="true"] { background:#153b58; color:white; }
+@media (max-width:540px) { .ai-quiz-options[data-question="topic"] { grid-template-columns:minmax(0,1fr); } }

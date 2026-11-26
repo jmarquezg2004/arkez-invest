@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import data from "../ai-map-source.json";
 
 const stages = ["Energía", "Equipos y EDA", "Diseño", "Fabricación", "Servidores", "Nube", "Modelos", "Transversales"];
@@ -24,6 +24,13 @@ export function AiRelationGraph() {
   const [hover, setHover] = useState("");
   const [signals, setSignals] = useState(false);
   const [zoom, setZoom] = useState(false);
+  useEffect(() => {
+    const company = new URLSearchParams(window.location.search).get("empresa");
+    if (company && data.nodes.some(({ id }) => id === company)) {
+      setQuery(company);
+      setSelected(company);
+    }
+  }, []);
   const matches = data.nodes.filter(({ id, name, stage: group }) => (!stage || stage === group)
     && `${id} ${name}`.toLowerCase().includes(query.trim().toLowerCase()));
   const focus = hover || selected || (query.trim() ? matches[0]?.id : "");

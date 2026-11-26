@@ -66,3 +66,7 @@
 .avs-company a { text-decoration:underline; text-underline-offset:.2em; }
 .avs-company-links a { display:inline-flex; align-items:center; min-height:44px; gap:.35rem; }
 @media (max-width:620px) { .avs[data-panels="4"] .avs-panels,.avs-outlook ul { grid-template-columns:minmax(0,1fr); } }
+
+.avs-topic-links { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1rem; }
+.avs-topic-links a { display:inline-flex; align-items:center; gap:.4rem; min-height:44px; padding:.4rem .65rem; border:1px solid #758597; border-radius:.35rem; background:#fffaf1; text-decoration:underline; text-underline-offset:.2em; }
+.avs-topic-links a:focus-visible { outline:2px solid #20587c; outline-offset:2px; }

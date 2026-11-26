@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BarChart3, BookOpen, Building2, Calculator, Check, Clock3, Compass, Layers3, RotateCcw, ScanLine } from "lucide-react";
+import mapData from "@/arkez-visual-engine/ai-map-source.json";
 import { storyForReading } from "./visual-stories/story-links";
-import { learningPath, learningQuestions, type Answers } from "./learning-path";
+import { beginnerKeys, beginnerTopics, learningPath, learningQuestions, type Answers, type BeginnerTopic } from "./learning-path";
 
 const scenes = {
   goal: { title: "Tu punto de partida", art: "/brand/prisma-720.webp", Icon: Compass },
@@ -14,7 +15,8 @@ const scenes = {
   focus: { title: "Dentro de la empresa", art: "/brand/prisma-720.webp", Icon: Building2 },
 };
 const goalIcons = [BookOpen, Building2, Calculator, Layers3];
-const formatIcons = [BookOpen, BarChart3, Calculator];
+const formatIcons = [BookOpen, BarChart3, Calculator, Building2];
+const normalize = (value: string) => value.normalize("NFD").replace(/\p{Diacritic}/gu, "").trim().toLowerCase();
 const resultArt = {
   Empieza: "/brand/prisma-720.webp",
   Aplica: "/brand/estudio-980.webp",
@@ -24,6 +26,7 @@ const resultArt = {
 export function LearningQuiz({ base }: { base: string }) {
   const [answers, setAnswers] = useState<Answers>({});
   const [step, setStep] = useState(0);
+  const [companyInput, setCompanyInput] = useState("");
   const [finished, setFinished] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const moveFocus = useRef(false);
@@ -46,12 +49,21 @@ export function LearningQuiz({ base }: { base: string }) {
 
   function choose(value: string) {
     setAnswers((previous) => question.id === "goal" && previous.goal !== value
-      ? { ...previous, goal: value as Answers["goal"], topic: undefined, focus: undefined }
-      : { ...previous, [question.id]: value });
+      ? { ...previous, goal: value as Answers["goal"], topic: undefined, focus: undefined, company: undefined, story: undefined }
+      : question.id === "level" && previous.level !== value ? { ...previous, level: value as Answers["level"], topic: undefined }
+        : question.id === "format" && previous.format !== value ? { ...previous, format: value as Answers["format"], focus: undefined, company: undefined, story: undefined }
+          : { ...previous, [question.id]: value });
   }
 
   const relatedStory = result ? [result.first, ...result.next].map(({ path }) => storyForReading(path)).find(Boolean) : undefined;
-  const canContinue = question.options.some(([value]) => answers[question.id] === value);
+  const showCompany = question.id === "focus" && answers.focus === "infraestructura";
+  const showStory = question.id === "focus" && answers.focus === "historia";
+  const search = normalize(companyInput);
+  const companies = search ? mapData.nodes.filter(({ id, name, kind }) =>
+    kind !== 2 && (normalize(id).includes(search) || normalize(name).includes(search))
+  ).slice(0, 8) : [];
+  const canContinue = question.options.some(([value]) => answers[question.id] === value)
+    && (!showCompany || Boolean(answers.company)) && (!showStory || Boolean(answers.story));
   const last = step === questions.length - 1;
 
   const scene = scenes[question.id];
@@ -83,7 +95,7 @@ export function LearningQuiz({ base }: { base: string }) {
       <p className="ai-quiz-note">Orientación educativa para elegir qué estudiar. No constituye asesoría de inversión.</p>
       <div className="ai-quiz-actions">
         <button className="ai-quiz-secondary" type="button" onClick={() => move(0)}><ArrowLeft size={17} aria-hidden="true" /> Editar respuestas</button>
-        <button className="ai-quiz-secondary" type="button" onClick={() => { setAnswers({}); move(0); }}><RotateCcw size={17} aria-hidden="true" /> Empezar de nuevo</button>
+        <button className="ai-quiz-secondary" type="button" onClick={() => { setAnswers({}); setCompanyInput(""); move(0); }}><RotateCcw size={17} aria-hidden="true" /> Empezar de nuevo</button>
       </div>
     </> : <>
       <div className="ai-quiz-progress" aria-hidden="true">
@@ -91,7 +103,7 @@ export function LearningQuiz({ base }: { base: string }) {
       </div>
       <p className="ai-quiz-status">{step === 0 ? "Pregunta 1 · 5 o 6 en total" : `Pregunta ${step + 1} de ${questions.length}`}</p>
       <h2 ref={heading} id="learning-question" tabIndex={-1}>{question.title}</h2>
-      <fieldset className="ai-quiz-options" aria-labelledby="learning-question" key={question.id}>
+      <fieldset className="ai-quiz-options" data-question={question.id} aria-labelledby="learning-question" key={question.id}>
         {question.options.map(([value, label], index) => {
           const OptionIcon = question.id === "goal" ? goalIcons[index] : question.id === "format" ? formatIcons[index] : scene.Icon;
           return <label key={value}>
@@ -100,6 +112,24 @@ export function LearningQuiz({ base }: { base: string }) {
           <span className="ai-quiz-option-label">{label}</span>
         </label>; })}
       </fieldset>
+      {showCompany && <div className="ai-quiz-case">
+        <label htmlFor="quiz-ai-company">Nombre o ticker de infraestructura de IA</label>
+        <input id="quiz-ai-company" type="search" placeholder="Ej. NVIDIA o NVDA" maxLength={80} value={companyInput} onChange={(event) => {
+          setCompanyInput(event.target.value);
+          setAnswers({ ...answers, company: undefined });
+        }} />
+        {search && !companies.length && <p role="status">No encontramos esa empresa en el mapa. Prueba otro nombre o elige una historia financiera.</p>}
+        {companies.length > 0 && <ul aria-label="Empresas del mapa">{companies.map(({ id, name }) => <li key={id}>
+          <button type="button" aria-pressed={answers.company === id} onClick={() => setAnswers({ ...answers, company: id })}>{name} · {id}</button>
+        </li>)}</ul>}
+      </div>}
+      {showStory && <div className="ai-quiz-case">
+        <label htmlFor="quiz-financial-story">Elige una Arkez Visual Story</label>
+        <select id="quiz-financial-story" value={answers.story ?? ""} onChange={(event) => setAnswers({ ...answers, story: event.target.value as BeginnerTopic })}>
+          <option value="">Selecciona un tema</option>
+          {beginnerKeys.map((key) => <option key={key} value={key}>{beginnerTopics[key].label}</option>)}
+        </select>
+      </div>}
       <div className="ai-quiz-actions">
         {step > 0 && <button className="ai-quiz-secondary" type="button" onClick={() => move(step - 1)}><ArrowLeft size={17} aria-hidden="true" /> Atrás</button>}
         <button className="ai-quiz-primary" type="button" disabled={!canContinue} onClick={() => {

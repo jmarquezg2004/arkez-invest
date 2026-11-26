@@ -1,3 +1,4 @@
+import { BeginnerStories } from "./beginner-stories";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { ArtImage } from "@/arkez-visual-engine/components/art";
 import { base, oddityStoryPath } from "../routes";
@@ -31,6 +32,7 @@ export function StoryLibrary() {
           </a></li>;
         })}</ul>
       </nav>
+      <BeginnerStories />
       <section aria-labelledby="avs-library-stories">
         <h2 id="avs-library-stories">Lee y anima las viñetas</h2>
         {entries.filter((key) => key !== "oddity").map((key) => <div key={key}>

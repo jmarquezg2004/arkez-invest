@@ -84,7 +84,7 @@ function CompoundChart({ scenarios, currency }: {
           </g>
         ))}
       </svg>
-      <p className="compound-legend"><span>A · con tasa</span><span data-line="cash">A · sin intereses</span>{scenarios.length > 1 && <><span data-line="b">B · con tasa</span><span data-line="cash-b">B · sin intereses</span></>}</p>
+      <p className="compound-legend"><span>{scenarios.length > 1 ? "A · " : ""}Capital más intereses</span><span data-line="cash">{scenarios.length > 1 ? "A · " : ""}Capital sin intereses</span>{scenarios.length > 1 && <><span data-line="b">B · Capital más intereses</span><span data-line="cash-b">B · Capital sin intereses</span></>}</p>
     </figure>
   );
 }
@@ -161,7 +161,7 @@ export function CompoundCalculator() {
           {results.map(({ final }, index) => (
             <dl key={index} aria-label={index === 0 ? "Escenario A" : "Escenario B"}>
               <div className="compound-total"><dt>Capital final{results.length > 1 && (index === 0 ? " · A" : " · B")}</dt><dd>{money.format(final.balance)}</dd></div>
-              <div><dt>Ahorro sin intereses</dt><dd>{money.format(final.contributed)}</dd></div>
+              <div><dt>Capital sin intereses</dt><dd>{money.format(final.contributed)}</dd></div>
               <div><dt>Diferencia frente al ahorro sin intereses</dt><dd>{money.format(final.growth)}</dd></div>
             </dl>
           ))}
