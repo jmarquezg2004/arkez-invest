@@ -280,7 +280,20 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     assert.match(research, /USD 10/);
     assert.match(read(base + "explore/"), /Megacaps y large caps/);
     assert.doesNotMatch(read(chain), /mapa-relaciones-ia\.zip/);
-    assert.equal((read(chain).match(/>Descargar ficha de la etapa</g) ?? []).length, 7);
+    assert.equal((read(chain).match(/>Descargar ficha de la etapa \(PDF\)</g) ?? []).length, 7);
+    assert.doesNotMatch(read(chain), /data:text\/plain/);
+    for (let i = 1; i <= 7; i++) {
+      const asset = `recursos/archivos/cadena-ia/etapa-ia-${i}.pdf`;
+      assert.ok(read(chain).includes(`href="/${asset}"`), asset);
+      assert.equal(readFileSync(new URL(asset, output)).subarray(0, 5).toString(), "%PDF-");
+    }
+    for (const [page, name] of [["explore/nubank/modelo/", "nubank"], ["research/oddity/modelo/", "oddity"]]) {
+      const html = read(base + page);
+      const asset = `recursos/archivos/${name}-cuaderno-modelo.pdf`;
+      assert.ok(html.includes(`href="/${asset}"`), asset);
+      assert.doesNotMatch(html, /Imprimir \/ PDF/);
+      assert.equal(readFileSync(new URL(asset, output)).subarray(0, 5).toString(), "%PDF-");
+    }
     const collectionPath = base + "research/visual-stories/";
     const oddityPath = base + "research/oddity/historia/";
     const collection = read(collectionPath);

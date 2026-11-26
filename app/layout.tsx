@@ -1,3 +1,4 @@
+import { ExternalLinks } from "@/components/external-links";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <a href="#contenido" className="skip-link">Saltar al contenido</a>
         <CommercialEvents />
+        <ExternalLinks />
         <SiteHeader />
         <main id="contenido" tabIndex={-1}>{children}</main>
         <SiteFooter />

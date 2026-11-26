@@ -15,6 +15,7 @@ export type Art = "chip" | "bank" | "security" | "energy" | "report" | "globe" |
 export type CatalogItem = { id: string; name: string; ticker?: string; category: Category; topic: string; summary: string; art: Art; palette: string; largeCompany?: boolean; href?: string };
 
 export const catalog: CatalogItem[] = [
+  { id: "the-trade-desk", name: "The Trade Desk", ticker: "TTD", category: "tecnologia", topic: "Publicidad digital", summary: "Ofrece software para que agencias y anunciantes compren y midan campañas en medios digitales, incluida la televisión conectada.", art: "study", palette: "blue" },
   { id: "apple", largeCompany: true, name: "Apple", ticker: "AAPL", category: "tecnologia", topic: "Dispositivos · Servicios", summary: "Diseña y vende dispositivos y ofrece servicios digitales a sus usuarios.", art: "chip", palette: "blue" },
   { id: "walmart", largeCompany: true, name: "Walmart", ticker: "WMT", category: "consumo", topic: "Comercio minorista", summary: "Vende productos en tiendas y por internet. Las membresías y la publicidad complementan el comercio.", art: "globe", palette: "blue" },
   { id: "microsoft", largeCompany: true, name: "Microsoft", ticker: "MSFT", category: "tecnologia", topic: "Software · Nube", summary: "Licencias, suscripciones y consumo de infraestructura en Azure.", art: "chain", palette: "blue" },

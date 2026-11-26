@@ -20,16 +20,16 @@ export function ResearchPlans() {
   const testLink = selection && testLinks[selection.id];
   const stripeTest = testLink && /^https:\/\/buy\.stripe\.com\/test_[a-zA-Z0-9]+$/.test(testLink) ? testLink : undefined;
   return <section className="ai-research-pricing" id="planes-research" aria-labelledby="planes-research-title">
-    <header><p className="ve-kicker">Arkez Research</p><h2 id="planes-research-title">Elige cómo seguir aprendiendo</h2><p>Prueba la elección de un plan o conversa con Arkez sobre una consultoría.</p></header>
+    <header><p className="ve-kicker">Arkez Research</p><h2 id="planes-research-title">Elige cómo seguir aprendiendo</h2><p>Prueba una consulta y una ruta de estudio. Si quieres profundizar, compara las opciones de pago único o conversa con Arkez sobre formación para tu caso.</p></header>
     <div className="ai-research-plans">
       {plans.map((plan) => <article key={plan.id} data-featured={plan.id === "taller"}>
-        <h3>{plan.name}</h3><p className="ai-plan-price">{plan.price}</p>
+        <h3>{plan.name}</h3><p className="ai-plan-price">{plan.price}</p><p>Pago único · vista previa</p>
         <ul>{plan.points.map((point) => <li key={point}><Check size={16} aria-hidden="true" />{point}</li>)}</ul>
         <button className="ve-cta" type="button" aria-pressed={selection?.id === plan.id} aria-controls="arkez-plan-confirmation"
           onClick={() => { setSelection(plan); setConfirmed(false); }}>Elegir {plan.name.toLowerCase()} <ArrowRight size={17} aria-hidden="true" /></button>
       </article>)}
-      <article><h3>Consultoría</h3><p className="ai-plan-price">A cotizar</p>
-        <ul><li><Check size={16} aria-hidden="true" />Conversación inicial</li><li><Check size={16} aria-hidden="true" />Revisión de objetivos</li><li><Check size={16} aria-hidden="true" />Alcance y precio según el caso</li></ul>
+      <article><h3>Consultoría educativa</h3><p className="ai-plan-price">A cotizar</p>
+        <ul><li><Check size={16} aria-hidden="true" />Conversación inicial</li><li><Check size={16} aria-hidden="true" />Orientación académica y diagnóstico de necesidades</li><li><Check size={16} aria-hidden="true" />Alcance y precio según el caso</li></ul>
         <a className="ve-cta" href={base + "/contacto/"}>Solicitar una reunión <ArrowRight size={17} aria-hidden="true" /></a>
       </article>
     </div>

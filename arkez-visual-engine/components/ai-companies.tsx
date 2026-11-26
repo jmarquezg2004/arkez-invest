@@ -46,7 +46,7 @@ export function AiCompanies() {
       {company && <section className="ve-ai-company" aria-live="polite"><p>{company[2] === "T" ? "Capas transversales" : groups[Number(company[2]) - 1]}{company[3] ? " · " + company[0] : ""}</p><h3>{format(company[1])}</h3>
         {relations.length ? relations.map(({ from, to, title, detail, href }) => <div className="ve-ai-relation" key={href}>
           <p><strong>{label(from)}</strong> <ArrowRight size={16} aria-label="hacia" /> <strong>{label(to)}</strong></p>
-          <h4>{title}</h4><p>{detail}</p><a href={href}>Ver documento original <ArrowUpRight size={15} aria-hidden="true" /></a>
+          <h4>{title}</h4><p>{detail}</p><a href={href} target="_blank" rel="noopener noreferrer">Ver documento original <ArrowUpRight size={15} aria-hidden="true" /></a>
         </div>) : <p>Ficha de la cadena. Las relaciones de esta empresa están pendientes de verificación.</p>}
       </section>}
     </div>

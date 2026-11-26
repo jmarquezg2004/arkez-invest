@@ -26,7 +26,7 @@ function Indicators({ data }: { data: Research }) {
 }
 
 function SourceLine({ data }: { data: Research }) {
-  return <p className="ve-source"><a href={data.source.href}>{data.source.title} <ArrowUpRight size={15} /></a><span>Publicado el {data.source.published} · {data.source.time ?? "hora de publicación sin confirmar"} · {data.period}</span><a href={data.accounts.href}>{data.accounts.title} <ArrowUpRight size={15} /></a></p>;
+  return <p className="ve-source"><a href={data.source.href} target="_blank" rel="noopener noreferrer">{data.source.title} <ArrowUpRight size={15} /></a><span>Publicado el {data.source.published} · {data.source.time ?? "hora de publicación sin confirmar"} · {data.period}</span><a href={data.accounts.href} target="_blank" rel="noopener noreferrer">{data.accounts.title} <ArrowUpRight size={15} /></a></p>;
 }
 
 export function ResearchIndex({ data }: { data: Research }) {
@@ -76,7 +76,8 @@ export function ResearchResource({ data, id }: { data: Research; id: ResourceId 
     <CompanyHero data={data} title={resource.title} />
     <div className="ve-research-body" id="ve-resource-body">
       <nav className="ve-breadcrumb" aria-label={`Recursos de ${data.name}`}><a href={companyPath(data)}>← Recursos de {data.name}</a><span>{resource.title}</span></nav>
-      <ExportActions slug={`${data.slug}-${id}`} />
+      {id === "modelo" ? <p className="ve-export"><a href="/recursos/archivos/nubank-cuaderno-modelo.pdf" download>Descargar cuaderno de análisis (PDF)</a></p>
+        : <ExportActions slug={`${data.slug}-${id}`} />}
       <h2 className="ve-document-title">{resource.title} · {data.name}</h2>
       {(id === "informe" || id === "ficha") && <Indicators data={data} />}
       {id === "ficha" && <Profile data={data} />}

@@ -1,0 +1,65 @@
+[
+  {
+    "title": "Energía y red",
+    "art": "energy",
+    "detail": "La generación, la transmisión y el enfriamiento sostienen la demanda eléctrica del cómputo.",
+    "output": "Energía disponible y estable",
+    "example": "Una nueva sala de servidores necesita más potencia durante las horas de máxima demanda.",
+    "question": "¿Qué diferencia hay entre tener capacidad de generación y contar con una conexión disponible?",
+    "source": "https://www.iea.org/reports/energy-and-ai"
+  },
+  {
+    "title": "Equipos y EDA",
+    "art": "security",
+    "detail": "Las herramientas de diseño electrónico y los equipos de producción preparan el paso del plano al silicio.",
+    "output": "Diseños verificables y procesos de producción",
+    "example": "Un equipo verifica el diseño antes de pedir una versión física del chip.",
+    "question": "Distingue qué corrige el software de diseño y qué hace la máquina de litografía.",
+    "source": "https://www.asml.com/en/technology/lithography-principles"
+  },
+  {
+    "title": "Diseño de chips",
+    "art": "chip",
+    "detail": "Las arquitecturas de cómputo deciden cómo se procesan los datos, con qué velocidad y cuánto consumo.",
+    "output": "Planos de CPU, GPU y aceleradores",
+    "example": "Un acelerador debe procesar más datos con la misma energía.",
+    "question": "¿Qué cambiaría si aumentara la memoria disponible sin cambiar el procesador?",
+    "source": "https://developer.nvidia.com/cuda-zone"
+  },
+  {
+    "title": "Fabricación y memoria",
+    "art": "chip",
+    "detail": "La fabricación, el empaquetado y la memoria integran los componentes en un producto físico.",
+    "output": "Chips y módulos listos para integrar",
+    "example": "Una planta integra procesadores y memoria en el mismo empaquetado.",
+    "question": "¿Cómo afectaría al producto final una demora en la entrega de memoria?",
+    "source": "https://3dfabric.tsmc.com/english/dedicatedFoundry/technology/3DFabric.htm"
+  },
+  {
+    "title": "Servidores y redes",
+    "art": "chain",
+    "detail": "Los equipos combinan chips, memoria y redes para transferir datos entre muchas máquinas.",
+    "output": "Capacidad de cómputo conectada",
+    "example": "Dos servidores procesan partes del mismo trabajo y deben intercambiar resultados.",
+    "question": "¿Qué sucede si el enlace de red es más lento que el procesamiento local?",
+    "source": "https://docs.aws.amazon.com/whitepapers/latest/hpc-lens/welcome.html"
+  },
+  {
+    "title": "Centros de datos y nube",
+    "art": "security",
+    "detail": "La infraestructura aloja, mantiene y ofrece cómputo que otros equipos pueden solicitar.",
+    "output": "Cómputo disponible para entrenar o servir modelos",
+    "example": "Un equipo alquila capacidad para entrenar un modelo y luego usa menos recursos para una prueba.",
+    "question": "Distingue el costo de entrenar del costo de atender solicitudes.",
+    "source": "https://docs.aws.amazon.com/ec2/latest/instancetypes/ac.html"
+  },
+  {
+    "title": "Modelos y aplicaciones",
+    "art": "study",
+    "detail": "El software aplica los modelos a tareas y flujos concretos como resumir o clasificar información.",
+    "output": "Herramientas para personas y empresas",
+    "example": "Un equipo usa un modelo para clasificar consultas y revisa manualmente una muestra.",
+    "question": "¿Qué medirías para detectar errores antes de ampliar el uso?",
+    "source": "https://www.nist.gov/itl/ai-risk-management-framework"
+  }
+]

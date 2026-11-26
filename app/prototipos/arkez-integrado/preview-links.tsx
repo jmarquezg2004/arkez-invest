@@ -11,11 +11,6 @@ export function PreviewLinks({ children }: { children: React.ReactNode }) {
     function update(link: HTMLAnchorElement) {
       const original = link.getAttribute("href");
       if (!original || link.hasAttribute("download")) return;
-      const url = URL.parse(original, window.location.href);
-      if (url && ["http:", "https:"].includes(url.protocol) && url.origin !== window.location.origin) {
-        link.target = "_blank";
-        link.relList.add("noopener", "noreferrer");
-      }
       const href = previewHref(original);
       if (href !== original) link.setAttribute("href", href);
     }

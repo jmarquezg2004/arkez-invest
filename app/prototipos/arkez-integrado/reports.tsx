@@ -2,6 +2,7 @@ import { ArrowUpRight, FileChartColumn, Network } from "lucide-react";
 import { Financials } from "@/arkez-visual-engine/components/financials";
 import { ArtImage } from "@/arkez-visual-engine/components/art";
 import { ExportActions } from "@/arkez-visual-engine/renderers/exports";
+import { ResearchWorkshop } from "./research-workshop";
 import { ResearchPlans } from "./research-plans";
 import { MarketLookup } from "./market-lookup";
 import { base, oddityStoryPath, visualStoriesPath } from "./routes";
@@ -25,7 +26,7 @@ export function ReportLibrary({ companyOnly = false }: { companyOnly?: boolean }
     </section>
     <div className="container-shell ai-library-body">
       {!companyOnly && <MarketLookup />}
-      {!companyOnly && <ResearchPlans />}
+      {!companyOnly && <><ResearchWorkshop /><ResearchPlans /></>}
       {!companyOnly && <section className="ve-shelf"><header><h2>Nubank</h2></header><ul className="ve-track" role="list"><li className="ve-cover" data-palette="purple">
         <ArtImage art="bank" /><a className="ve-cover-open" href={base + "/explore/nubank/"}><span>NU</span><strong>Galería de Nubank</strong><small>Seis recursos de investigación</small><ArrowUpRight size={19} /></a>
       </li></ul></section>}
@@ -44,7 +45,8 @@ export function OddityReport({ model = false }: { model?: boolean }) {
     <div className="ve-company-hero"><ArtImage art="report" eager /><div className="ve-company-intro"><p className="ve-kicker">Arkez Research · NASDAQ: ODD</p><h1>{title}</h1><p>Resultados históricos del tercer trimestre de 2026.</p></div></div>
     <div className="ve-research-body" id="ve-resource-body">
       <nav className="ve-breadcrumb" aria-label="Recursos de ODDITY"><a href={oddity}>← Recursos de ODDITY</a></nav>
-      <ExportActions slug={model ? "oddity-modelo" : "oddity-informe"} />
+      {model ? <p className="ve-export"><a href="/recursos/archivos/oddity-cuaderno-modelo.pdf" download>Descargar cuaderno de análisis (PDF)</a></p>
+        : <ExportActions slug="oddity-informe" />}
       {model ? <>
         <section className="ve-document-section"><h2>Quién paga y por qué</h2><p>ODDITY vende maquillaje, cuidado personal y servicios de dermatología digital al consumidor. En el 3T de 2026, sus propias webs aportaron US$138,7 M, el 95,7 % de sus ingresos netos.</p>
           <div className="ve-model"><ol>{[["Atracción","Publicidad y redes"],["Elección","Recomendaciones en la web"],["Compra","El cliente paga a ODDITY"],["Entrega","Transporte y recompra"]].map(([label, text]) => <li key={label}><h3>{label}</h3><p>{text}</p></li>)}</ol></div>

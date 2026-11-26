@@ -25,7 +25,7 @@ export function Ecosystem() {
         <ul className="ai-eco-grid" role="list">{platforms.filter((item) => item.type === type).map(({ name, scope, costs, check, href }) => <li key={name}>
           <h3>{name}</h3><p>{scope}</p>
           <dl><div><dt>Cómo cobra</dt><dd>{costs}</dd></div><div><dt>Qué comprobar</dt><dd>{check}</dd></div></dl>
-          <a href={href}>Fuente de tarifas de {name} <ArrowUpRight size={16} aria-hidden="true" /></a>
+          <a href={href} target="_blank" rel="noopener noreferrer">Fuente de tarifas de {name} <ArrowUpRight size={16} aria-hidden="true" /></a>
         </li>)}</ul>
       </section>;
     })}
@@ -33,7 +33,7 @@ export function Ecosystem() {
       const Icon = id === "mercados" ? Building2 : id === "datos" ? Database : id === "fintech" ? Layers3 : BookOpen;
       return <section className="ai-eco-section" id={id} key={id} aria-labelledby={id + "-titulo"}>
         <h2 id={id + "-titulo"}><Icon aria-hidden="true" />{id === "mercados" ? "Bolsas y mercados" : title}</h2>
-        <ul className="ai-eco-grid" role="list">{sources.map(({ name, description, href }) => <li key={name}><h3><a href={href}>{name} <ArrowUpRight size={16} aria-hidden="true" /></a></h3><p>{description}</p></li>)}</ul>
+        <ul className="ai-eco-grid" role="list">{sources.map(({ name, description, href }) => <li key={name}><h3><a href={href} target="_blank" rel="noopener noreferrer">{name} <ArrowUpRight size={16} aria-hidden="true" /></a></h3><p>{description}</p></li>)}</ul>
         {id === "fintech" && <a className="avs-reading-link" href={visualStoriesPath + "#historia-pagos"}>Ver el ejemplo ilustrado sobre pagos en Research</a>}
         {id === "datos" && <a className="ai-eco-data-link" href={base + "/research/#consultar-ticker"}>Consultar un ticker en Research <ArrowUpRight size={16} aria-hidden="true" /></a>}
       </section>;

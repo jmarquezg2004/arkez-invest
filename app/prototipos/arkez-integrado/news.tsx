@@ -103,7 +103,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
       <ul className="ai-news-stories" role="list">
         {(directoryPage ? stories : stories.slice(offset, offset + 2)).map((story) => { const { title, href, date } = story; return <li key={href}>
           <article>
-            <a href={href}>
+            <a href={href} target="_blank" rel="noopener noreferrer">
               <StoryCover key={story.image} story={story} />
               <div className="ai-news-copy">
                 <p><time dateTime={date}>{dateFormat.format(new Date(date))}</time></p>
@@ -120,15 +120,15 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
       </div>}
       <div className="ai-news-sources">
         <span>Consultar directamente</span>
-        {publishers.map(([name, href]) => <a key={name} href={href}>{name} <ArrowUpRight size={14} aria-hidden="true" /></a>)}
+        {publishers.map(([name, href]) => <a key={name} href={href} target="_blank" rel="noopener noreferrer">{name} <ArrowUpRight size={14} aria-hidden="true" /></a>)}
       </div>
       {directoryPage && <><div className="ai-news-sources">
         <span>Lectura de América Latina</span>
-        <a href={regionalReading.href}>{regionalReading.title} · {regionalReading.source} · <time dateTime={regionalReading.date}>{dateFormat.format(new Date(regionalReading.date))}</time></a>
+        <a href={regionalReading.href} target="_blank" rel="noopener noreferrer">{regionalReading.title} · {regionalReading.source} · <time dateTime={regionalReading.date}>{dateFormat.format(new Date(regionalReading.date))}</time></a>
       </div><div className="ai-news-sources"><span>Fuentes por región</span>
-        {regionalSources.map(([region, name, href]) => <a key={href} href={href}>{region} · {name} <ArrowUpRight size={14} aria-hidden="true" /></a>)}
+        {regionalSources.map(([region, name, href]) => <a key={href} href={href} target="_blank" rel="noopener noreferrer">{region} · {name} <ArrowUpRight size={14} aria-hidden="true" /></a>)}
       </div><div className="ai-news-sources"><span>Cuentas en X</span>
-        {socialSources.map(([name, href]) => <a key={href} href={href}>{name} <ArrowUpRight size={14} aria-hidden="true" /></a>)}
+        {socialSources.map(([name, href]) => <a key={href} href={href} target="_blank" rel="noopener noreferrer">{name} <ArrowUpRight size={14} aria-hidden="true" /></a>)}
       </div></>}
     </div>
   </section>;

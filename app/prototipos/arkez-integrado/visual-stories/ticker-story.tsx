@@ -1,11 +1,14 @@
 import { ArrowUpRight } from "lucide-react";
 import type { CatalogItem } from "@/arkez-visual-engine/catalog";
 import { base } from "../routes";
-import illustration from "./ticker-vinetas.webp";
+import genericArt from "./ticker-vinetas.webp";
+import tradeDeskArt from "./ttd-vinetas.webp";
 
 type Filing = { form: string; date: string; href: string };
+const tradeDeskFiling = { form: "10-K", date: "2026-02-27", href: "https://www.sec.gov/Archives/edgar/data/1671933/000167193326000014/ttd-20251231.htm" };
 const chapters = ["Qué hace", "De dónde sale el dinero", "Qué conviene revisar", "Dónde comprobarlo"];
 const models: Record<string, [string, string]> = {
+  TTD: ["Las agencias y los anunciantes pagan por usar la plataforma. La tarifa suele depender del gasto del cliente. La empresa también cobra por datos y servicios adicionales.", "Distingue el gasto total que pasa por la plataforma de los ingresos que la empresa reconoce. Compara ambos conceptos en el 10-K."],
   AAPL: ["Vende dispositivos y presta servicios. Pagan quienes compran un equipo o usan servicios de pago.", "Contrasta las ventas de dispositivos con las de servicios y compara sus márgenes."],
   MSFT: ["Cobra por licencias, suscripciones y uso de nube. Sus clientes incluyen hogares, empresas y gobiernos.", "Distingue las suscripciones del consumo medido de Azure y compara el costo de ampliar su infraestructura."],
   GOOGL: ["Los anunciantes pagan por mostrar anuncios. También cobra suscripciones y ofrece capacidad de nube a empresas.", "Separa publicidad y nube. Busca qué segmento aporta cada incremento de ingresos."],
@@ -23,7 +26,8 @@ export function TickerStory({ ticker, name, sector, profile, filings }: {
   ticker: string; name: string; sector?: string; profile?: CatalogItem; filings: Filing[];
 }) {
   const model = models[ticker];
-  const primary = filings.find(({ form }) => ["10-K", "20-F", "40-F"].includes(form)) ?? filings[0];
+  const illustration = ticker === "TTD" ? tradeDeskArt : genericArt;
+  const primary = ticker === "TTD" ? tradeDeskFiling : filings.find(({ form }) => ["10-K", "20-F", "40-F"].includes(form)) ?? filings[0];
   const parts = [
     profile?.summary ?? (sector ? `EDGAR clasifica a este emisor en «${sector}». Abre sus documentos para identificar los productos y servicios.` : "Identifica sus productos y servicios en los documentos del emisor."),
     model?.[0] ?? "Busca en los estados financieros quién paga y qué compra. Anota qué ingreso pertenece a cada línea de negocio.",
@@ -39,8 +43,8 @@ export function TickerStory({ ticker, name, sector, profile, filings }: {
       <div className="ticker-story-art"><img src={illustration.src} width={illustration.width} height={illustration.height} alt="" loading="lazy" decoding="async" /></div>
       <div><h4>{chapters[index]}</h4><p>{part}</p></div>
     </li>)}</ol>
-    {primary && <a href={primary.href}>Consultar el documento en EDGAR <ArrowUpRight size={15} aria-hidden="true" /></a>}
+    {primary && <a href={primary.href} target="_blank" rel="noopener noreferrer">Consultar el documento en EDGAR <ArrowUpRight size={15} aria-hidden="true" /></a>}
     {ticker === "NU" && <a href={base + "/explore/nubank/modelo/"}>Leer el modelo de Nubank <ArrowUpRight size={15} aria-hidden="true" /></a>}
-    {ticker === "SPY" && <a href="https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy">Consultar la ficha del fondo <ArrowUpRight size={15} aria-hidden="true" /></a>}
+    {ticker === "SPY" && <a href="https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy" target="_blank" rel="noopener noreferrer">Consultar la ficha del fondo <ArrowUpRight size={15} aria-hidden="true" /></a>}
   </section>;
 }

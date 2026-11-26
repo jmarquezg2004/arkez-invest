@@ -19,7 +19,7 @@ type Issuer = {
   filings: { form: string; date: string; href: string }[];
 };
 
-const samples = ["NASDAQ:ODD", "NYSE:NU", "NASDAQ:AAPL", "AMEX:SPY"];
+const samples = ["NASDAQ:ODD", "NYSE:NU", "NASDAQ:TTD", "NASDAQ:AAPL", "AMEX:SPY"];
 const companyExchanges: Record<string, string> = { NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
 
 const validSymbol = /^(?:[A-Z0-9_-]{1,20}:)?[A-Z0-9][A-Z0-9._!^=-]{0,22}$/;
@@ -140,14 +140,15 @@ export function MarketLookup() {
         <a href={oddityStoryPath}>Explorar los escenarios y fuentes de ODDITY <ArrowUpRight size={15} aria-hidden="true" /></a></>
         : hasStory && <TickerStory ticker={ticker} name={profile?.name ?? issuer?.name ?? "SPDR S&P 500 ETF Trust"}
             sector={issuer?.sector} profile={profile} filings={issuer?.filings ?? []} />}
+      {!hasStory && <p className="ai-market-issuer" role="status">{filingStatus || "Buscando una ficha pública para este símbolo."}</p>}
       <h3>Gráfico de {symbol}</h3>
       <iframe key={symbol} title={`Gráfico de ${symbol} en TradingView`} src={chartUrl(symbol)} sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
-      <a href={`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(symbol)}`}>Abrir gráfico en TradingView <ArrowUpRight size={15} aria-hidden="true" /></a>
-      {filingStatus && <p role="status">{filingStatus}</p>}
+      <a href={`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(symbol)}`} target="_blank" rel="noopener noreferrer">Abrir gráfico en TradingView <ArrowUpRight size={15} aria-hidden="true" /></a>
+      {hasStory && filingStatus && <p role="status">{filingStatus}</p>}
       {issuer && <div className="ai-market-issuer">
         <h3>{issuer.name}</h3>
         <p>{[issuer.exchange, issuer.sector].filter(Boolean).join(" · ")}</p>
-        {issuer.filings.length ? <ul role="list">{issuer.filings.map(({ form, date, href }) => <li key={href}><a href={href}>{form} · <time dateTime={date}>{date}</time> <ArrowUpRight size={15} aria-hidden="true" /></a></li>)}</ul>
+        {issuer.filings.length ? <ul role="list">{issuer.filings.map(({ form, date, href }) => <li key={href}><a href={href} target="_blank" rel="noopener noreferrer">{form} · <time dateTime={date}>{date}</time> <ArrowUpRight size={15} aria-hidden="true" /></a></li>)}</ul>
           : <p>Sin documentos recientes de los tipos que muestra este buscador.</p>}
       </div>}
     </div>}
