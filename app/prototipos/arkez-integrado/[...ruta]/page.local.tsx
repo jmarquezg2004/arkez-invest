@@ -15,7 +15,8 @@ import { ResearchIndex, ResearchResource } from "@/arkez-visual-engine/templates
 import { nubank } from "@/arkez-visual-engine/research-data";
 import { resourceTypes } from "@/arkez-visual-engine/schemas/research";
 import InnovationPage from "@/app/innovacion/page";
-import { base, learningPathRoute, oddityStoryPath, oddityStoryRoute, publicRoutes, researchRoutes, visualStoriesPath, visualStoriesRoute } from "../routes";
+import { ResearchCheckout } from "../research-checkout";
+import { base, researchCheckoutRoute, learningPathRoute, oddityStoryPath, oddityStoryRoute, publicRoutes, researchRoutes, visualStoriesPath, visualStoriesRoute } from "../routes";
 import { serviceEditorial } from "../service-editorial";
 import { Ecosystem } from "../ecosystem";
 import { MarketLookup } from "../market-lookup";
@@ -65,6 +66,7 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
     const resource = resourceTypes.find(({ id }) => id === ruta[2]);
     if (resource) return <div className="ve"><ResearchResource data={nubank} id={resource.id} /></div>;
   }
+  if (path === researchCheckoutRoute) return <ResearchCheckout />;
   if (path === "/research/") return <ReportLibrary />;
   if (path === "/research/oddity/") return <ReportLibrary companyOnly />;
   if (path === "/research/oddity/informe/" || path === "/research/oddity/modelo/") return <OddityReport model={path.endsWith("/modelo/")} />;

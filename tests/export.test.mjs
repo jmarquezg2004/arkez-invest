@@ -216,7 +216,7 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `/prototipos/arkez-explore/nubank/${slug}/`),
     ...(process.env.ARKEZ_LOCAL_PREVIEW === "1" ? [
     ...routes.map((path) => `/prototipos/arkez-integrado${path}`),
-    ...["ruta-de-aprendizaje", "visual-stories", "explore", "explore/oddity", "explore/ecosistema-ia", "explore/nubank", "research", "research/visual-stories", "research/oddity", "research/oddity/historia", "research/oddity/informe", "research/oddity/modelo",
+    ...["ruta-de-aprendizaje", "visual-stories", "explore", "explore/oddity", "explore/ecosistema-ia", "explore/nubank", "research", "research/pedido", "research/visual-stories", "research/oddity", "research/oddity/historia", "research/oddity/informe", "research/oddity/modelo",
       ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `explore/nubank/${slug}`),
     ].map((slug) => `/prototipos/arkez-integrado/${slug}/`),
     ] : []),
@@ -278,6 +278,9 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     assert.match(research, /id="planes-research"/);
     assert.match(research, /USD 5/);
     assert.match(research, /USD 10/);
+    assert.ok(research.includes(`href="${base}research/pedido/?plan=guia"`));
+    assert.ok(research.includes(`href="${base}research/pedido/?plan=taller"`));
+    assert.match(read(base + "research/pedido/"), /Resumen del pedido/);
     assert.match(read(base + "explore/"), /Megacaps y large caps/);
     assert.doesNotMatch(read(chain), /mapa-relaciones-ia\.zip/);
     assert.equal((read(chain).match(/>Descargar ficha de la etapa \(PDF\)</g) ?? []).length, 7);
@@ -297,6 +300,10 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     const collectionPath = base + "research/visual-stories/";
     const oddityPath = base + "research/oddity/historia/";
     const collection = read(collectionPath);
+    for (const id of ["volumen", "liquidez", "precio", "sma", "per", "roic", "peg"]) {
+      assert.ok(collection.includes(`id="indicador-${id}"`));
+    }
+    assert.match(collection, /id="etapas-weinstein"/);
     const covers = Array.from(collection.matchAll(/<img[^>]+src="([^"]*portada-[^"]+\.webp)"[^>]+width="480" height="270"/g), ([, src]) => src);
     assert.equal(new Set(covers).size, 8);
     for (const cover of covers) assert.ok(readFileSync(new URL(cover.slice(1), output)).length > 0, cover);
@@ -306,6 +313,7 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     assert.equal((collection.match(/data-visual-story=/g) ?? []).length, 7);
     assert.equal((collection.match(/>Ver reel</g) ?? []).length, 3);
     for (const [, path, anchor] of collection.matchAll(/class="avs-reading-link" href="([^"#]+)(?:#([^"]+))?"/g)) {
+      if (!path.startsWith("/")) continue;
       const reading = read(path);
       if (anchor) assert.ok(reading.includes(`id="${anchor}"`), `${path}#${anchor}`);
     }

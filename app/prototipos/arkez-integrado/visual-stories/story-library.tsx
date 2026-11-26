@@ -1,3 +1,4 @@
+import { MarketStories } from "./market-stories";
 import { BeginnerStories } from "./beginner-stories";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { ArtImage } from "@/arkez-visual-engine/components/art";
@@ -32,6 +33,7 @@ export function StoryLibrary() {
           </a></li>;
         })}</ul>
       </nav>
+      <MarketStories />
       <BeginnerStories />
       <section aria-labelledby="avs-library-stories">
         <h2 id="avs-library-stories">Lee y anima las viñetas</h2>

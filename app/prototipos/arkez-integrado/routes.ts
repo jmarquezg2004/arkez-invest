@@ -10,7 +10,10 @@ export const oddityStoryRoute = "/research/oddity/historia/";
 export const oddityStoryPath = base + oddityStoryRoute;
 export const learningPathRoute = "/ruta-de-aprendizaje/";
 export const publicRoutes = [...new Set([...Object.keys(pages), "/innovacion/"])].filter((path) => path !== "/").sort();
+export const researchCheckoutRoute = "/research/pedido/";
+export const researchCheckoutPath = base + researchCheckoutRoute;
 export const researchRoutes = [
+  researchCheckoutRoute,
   "/explore/", "/explore/oddity/", "/visual-stories/", "/research/", visualStoriesRoute, oddityStoryRoute, "/explore/ecosistema-ia/",
   "/explore/nubank/", ...resourceTypes.map(({ id }) => `/explore/nubank/${id}/`),
   "/research/oddity/", "/research/oddity/informe/", "/research/oddity/modelo/",

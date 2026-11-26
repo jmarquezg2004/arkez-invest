@@ -70,3 +70,12 @@
 .avs-topic-links { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1rem; }
 .avs-topic-links a { display:inline-flex; align-items:center; gap:.4rem; min-height:44px; padding:.4rem .65rem; border:1px solid #758597; border-radius:.35rem; background:#fffaf1; text-decoration:underline; text-underline-offset:.2em; }
 .avs-topic-links a:focus-visible { outline:2px solid #20587c; outline-offset:2px; }
+
+.avs-market-stories { scroll-margin-top:6rem; }
+.avs-indicator .avs-art img { left:0; top:0; }
+.avs-indicator .avs-art[data-art-frame="2"] img,.avs-indicator .avs-art[data-art-frame="4"] img { left:-100%; }
+.avs-indicator .avs-art[data-art-frame="3"] img,.avs-indicator .avs-art[data-art-frame="4"] img { top:-100%; }
+.avs-stage-chart { display:block; width:100%; height:auto; margin:.7rem 0; border:1px solid #a6b2bf; border-radius:.35rem; }
+.avs-chart-key { display:flex; flex-wrap:wrap; gap:.45rem 1rem; margin:.3rem 0 .85rem; font-weight:740; font-size:.88rem; }
+.avs-chart-key span::before { content:""; display:inline-block; width:1.2rem; vertical-align:middle; margin-right:.38rem; border-top:3px solid #183c60; }
+.avs-chart-key span + span::before { border-top:3px dashed #8f551d; }

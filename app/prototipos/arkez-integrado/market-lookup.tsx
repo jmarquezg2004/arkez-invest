@@ -152,6 +152,7 @@ export function MarketLookup() {
           : <p>Sin documentos recientes de los tipos que muestra este buscador.</p>}
       </div>}
     </div>}
+    <p className="ai-market-source"><a className="avs-reading-link" href={visualStoriesPath + "#historias-mercado"}>Entender volumen, indicadores y etapas en viñetas <ArrowUpRight size={16} aria-hidden="true" /></a></p>
     {!odditySelected && <p className="ai-market-source"><a className="avs-reading-link" href={visualStoriesPath + "#historia-fuentes"}>Cómo comprobar el periodo y la fuente de una cifra <ArrowUpRight size={16} aria-hidden="true" /></a></p>}
     <p className="ai-market-source">Precios de TradingView. La cobertura y el retraso varían por mercado. Documentos de EDGAR para emisores registrados en la SEC.</p>
   </section>;
