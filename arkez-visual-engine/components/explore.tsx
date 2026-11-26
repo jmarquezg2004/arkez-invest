@@ -35,7 +35,7 @@ function Shelf({ title, items, saved, onSave, onPreview }: {
   </section>;
 }
 
-export function Explore({ market, onMarketPath }: { market?: React.ReactNode; onMarketPath?: string } = {}) {
+export function Explore({ market, onMarketPath, featuredStory }: { market?: React.ReactNode; onMarketPath?: string; featuredStory?: { href: string; label: string } } = {}) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
   const [onlySaved, setOnlySaved] = useState(false);
@@ -74,7 +74,8 @@ export function Explore({ market, onMarketPath }: { market?: React.ReactNode; on
       <section className="ve-explore-hero">
         <ArtImage art="chain" eager />
         <div><p className="ve-kicker">Arkez Explore</p><h1>Descubre,<br />analiza y aprende.</h1><p>Explora empresas, sectores y cadenas de valor a través de casos de estudio.</p>
-          <a className="ve-cta" href={base + "nubank/"}>Abrir el caso Nubank <ArrowUpRight size={18} /></a></div>
+          <a className="ve-cta" href={base + "nubank/"}>Abrir el caso Nubank <ArrowUpRight size={18} /></a>
+          {featuredStory && <a className="ve-cta ve-story-cta" href={featuredStory.href}>{featuredStory.label} <ArrowUpRight size={18} aria-hidden="true" /></a>}</div>
       </section>
       {market}
       <div className="ve-filters">

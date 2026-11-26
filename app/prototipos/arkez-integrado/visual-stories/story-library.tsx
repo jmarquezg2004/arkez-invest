@@ -25,7 +25,7 @@ export function StoryLibrary() {
     <div className="container-shell">
       <p className="eyebrow">Formación financiera</p>
       <h1>Arkez Visual Stories</h1>
-      <p>Historietas de tres viñetas para entender una idea y seguir leyendo en su guía, artículo o recurso.</p>
+      <p>Historietas de tres o cuatro viñetas para entender una idea y seguir leyendo en su guía, artículo o caso empresarial.</p>
       <StoryCards items={Object.keys(stories) as StoryKey[]} />
     </div>
   </main>;

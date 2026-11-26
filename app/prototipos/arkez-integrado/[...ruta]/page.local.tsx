@@ -1,3 +1,4 @@
+import { OddityVisualStory } from "../visual-stories/oddity-story";
 import { StoryLibrary, StoryShelf } from "../visual-stories/story-library";
 import { StoryStrip } from "../visual-stories/story-strip";
 import { ArtImage } from "@/arkez-visual-engine/components/art";
@@ -49,9 +50,10 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
     </div>
   </main>;
   if (path === "/explore/") return <div className="ve">
-    <Explore market={<MarketLookup />} onMarketPath={base + "/research/"} />
-    <div className="container-shell"><StoryShelf id="historias-explore" items={["fuentes", "inflacion", "diversificacion"]} /></div>
+    <Explore market={<MarketLookup />} onMarketPath={base + "/research/"} featuredStory={{ href: base + "/explore/oddity/", label: "ODDITY en cuatro viñetas" }} />
+    <div className="container-shell"><StoryShelf id="historias-explore" items={["oddity", "fuentes", "diversificacion"]} /></div>
   </div>;
+  if (path === "/explore/oddity/") return <OddityVisualStory />;
   if (path === "/explore/ecosistema-ia/") return <div className="ve"><AiChain directory={<AiCompanies downloadHref={aiMapDownload} />} /></div>;
   if (path === "/explore/nubank/") return <div className="ve"><ResearchIndex data={nubank} /></div>;
   if (ruta[0] === "explore" && ruta[1] === "nubank" && ruta.length === 3) {

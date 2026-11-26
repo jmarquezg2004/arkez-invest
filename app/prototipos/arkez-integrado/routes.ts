@@ -10,7 +10,7 @@ export const visualStoriesPath = base + visualStoriesRoute;
 export const learningPathRoute = "/ruta-de-aprendizaje/";
 export const publicRoutes = [...new Set([...Object.keys(pages), "/innovacion/"])].filter((path) => path !== "/").sort();
 export const researchRoutes = [
-  "/explore/", "/research/", "/explore/ecosistema-ia/",
+  "/explore/", "/explore/oddity/", "/research/", "/explore/ecosistema-ia/",
   "/explore/nubank/", ...resourceTypes.map(({ id }) => `/explore/nubank/${id}/`),
   "/research/oddity/", "/research/oddity/informe/", "/research/oddity/modelo/",
 ];

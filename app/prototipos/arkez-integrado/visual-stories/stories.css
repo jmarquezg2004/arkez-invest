@@ -47,3 +47,26 @@
 .avs-cards span { display:grid; padding:0 .65rem .65rem; line-height:1.23; }
 .avs-cards small { line-height:1.35; color:#6b4e20; }
 .avs-cards svg { margin-right:.65rem; }
+
+.avs[data-panels="4"] .avs-panels { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.avs[data-panels="4"] .avs-art img { width:200%; height:200%; }
+.avs[data-panels="4"] [data-panel="1"] img { transform-origin:25% 25%; }
+.avs[data-panels="4"] [data-panel="2"] img { left:-100%; transform-origin:75% 25%; }
+.avs[data-panels="4"] [data-panel="3"] img { left:0; top:-100%; transform-origin:25% 75%; }
+.avs[data-panels="4"] [data-panel="4"] img { left:-100%; top:-100%; transform-origin:75% 75%; }
+.avs-company { padding-block:clamp(1.5rem,4vw,3rem); color:#162e46; background:#f3f6fa; }
+.avs-company h1 { font-size:clamp(2rem,5vw,4rem); font-weight:850; line-height:1.05; letter-spacing:-.045em; padding-block:.5rem; }
+.avs-company > .container-shell { max-width:62rem; }
+.avs-company .avs-series { color:#725021; }
+.avs-outlook { border-top:1px solid #b3c3d0; margin-top:2rem; padding-block:1.25rem; }
+.avs-outlook h2 { font-size:clamp(1.4rem,3vw,2rem); font-weight:820; margin-bottom:.45rem; }
+.avs-outlook ul { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.8rem; margin:.8rem 0; padding:0; }
+.avs-outlook li { list-style:none; background:white; border:1px solid #bccbdb; border-radius:.5rem; padding:1rem; }
+.avs-outlook h3 { font-weight:820; margin-bottom:.35rem; }
+.avs-company-links { display:flex; flex-wrap:wrap; gap:.65rem 1rem; }
+.avs-company a { text-decoration:underline; text-underline-offset:.2em; }
+.avs-company-links a { display:inline-flex; align-items:center; min-height:44px; gap:.35rem; }
+@media (max-width:620px) { .avs[data-panels="4"] .avs-panels,.avs-outlook ul { grid-template-columns:minmax(0,1fr); } }
+
+.ve-explore-hero .ve-story-cta { margin-inline-start:.5rem; background:#17324d; color:#f6daa0; border:1px solid #a28b60; }
+@media (max-width:650px) { .ve-explore-hero .ve-story-cta { margin-inline-start:0; margin-inline-end:.5rem; } }

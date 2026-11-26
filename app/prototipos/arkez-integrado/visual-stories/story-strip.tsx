@@ -45,7 +45,7 @@ export function StoryStrip({ story, reelDirectory }: { story: StoryKey; reelDire
     });
   }
 
-  return <figure id={storyAnchor(story)} className="avs" data-visual-story={story} aria-labelledby={titleId}>
+  return <figure id={storyAnchor(story)} className="avs" data-panels={panels.length} data-visual-story={story} aria-labelledby={titleId}>
     <header>
       <div><p className="avs-series">Arkez Visual Stories</p><Heading id={titleId}>{title}</Heading></div>
       <div className="avs-controls">
@@ -61,7 +61,7 @@ export function StoryStrip({ story, reelDirectory }: { story: StoryKey; reelDire
         Tu navegador no puede reproducir este video. Puedes leer las viñetas a continuación.
       </video>}
     </div>}
-    <ol className="avs-panels" ref={strip} aria-label="Historieta en tres viñetas">
+    <ol className="avs-panels" ref={strip} aria-label={`Historieta en ${panels.length} viñetas`}>
       {panels.map(({ alt, caption, dialogue }, index) => <li key={caption} data-panel={index + 1}>
         <div className="avs-art"><img src={image.src} width={image.width} height={image.height} alt={alt} loading="lazy" decoding="async" /><span className="avs-dialogue">{dialogue}</span></div>
         <p>{caption}</p>

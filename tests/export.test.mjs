@@ -216,7 +216,7 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `/prototipos/arkez-explore/nubank/${slug}/`),
     ...(process.env.ARKEZ_LOCAL_PREVIEW === "1" ? [
     ...routes.map((path) => `/prototipos/arkez-integrado${path}`),
-    ...["ruta-de-aprendizaje", "visual-stories", "explore", "explore/ecosistema-ia", "explore/nubank", "research", "research/oddity", "research/oddity/informe", "research/oddity/modelo",
+    ...["ruta-de-aprendizaje", "visual-stories", "explore", "explore/oddity", "explore/ecosistema-ia", "explore/nubank", "research", "research/oddity", "research/oddity/informe", "research/oddity/modelo",
       ...["informe", "ficha", "graficos", "mapa", "modelo", "estudio"].map((slug) => `explore/nubank/${slug}`),
     ].map((slug) => `/prototipos/arkez-integrado/${slug}/`),
     ] : []),
@@ -275,7 +275,7 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     assert.match(read(chain), /Descargar el mapa original/);
     const collection = read(base + "visual-stories/");
     const storyLinks = [...new Set(Array.from(collection.matchAll(/href="([^"]+)#(historia-[a-z]+)"/g), ([, path, anchor]) => `${path}#${anchor}`))];
-    assert.equal(storyLinks.length, 7);
+    assert.equal(storyLinks.length, 8);
     for (const link of storyLinks) {
       const [path, anchor] = link.split("#");
       assert.ok(read(path).includes(`id="${anchor}"`), link);
@@ -284,6 +284,11 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
       const reel = readFileSync(new URL(`prototipos/arkez-integrado/archivos/visual-stories/reel-${name}.mp4`, output));
       assert.equal(reel.subarray(4, 8).toString(), "ftyp");
     }
+    assert.match(read(base + "explore/"), /ODDITY en cuatro viñetas/);
+    const oddity = read(base + "explore/oddity/");
+    assert.match(oddity, /data-panels="4"/);
+    assert.match(oddity, /Dos escenarios a 3–5 años/);
+    assert.ok(oddity.includes(`href="${base}research/oddity/modelo/"`));
     assert.doesNotMatch(read(base + "research/"), /data-visual-story=/);
     const archive = readFileSync(new URL("prototipos/arkez-integrado/archivos/mapa-relaciones-ia.zip", output));
     assert.equal(archive.subarray(0, 2).toString(), "PK");

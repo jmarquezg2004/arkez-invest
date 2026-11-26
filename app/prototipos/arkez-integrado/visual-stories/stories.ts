@@ -1,3 +1,4 @@
+import oddity from "./oddity-en-cuatro-vinetas.webp";
 import cash from "./cobros-y-caja.webp";
 import apples from "./manzanas-y-riesgo.webp";
 import scenarios from "./comparar-escenarios.webp";
@@ -101,6 +102,20 @@ export const stories = {
       { dialogue: "Ahora sí aparece.", alt: "Inés revisa los movimientos en el teléfono y hace una marca en su cuaderno.", caption: "Cuando llega el abono, Inés compara el movimiento con el comprobante." },
     ],
     takeaway: "Autorización y abono son momentos distintos. El plazo depende del medio de pago y las condiciones del proveedor.",
+  },
+  oddity: {
+    route: "/explore/oddity/",
+    topic: "Modelos de negocio",
+    title: "¿Cómo gana dinero ODDITY?",
+    image: oddity,
+    heading: "h2",
+    panels: [
+      { dialogue: "¿Qué tono me queda?", alt: "Inés compara tonos de maquillaje en un teléfono.", caption: "Qué hace. ODDITY desarrolla marcas de belleza y bienestar. En este ejemplo, una clienta busca maquillaje de IL MAKIAGE en internet." },
+      { dialogue: "Llegó mi pedido.", alt: "Inés abre un paquete con un producto cosmético.", caption: "Quién paga. La clienta paga el producto en la tienda de la marca. La venta directa al consumidor genera ingresos para ODDITY." },
+      { dialogue: "¿Cuánto costó esa venta?", alt: "Inés compara un producto con el costo de anunciarlo.", caption: "Qué necesita para crecer. Atraer clientes cuesta dinero. Importa cuánto cuesta conseguir la primera compra y si luego vuelven a pedir." },
+      { dialogue: "Dos futuros posibles.", alt: "Inés observa una nueva compra y, al otro lado, el costo de anunciarse.", caption: "Qué podría pasar en 3–5 años. Si aumenta la recompra, el negocio puede depender menos de captar nuevos clientes. Si la captación se encarece, la rentabilidad puede resentirse." },
+    ],
+    takeaway: "Sigue el recorrido del pedido: quién paga, cuánto cuesta conseguir la venta y qué hace que un cliente vuelva.",
   },
 } as const;
 
