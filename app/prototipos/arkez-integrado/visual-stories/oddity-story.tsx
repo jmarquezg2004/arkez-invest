@@ -11,7 +11,7 @@ export function OddityVisualStory() {
       <nav aria-label="Ruta de navegación"><a href={report}>Recursos de ODDITY en Research</a></nav>
       <h1>ODDITY en cuatro viñetas</h1>
       <p>Una compra de maquillaje sirve para entender cómo funciona una marca que vende directamente por internet.</p>
-      <StoryStrip story="oddity" />
+      <StoryStrip story="oddity" reelDirectory={base + "/archivos/visual-stories/"} />
       <section className="avs-outlook" aria-labelledby="oddity-outlook">
         <h2 id="oddity-outlook">Dos escenarios a 3–5 años</h2>
         <p>Son escenarios educativos planteados por Arkez para explorar cómo podría cambiar el negocio.</p>

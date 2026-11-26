@@ -4,7 +4,7 @@ import { base, oddityStoryPath } from "../routes";
 import { stories, storyAnchor, type StoryKey } from "./stories";
 import { StoryStrip } from "./story-strip";
 
-const entries = Object.keys(stories) as StoryKey[];
+const entries = ["oddity", "caja", "diversificacion", "escenarios", "fuentes", "inflacion", "plazos", "pagos"] as const satisfies readonly StoryKey[];
 const reels = base + "/archivos/visual-stories/";
 
 export function StoryLibrary() {
@@ -22,10 +22,11 @@ export function StoryLibrary() {
       <nav aria-labelledby="avs-library-topics">
         <h2 id="avs-library-topics">Explora por tema</h2>
         <ul className="avs-cards" role="list">{entries.map((key) => {
-          const { image, topic, title } = stories[key];
+          const story = stories[key];
+          const { image, topic, title } = story;
           return <li key={key}><a href={key === "oddity" ? oddityStoryPath : "#" + storyAnchor(key)}>
             <img src={image.src} width={image.width} height={image.height} alt="" loading="lazy" decoding="async" />
-            <span><small>{topic}</small><strong>{title}</strong></span>
+            <span><small>{topic}{"reel" in story ? " · Reel" : ""}</small><strong>{title}</strong></span>
             <ArrowRight size={20} aria-hidden="true" />
           </a></li>;
         })}</ul>

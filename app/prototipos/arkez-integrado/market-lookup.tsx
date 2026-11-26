@@ -3,6 +3,8 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { ArrowUpRight, ChartCandlestick, Search } from "lucide-react";
 
+import { oddityStoryPath, visualStoriesPath } from "./routes";
+
 type Issuer = {
   name: string; exchange?: string; sector?: string;
   filings: { form: string; date: string; href: string }[];
@@ -74,6 +76,8 @@ export function MarketLookup() {
     select(input);
   }
 
+  const odditySelected = /^(?:NASDAQ:)?ODD$/.test(symbol);
+
   return <section id="consultar-ticker" className="ai-market" aria-labelledby="ai-market-title">
     <p className="ve-kicker"><ChartCandlestick size={19} aria-hidden="true" /> Datos de mercado</p>
     <h2 id="ai-market-title">Consulta cualquier ticker disponible</h2>
@@ -96,6 +100,9 @@ export function MarketLookup() {
           : <p>Sin documentos recientes de los tipos que muestra este buscador.</p>}
       </div>}
     </div>}
+    <p className="ai-market-source"><a className="avs-reading-link" href={odditySelected ? oddityStoryPath : visualStoriesPath + "#historia-fuentes"}>
+      {odditySelected ? "Cómo gana dinero ODDITY, en cuatro viñetas" : "Cómo comprobar el periodo y la fuente de una cifra"} <ArrowUpRight size={16} aria-hidden="true" />
+    </a></p>
     <p className="ai-market-source">Precios de TradingView. La cobertura y el retraso varían por mercado. Documentos de EDGAR para emisores registrados en la SEC.</p>
   </section>;
 }

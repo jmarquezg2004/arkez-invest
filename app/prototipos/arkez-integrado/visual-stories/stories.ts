@@ -105,6 +105,7 @@ export const stories = {
   },
   oddity: {
     topic: "Modelos de negocio",
+    reel: "reel-oddity.mp4",
     title: "¿Cómo gana dinero ODDITY?",
     image: oddity,
     heading: "h2",

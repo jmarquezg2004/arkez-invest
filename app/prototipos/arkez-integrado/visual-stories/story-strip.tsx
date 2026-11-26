@@ -36,12 +36,12 @@ export function StoryStrip({ story, reelDirectory, heading }: { story: StoryKey;
     if (window.matchMedia(motionPreference).matches || !strip.current) return;
     animations.current.forEach((animation) => animation.cancel());
     animations.current = Array.from(strip.current.children).flatMap((panel, index) => {
-      const timing = { duration: 640, delay: index * 520, easing: "ease-in-out" };
+      const timing = { duration: 760, delay: index * 660, easing: "ease-in-out" };
       const image = panel.querySelector(".avs-art img");
       const dialogue = panel.querySelector(".avs-dialogue");
       return [
-        image?.animate([{ scale: 1 }, { scale: 1.04, offset: .48 }, { scale: 1 }], timing),
-        dialogue?.animate([{ translate: "0 0" }, { translate: "0 -5px", offset: .48 }, { translate: "0 0" }], timing),
+        image?.animate([{ scale: 1 }, { scale: 1.065, offset: .48 }, { scale: 1 }], timing),
+        dialogue?.animate([{ translate: "0 0" }, { translate: "0 -5px", scale: 1.025, offset: .48 }, { translate: "0 0" }], timing),
       ].filter((animation): animation is Animation => Boolean(animation));
     });
   }
@@ -64,7 +64,7 @@ export function StoryStrip({ story, reelDirectory, heading }: { story: StoryKey;
     </div>}
     <ol className="avs-panels" ref={strip} aria-label={`Historieta en ${panels.length} viñetas`}>
       {panels.map(({ alt, caption, dialogue }, index) => <li key={caption} data-panel={index + 1}>
-        <div className="avs-art"><img src={image.src} width={image.width} height={image.height} alt={alt} loading="lazy" decoding="async" /><span className="avs-dialogue">{dialogue}</span></div>
+        <div className="avs-art"><img src={image.src} width={image.width} height={image.height} alt={alt} loading="lazy" decoding="async" /><span className="avs-dialogue">{dialogue}</span><span className="avs-panel-number" aria-hidden="true">{index + 1}</span></div>
         <p>{caption}</p>
       </li>)}
     </ol>

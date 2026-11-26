@@ -1,4 +1,5 @@
 import { OddityVisualStory } from "../visual-stories/oddity-story";
+import { storyForReading } from "../visual-stories/story-links";
 import { StoryLibrary } from "../visual-stories/story-library";
 import { ArtImage } from "@/arkez-visual-engine/components/art";
 import type { Art } from "@/arkez-visual-engine/catalog";
@@ -71,12 +72,18 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
   const page = pages[path];
   if (!page) notFound();
   const service = serviceEditorial(path);
+  const readingStories = Object.fromEntries((page.sections ?? []).flatMap(({ id }) => {
+    const href = id && storyForReading(path + "#" + id);
+    return href ? [[id, <a className="avs-reading-link" href={href}>Ver el ejemplo ilustrado en Research</a>]] : [];
+  }));
+  const relatedStory = storyForReading(path);
   return <main className="ai-inner" data-service-tone={service?.tone}><ContentPage page={page} path={path}
     heroArt={service?.hero ?? <ArtImage art={sectionArtwork[ruta[0]] ?? "report"} eager />}
-    heroActions={service?.intro}>
+    heroActions={service?.intro} sectionExtras={readingStories}>
     {path === "/actualidad/" && <PreviewNews directory={base + path} directoryPage />}
     {path === "/ecosistema/" ? <Ecosystem /> : service?.body ?? <CommercialPages path={path} />}
-    {path === "/recursos/" && <ResourceLibrary />}
+    {path === "/recursos/" && <><ResourceLibrary /><a className="avs-reading-link" href={visualStoriesPath}>Explorar historias y reels en Research</a></>}
+    {relatedStory && <a className="avs-reading-link" href={relatedStory}>Ver la historia relacionada en Research</a>}
     {path === "/contacto/" && <p className="ai-contact-note">Vista previa para revisar el sitio. El envío de mensajes se habilita en la versión pública cuando esté disponible.</p>}
   </ContentPage></main>;
 }

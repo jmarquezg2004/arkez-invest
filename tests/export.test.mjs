@@ -294,12 +294,13 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
       if ([collectionPath, oddityPath].includes(path)) continue;
       assert.doesNotMatch(read(path), /data-visual-story=|class="avs-cards"|>Ver reel</, path);
     }
-    for (const name of ["caja", "diversificacion", "escenarios"]) {
+    for (const name of ["caja", "diversificacion", "escenarios", "oddity"]) {
       const reel = readFileSync(new URL(`prototipos/arkez-integrado/archivos/visual-stories/reel-${name}.mp4`, output));
       assert.equal(reel.subarray(4, 8).toString(), "ftyp");
     }
     const oddity = read(oddityPath);
     assert.match(oddity, /data-panels="4"/);
+    assert.match(oddity, />Ver reel</);
     assert.match(oddity, /Dos escenarios a 3–5 años/);
     assert.ok(oddity.includes(`href="${base}research/oddity/modelo/"`));
     const archive = readFileSync(new URL("prototipos/arkez-integrado/archivos/mapa-relaciones-ia.zip", output));

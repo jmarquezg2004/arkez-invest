@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BarChart3, BookOpen, Building2, Calculator, Check, Clock3, Compass, Layers3, RotateCcw, ScanLine } from "lucide-react";
+import { storyForReading } from "./visual-stories/story-links";
 import { learningPath, learningQuestions, type Answers } from "./learning-path";
 
 const scenes = {
@@ -49,6 +50,7 @@ export function LearningQuiz({ base }: { base: string }) {
       : { ...previous, [question.id]: value });
   }
 
+  const relatedStory = result ? [result.first, ...result.next].map(({ path }) => storyForReading(path)).find(Boolean) : undefined;
   const canContinue = question.options.some(([value]) => answers[question.id] === value);
   const last = step === questions.length - 1;
 
@@ -77,6 +79,7 @@ export function LearningQuiz({ base }: { base: string }) {
           <p>{format} · {task}</p>
         </li>)}
       </ol>
+      {relatedStory && <a className="avs-reading-link" href={relatedStory}>Ver una historia relacionada en Research <ArrowUpRight size={16} aria-hidden="true" /></a>}
       <p className="ai-quiz-note">Orientación educativa para elegir qué estudiar. No constituye asesoría de inversión.</p>
       <div className="ai-quiz-actions">
         <button className="ai-quiz-secondary" type="button" onClick={() => move(0)}><ArrowLeft size={17} aria-hidden="true" /> Editar respuestas</button>

@@ -1,6 +1,6 @@
 import { ArrowUpRight, BookOpen, Building2, Database, Landmark, Layers3 } from "lucide-react";
 import { ecosystemSections } from "@/lib/external-directory";
-import { base, learningPathRoute } from "./routes";
+import { base, learningPathRoute, visualStoriesPath } from "./routes";
 import { EcosystemInterest } from "./ecosystem-interest";
 import { platforms } from "./ecosystem-data";
 
@@ -34,6 +34,7 @@ export function Ecosystem() {
       return <section className="ai-eco-section" id={id} key={id} aria-labelledby={id + "-titulo"}>
         <h2 id={id + "-titulo"}><Icon aria-hidden="true" />{id === "mercados" ? "Bolsas y mercados" : title}</h2>
         <ul className="ai-eco-grid" role="list">{sources.map(({ name, description, href }) => <li key={name}><h3><a href={href}>{name} <ArrowUpRight size={16} aria-hidden="true" /></a></h3><p>{description}</p></li>)}</ul>
+        {id === "fintech" && <a className="avs-reading-link" href={visualStoriesPath + "#historia-pagos"}>Ver el ejemplo ilustrado sobre pagos en Research</a>}
         {id === "datos" && <a className="ai-eco-data-link" href={base + "/research/#consultar-ticker"}>Consultar un ticker en Research <ArrowUpRight size={16} aria-hidden="true" /></a>}
       </section>;
     })}

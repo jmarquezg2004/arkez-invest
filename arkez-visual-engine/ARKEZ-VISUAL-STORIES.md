@@ -59,4 +59,4 @@ Usa estos comandos como encabezado de un encargo seguido del tema, la audiencia,
 
 En el prototipo integrado, **Explore y Research → Arkez Visual Stories** abre la colección dentro de Research. Las tarjetas llevan a cada historieta o al caso ilustrado de ODDITY. Cada pieza educativa enlaza a su guía, artículo o directorio para ampliar el tema.
 
-Las viñetas se leen sin interacción y el movimiento se activa con un botón. Los tres reels de la primera serie conservan controles propios y se cargan al abrir el reproductor. Las ilustraciones WebP y los videos del prototipo se preparan para la compilación de revisión.
+Las viñetas se leen sin interacción y el movimiento se activa con un botón. Los cuatro reels de la colección conservan controles propios y se cargan al abrir el reproductor. Las ilustraciones WebP y los videos del prototipo se preparan para la compilación de revisión.
