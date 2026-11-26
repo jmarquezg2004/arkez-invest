@@ -54,3 +54,9 @@ Usa estos comandos como encabezado de un encargo seguido del tema, la audiencia,
 2. Revisa fuentes, fechas y unidades cuando se usen datos. Distingue de forma visible los ejemplos ilustrativos.
 3. Comprueba la continuidad de personajes, el contraste, el orden de lectura y los recortes del formato final.
 4. Prueba la alternativa estática y, donde aplique, los controles por teclado, subtítulos y cargas en móvil.
+
+## Implementación web
+
+En el prototipo integrado, **Recursos → Arkez Visual Stories** abre la colección. Cada tarjeta enlaza a la viñeta en su lectura de origen. La portada, Explore, Recursos y Herramientas ofrecen selecciones de esa colección. Las historias completas aparecen junto a los temas que explican en Guías, Artículos y la sección Fintech de Ecosistema.
+
+Las viñetas se leen sin interacción y el movimiento se activa con un botón. Los tres reels de la primera serie conservan controles propios y se cargan al abrir el reproductor. Las ilustraciones WebP y los videos del prototipo se preparan para la compilación de revisión.

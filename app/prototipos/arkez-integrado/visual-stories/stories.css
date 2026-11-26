@@ -23,3 +23,27 @@
 .avs-dialogue::after { position:absolute; content:""; width:.55em; height:.55em; inset-inline-start:1.15em; inset-block-end:-.34em; transform:rotate(45deg); background:inherit; border-inline-end:2px solid var(--avs-ink); border-block-end:2px solid var(--avs-ink); }
 .avs-panels [data-panel="2"] .avs-dialogue { inset-inline:auto 5%; }
 @media (max-width:620px) { .avs-dialogue { font-size:clamp(.95rem,4.2vw,1.2rem); } }
+
+.avs-controls { display:flex; flex-wrap:wrap; gap:.45rem; }
+.avs-reel:not([hidden]) { display:grid; justify-items:center; margin:0 0 .85rem; background:#122d43; border-radius:.45rem; padding:.5rem; }
+.avs-reel video { width:min(100%,18rem); height:auto; aspect-ratio:9 / 16; }
+@media (prefers-reduced-motion:reduce) { .avs .avs-reel-toggle { display:inline-flex; } }
+
+.avs-library,.avs-shelf { color:#152f45; background:#f8f1e2; }
+.avs-library { padding-block:clamp(1.65rem,5vw,4.2rem); }
+.avs-library h1 { font-family:Georgia,serif; font-size:clamp(2.4rem,6vw,5rem); line-height:1.04; letter-spacing:-.052em; }
+.avs-library .eyebrow { color:#725021; }
+.avs-library h1 + p { margin:.85rem 0 1.5rem; max-width:54ch; }
+.avs-shelf { margin-block:1.5rem; padding:clamp(.95rem,3vw,1.65rem); border:1px solid #c4b394; border-radius:.6rem; }
+.avs-shelf header { display:flex; align-items:center; flex-wrap:wrap; justify-content:space-between; gap:.45rem 1rem; margin-bottom:.75rem; }
+.avs-shelf header h2 { font-family:Georgia,serif; font-size:clamp(1.55rem,3vw,2.45rem); line-height:1.05; }
+.avs-shelf header a { display:inline-flex; gap:.4rem; align-items:center; min-height:44px; font-weight:770; text-decoration:underline; text-underline-offset:.22em; }
+.avs-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr)); gap:.8rem; margin:0; padding:0; }
+.avs-cards li { list-style:none; min-width:0; }
+.avs-cards a { display:grid; grid-template-columns:1fr auto; align-items:center; gap:.5rem; overflow:hidden; height:100%; border:1px solid #687d8c; border-radius:.45rem; background:#fffaf0; }
+.avs-cards a:is(:hover,:focus-visible) { color:#1d5076; text-decoration:underline; text-underline-offset:.2em; }
+.avs-cards a:focus-visible,.avs-shelf header a:focus-visible { outline:2px solid #20587c; outline-offset:2px; }
+.avs-cards img { grid-column:1/-1; width:100%; height:auto; border-bottom:1px solid #687d8c; }
+.avs-cards span { display:grid; padding:0 .65rem .65rem; line-height:1.23; }
+.avs-cards small { line-height:1.35; color:#6b4e20; }
+.avs-cards svg { margin-right:.65rem; }

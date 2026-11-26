@@ -5,6 +5,8 @@ export const base = "/prototipos/arkez-integrado";
 export const aiChainPath = base + "/explore/ecosistema-ia/";
 export const aiMapPath = aiChainPath + "#empresas-cadena-ia";
 export const aiMapDownload = base + "/archivos/mapa-relaciones-ia.zip";
+export const visualStoriesRoute = "/visual-stories/";
+export const visualStoriesPath = base + visualStoriesRoute;
 export const learningPathRoute = "/ruta-de-aprendizaje/";
 export const publicRoutes = [...new Set([...Object.keys(pages), "/innovacion/"])].filter((path) => path !== "/").sort();
 export const researchRoutes = [

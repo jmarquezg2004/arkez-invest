@@ -250,7 +250,7 @@ export const pages: Readonly<Record<string, ContentPage>> = {
       { title: "¿Qué pérdida podrías asumir?", body: "Piensa cómo afectaría una caída a tu objetivo y a tus otros gastos. Separa tu capacidad financiera de tu comodidad con la volatilidad." },
       { title: "¿Cómo funciona y cuánto cuesta?", body: "Revisa la documentación del instrumento y las comisiones, impuestos u otros costos aplicables. Identifica de qué depende su resultado." },
       { title: "¿Qué falta verificar?", body: "Anota la fuente consultada, sus posibles conflictos de interés y lo que desconoces antes de tomar una decisión." },
-      { title: "Ejemplo: un objetivo con fecha fija", edition: "primeros-pasos-para-invertir", body: "Si necesitas pagar una matrícula en seis meses, anota el importe y la fecha. Compara cuándo estaría disponible el dinero, cuánto cuesta retirarlo y qué ocurriría si el valor baja justo antes del pago. Registra la respuesta antes de pasar a otro instrumento.", links: [{ href: "/recursos/archivos/primeros-pasos-para-invertir.pdf", label: "Ver la lista de comprobación para invertir (PDF)" }] },
+      { id: "objetivo-fecha-fija", title: "Ejemplo: un objetivo con fecha fija", edition: "primeros-pasos-para-invertir", body: "Si necesitas pagar una matrícula en seis meses, anota el importe y la fecha. Compara cuándo estaría disponible el dinero, cuánto cuesta retirarlo y qué ocurriría si el valor baja justo antes del pago. Registra la respuesta antes de pasar a otro instrumento.", links: [{ href: "/recursos/archivos/primeros-pasos-para-invertir.pdf", label: "Ver la lista de comprobación para invertir (PDF)" }] },
     ],
     next: { label: "Revisar los riesgos", href: riskCard.href },
   },

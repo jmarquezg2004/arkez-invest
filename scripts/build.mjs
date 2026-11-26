@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { copyFileSync, mkdirSync } from "node:fs";
+import { copyFileSync, cpSync, mkdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
@@ -20,5 +20,6 @@ if (env.ARKEZ_LOCAL_PREVIEW === "1" && env.ARKEZ_INDEXABLE !== "1") {
   const assets = new URL("../out/prototipos/arkez-integrado/archivos/", import.meta.url);
   mkdirSync(assets, { recursive: true });
   copyFileSync(new URL("../resources/prototipos/mapa-relaciones-ia.zip", import.meta.url), new URL("mapa-relaciones-ia.zip", assets));
+  cpSync(new URL("../resources/prototipos/visual-stories/", import.meta.url), new URL("visual-stories/", assets), { recursive: true });
 }
 run(fileURLToPath(new URL(stage ? "./package-staging.mjs" : "./pages-headers.mjs", import.meta.url)), ...(stage ? ["--in-place"] : []));
