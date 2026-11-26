@@ -12,7 +12,7 @@ import { ResearchIndex, ResearchResource } from "@/arkez-visual-engine/templates
 import { nubank } from "@/arkez-visual-engine/research-data";
 import { resourceTypes } from "@/arkez-visual-engine/schemas/research";
 import InnovationPage from "@/app/innovacion/page";
-import { base, learningPathRoute, publicRoutes, researchRoutes } from "../routes";
+import { aiMapDownload, base, learningPathRoute, publicRoutes, researchRoutes } from "../routes";
 import { serviceEditorial } from "../service-editorial";
 import { Ecosystem } from "../ecosystem";
 import { MarketLookup } from "../market-lookup";
@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
     </div>
   </main>;
   if (path === "/explore/") return <div className="ve"><Explore market={<MarketLookup />} onMarketPath={base + "/research/"} /></div>;
-  if (path === "/explore/ecosistema-ia/") return <div className="ve"><AiChain directory={<AiCompanies />} /></div>;
+  if (path === "/explore/ecosistema-ia/") return <div className="ve"><AiChain directory={<AiCompanies downloadHref={aiMapDownload} />} /></div>;
   if (path === "/explore/nubank/") return <div className="ve"><ResearchIndex data={nubank} /></div>;
   if (ruta[0] === "explore" && ruta[1] === "nubank" && ruta.length === 3) {
     const resource = resourceTypes.find(({ id }) => id === ruta[2]);

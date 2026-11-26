@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, ArrowUpRight, Network, Search } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Download, Network, Search } from "lucide-react";
 import directory from "../ai-attachment-directory.json";
 
 type Company = [string, string, number | "T", boolean];
@@ -13,7 +13,7 @@ const documented = [
 ];
 const format = (name: string) => name.split(" · ")[0];
 
-export function AiCompanies() {
+export function AiCompanies({ downloadHref }: { downloadHref: string }) {
   const [query, setQuery] = useState("");
   const [stage, setStage] = useState("");
   const [chosen, setChosen] = useState("NVDA");
@@ -24,8 +24,10 @@ export function AiCompanies() {
   const relations = documented.filter(({ from, to }) => from === selection || to === selection);
   const label = (ticker: string) => format(companies.find(([id]) => id === ticker)?.[1] ?? ticker);
   return <section id="empresas-cadena-ia" className="ve-ai-companies" aria-labelledby="empresas-ia-titulo">
-    <h2 id="empresas-ia-titulo"><Network aria-hidden="true" /> Empresas y relaciones de la cadena</h2>
+    <h2 id="empresas-ia-titulo"><Network aria-hidden="true" /> Mapa de relaciones de IA</h2>
     <p>Directorio del mapa aportado por Arkez. Los enlaces entre empresas se muestran cuando tienen fuente primaria.</p>
+    <a className="ve-cta" href={downloadHref} download><Download size={17} aria-hidden="true" /> Descargar el mapa original (ZIP)</a>
+    <p>El ZIP contiene el HTML original. Sus cifras son históricas y el archivo requiere internet para cargar el mapa interactivo.</p>
     <div className="ve-ai-search">
       <label>Buscar empresa o ticker<span><Search size={18} aria-hidden="true" /><input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Ej. NVIDIA" /></span></label>
       <label>Etapa<select value={stage} onChange={(e) => setStage(e.target.value)}><option value="">Todas las etapas</option>{groups.map((name, i) => <option key={name} value={i + 1}>{name}</option>)}<option value="T">Capas transversales</option></select></label>

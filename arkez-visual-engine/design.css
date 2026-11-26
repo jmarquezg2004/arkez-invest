@@ -252,3 +252,5 @@ body:has(.ve) > :is(.site-header,.site-footer) { display:none; }
 .ve-ai-relation :is(p,a) svg { display:inline-block; vertical-align:middle; }
 .ve-ai-relation a { display:inline-flex; align-items:center; gap:.3rem; min-height:44px; text-decoration:underline; text-underline-offset:.22em; }
 @media (max-width:700px) { .ve-ai-directory { grid-template-columns:minmax(0,1fr); } .ve-ai-directory ul { max-height:10rem; } }
+
+.ve-chain-map-link,.ve-ai-companies > .ve-cta { margin-block:.75rem; }

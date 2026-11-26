@@ -267,6 +267,15 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
       assert.match(html, /href="\/prototipos\/preview\.css"/, route);
     }
   }
+  if (process.env.ARKEZ_LOCAL_PREVIEW === "1" && !indexable) {
+    const base = "/prototipos/arkez-integrado/";
+    const chain = base + "explore/ecosistema-ia/";
+    assert.ok(read(base).includes(`href="${chain}#empresas-cadena-ia"`));
+    assert.match(read(chain), /id="empresas-cadena-ia"/);
+    assert.match(read(chain), /Descargar el mapa original/);
+    const archive = readFileSync(new URL("prototipos/arkez-integrado/archivos/mapa-relaciones-ia.zip", output));
+    assert.equal(archive.subarray(0, 2).toString(), "PK");
+  }
   for (const route of routes) assert.doesNotMatch(read(route), /href="\/prototipos\//, route);
 });
 

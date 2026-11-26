@@ -13,7 +13,7 @@ const stages = [
 
 export function AiChain({ directory }: { directory?: React.ReactNode } = {}) {
   return <article className="ve-research ve-chain-page">
-    <section className="ve-company-hero"><ArtImage art="chain" eager /><div className="ve-company-intro"><p className="ve-kicker">Ecosistemas y cadenas de valor</p><h1>De la energía a la IA</h1><p>Explora las siete etapas que conectan la infraestructura con las aplicaciones.</p></div></section>
+    <section className="ve-company-hero"><ArtImage art="chain" eager /><div className="ve-company-intro"><p className="ve-kicker">Ecosistemas y cadenas de valor</p><h1>De la energía a la IA</h1><p>Explora las siete etapas que conectan la infraestructura con las aplicaciones.</p>{directory && <a className="ve-cta ve-chain-map-link" href="#empresas-cadena-ia">Abrir el mapa de relaciones de IA <ArrowRight size={18} aria-hidden="true" /></a>}</div></section>
     <div className="ve-research-body">
       <h2>La cadena de valor, etapa por etapa</h2>
       <p>Selecciona una etapa para ver qué hace y qué aporta a la siguiente.</p>

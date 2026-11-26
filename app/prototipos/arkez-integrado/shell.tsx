@@ -1,14 +1,15 @@
-import { ArrowDownRight, ArrowUpRight, Compass, LibraryBig } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Compass, LibraryBig, Network } from "lucide-react";
 import { Brand } from "@/components/brand";
 import { contactLink, legalLinks, mainNavigation, type SiteLink } from "@/lib/navigation";
 import { PreviewLinks } from "./preview-links";
-import { base, learningPathRoute, previewHref } from "./routes";
+import { aiChainPath, aiMapPath, base, learningPathRoute, previewHref } from "./routes";
 
 const library = [
   { label: "Catálogo Explore", href: base + "/explore/" },
   { label: "Informes de empresas", href: base + "/research/" },
   { label: "Recursos de Nubank", href: base + "/explore/nubank/" },
-  { label: "Cadena de valor de la IA", href: base + "/explore/ecosistema-ia/" },
+  { label: "Cadena de valor de la IA", href: aiChainPath },
+  { label: "Mapa de relaciones de IA", href: aiMapPath },
 ];
 const groups: readonly (SiteLink | (SiteLink & { children: readonly SiteLink[] }))[] = [
   ...mainNavigation.map((group) => group.href === "/recursos/" && "children" in group
@@ -51,6 +52,7 @@ export function ResearchEntry() {
       <div className="ai-entry-links">
         <a href={base + "/explore/"}><Compass size={24} /><span>Explorar el catálogo</span><ArrowUpRight size={19} /></a>
         <a href={base + "/research/"}><LibraryBig size={24} /><span>Ver los informes</span><ArrowUpRight size={19} /></a>
+        <a href={aiMapPath}><Network size={24} aria-hidden="true" /><span>Abrir el mapa de relaciones de IA</span><ArrowUpRight size={19} /></a>
       </div>
     </div>
   </section>;
