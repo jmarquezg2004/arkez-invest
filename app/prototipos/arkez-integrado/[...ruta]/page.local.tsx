@@ -63,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
   return <main className="ai-inner" data-service-tone={service?.tone}><ContentPage page={page} path={path}
     heroArt={service?.hero ?? <ArtImage art={sectionArtwork[ruta[0]] ?? "report"} eager />}
     heroActions={service?.intro}
-    sectionExtras={path === "/recursos/guias/" ? { "liquidez-operativa": <StoryStrip story="caja" /> } : undefined}>
+    sectionExtras={path === "/recursos/guias/" ? { "comparar-escenarios": <StoryStrip story="escenarios" />, "liquidez-operativa": <StoryStrip story="caja" /> } : undefined}>
     {path === "/recursos/articulos/que-es-diversificar/" && <StoryStrip story="diversificacion" />}
     {path === "/actualidad/" && <PreviewNews directory={base + path} directoryPage />}
     {path === "/ecosistema/" ? <Ecosystem /> : service?.body ?? <CommercialPages path={path} />}

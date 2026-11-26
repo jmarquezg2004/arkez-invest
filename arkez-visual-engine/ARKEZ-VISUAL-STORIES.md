@@ -10,15 +10,15 @@ Reserva el diseño institucional aprobado para informes financieros, documentos 
 
 ## Dirección artística
 
-- Toma de la historieta clásica de periódico la claridad de las viñetas, el ritmo de lectura y la expresividad contenida. Usa tinta fina, artesanal y definida, con una textura de papel cálida y sutil.
+- Toma de la historieta clásica de periódico la claridad de las viñetas, el ritmo de lectura y la expresividad contenida. Usa contornos definidos de grosor medio en azul marino o negro, rellenos planos y sombras simples. Mantén el papel cálido y la textura discreta.
 - Usa azul marino para trazos y contraste, blanco o marfil para el papel y dorado apagado para acentos. El resto de la escena puede incorporar colores suaves y desaturados.
 - Crea personajes originales y reconocibles. Registra para cada personaje su silueta, proporciones, vestuario y expresiones clave. Reutiliza esos rasgos en las siguientes piezas y conserva la continuidad de objetos, luz y escenario entre viñetas.
-- Sitúa los conceptos en escenas cotidianas y usa objetos que hagan visible la idea. Mantén las expresiones naturales y la composición adulta y sobria. Deja el espacio necesario para leer y usa diálogos breves.
+- Sitúa los conceptos en escenas cotidianas y usa objetos que hagan visible la idea. Mantén las expresiones naturales y la composición adulta y sobria. Deja el espacio necesario para leer y usa globos con una frase breve, separados de la ilustración para conservar contraste y legibilidad.
 - Trabaja con una sola idea central por secuencia. En tres o cuatro viñetas, presenta la situación, muestra qué cambia y cierra con una consecuencia clara o un remate que ayude a recordarla. Si hay cifras ilustrativas, identifícalas. Si hay afirmaciones que requieren sustento, acompáñalas de una fuente verificable.
 
 ### Referencia artística
 
-La imagen adjunta en el encargo es una tira de tres paneles con encuadre estable, papel cálido, contornos claros y un remate breve. Toma de ella la economía de texto, la progresión entre escenas y la manera de dirigir la mirada. Crea personajes, acciones, diálogos y escenarios propios de Arkez.
+Las referencias incluyen tiras de periódico y un cómic contemporáneo de contorno marcado, color plano y globos de una sola frase. Toma de ellas la economía de texto, la progresión entre escenas y el contraste expresivo entre el planteamiento y el remate. Crea personajes, acciones, diálogos y escenarios propios de Arkez.
 
 ## Movimiento y accesibilidad
 
