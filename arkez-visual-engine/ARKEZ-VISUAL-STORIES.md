@@ -11,7 +11,7 @@ Reserva el diseño institucional aprobado para informes financieros, documentos 
 ## Dirección artística
 
 - Toma de la historieta clásica de periódico la claridad de las viñetas, el ritmo de lectura y la expresividad contenida. Usa contornos definidos de grosor medio en azul marino o negro, rellenos planos y sombras simples. Mantén el papel cálido y la textura discreta.
-- Usa azul marino para trazos y contraste, blanco o marfil para el papel y dorado apagado para acentos. El resto de la escena puede incorporar colores suaves y desaturados.
+- Usa azul marino para los contornos y marfil para globos y zonas de lectura. Amplía la paleta con turquesa, azul cielo, verde hoja, coral y mostaza. Elige uno o dos colores dominantes para cada escena y conserva el color del personaje y de sus objetos entre viñetas. Reserva los tonos más saturados para la acción principal o el remate.
 - Crea personajes originales y reconocibles. Registra para cada personaje su silueta, proporciones, vestuario y expresiones clave. Reutiliza esos rasgos en las siguientes piezas y conserva la continuidad de objetos, luz y escenario entre viñetas.
 - Sitúa los conceptos en escenas cotidianas y usa objetos que hagan visible la idea. Mantén las expresiones naturales y la composición adulta y sobria. Deja el espacio necesario para leer y usa globos con una frase breve, separados de la ilustración para conservar contraste y legibilidad.
 - Trabaja con una sola idea central por secuencia. En tres o cuatro viñetas, presenta la situación, muestra qué cambia y cierra con una consecuencia clara o un remate que ayude a recordarla. Si hay cifras ilustrativas, identifícalas. Si hay afirmaciones que requieren sustento, acompáñalas de una fuente verificable.
