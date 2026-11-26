@@ -1,0 +1,20 @@
+.avs { --avs-ink:#122d43; --avs-paper:#f8f1e2; margin:1.7rem 0; padding:clamp(.8rem,2.4vw,1.7rem); border:1px solid #c4b394; border-radius:.6rem; background:var(--avs-paper); color:var(--avs-ink); }
+.avs header { display:flex; gap:.6rem 1rem; flex-wrap:wrap; justify-content:space-between; align-items:end; margin-bottom:.85rem; }
+.avs .avs-series { color:#725021; text-transform:uppercase; letter-spacing:.095em; font-size:.72rem; font-weight:830; margin:0 0 .28rem; }
+.avs :is(h2,h3) { font-family:Georgia,serif; font-size:clamp(1.55rem,3.4vw,2.55rem); letter-spacing:-.044em; line-height:1.05; font-weight:650; }
+.avs button { display:inline-flex; gap:.45rem; align-items:center; min-height:44px; padding:.42rem .7rem; border:1px solid #788795; background:#fffaf0; border-radius:.35rem; font-weight:770; font-size:.84rem; cursor:pointer; }
+.avs button:hover { background:#efe1c1; }
+.avs button:focus-visible { outline:2px solid #204d6d; outline-offset:2px; }
+.avs-panels { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(.4rem,1vw,.8rem); list-style:none; padding:0; margin:0; }
+.avs-panels li { min-width:0; display:grid; grid-template-rows:auto 1fr; border:1px solid #938971; background:#fffaf0; }
+.avs-art { position:relative; overflow:hidden; aspect-ratio:1/1; border-bottom:1px solid #938971; background:#eee4cf; }
+.avs-art img { display:block; position:absolute; width:300%; max-width:none; height:100%; object-fit:cover; transform-origin: center; }
+.avs-panels [data-panel="1"] img { transform-origin:16.667% center; }
+.avs-panels [data-panel="2"] img { left:-100%; }
+.avs-panels [data-panel="3"] img { left:-200%; transform-origin:83.333% center; }
+.avs .avs-panels p { margin:0; padding:.62rem .7rem; color:#263d51; font-size:.94rem; line-height:1.4; }
+.avs figcaption { border-inline-start:3px solid #aa7d39; margin-top:.9rem; padding-inline-start:.68rem; font-size:.94rem; font-weight:740; }
+@media (max-width:620px) {
+ .avs-panels { grid-template-columns:minmax(0,1fr); }
+}
+@media (prefers-reduced-motion:reduce) { .avs button { display:none; } }

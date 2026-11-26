@@ -16,7 +16,7 @@ const dateFormat = new Intl.DateTimeFormat("es-CO", {
   day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
 });
 
-export function ContentPage({ page, path, heroArt, heroActions, children }: { page: PageData; path: string; heroArt?: ReactNode; heroActions?: ReactNode; children?: ReactNode }) {
+export function ContentPage({ page, path, heroArt, heroActions, sectionExtras, children }: { page: PageData; path: string; heroArt?: ReactNode; heroActions?: ReactNode; sectionExtras?: Readonly<Record<string, ReactNode>>; children?: ReactNode }) {
   const trail = breadcrumbs(path);
   const Body = page.editorial ? "article" : "div";
 
@@ -63,6 +63,7 @@ export function ContentPage({ page, path, heroArt, heroActions, children }: { pa
                     <p>{topic.body}</p>
                   </div>
                 ))}
+                {id && sectionExtras?.[id]}
                 {preview && <figure className="resource-preview">
                   <img src={preview.href} alt={preview.alt} width={preview.width} height={preview.height} loading="lazy" />
                   <figcaption>Vista del Dashboard con datos ficticios. El libro incluye campos para tus propios escenarios.</figcaption>

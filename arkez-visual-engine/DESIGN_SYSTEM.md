@@ -18,3 +18,7 @@ Las imágenes WebP se generaron para esta revisión sin identidad de terceros in
 Los datos de Nu corresponden a 2023 y 2024. La lectura usa el comunicado y los estados consolidados presentados ante la SEC. El gráfico de EPS básico utiliza dólares por acción. Las cifras agregadas financieras se expresan en millones de dólares. [Comunicado oficial](https://nu.com/en/newsroom/company/nu-holdings-ltd-reports-fourth-quarter-and-full-year-2024-financial-results) · [Estados financieros 6-K](https://www.sec.gov/Archives/edgar/data/1691493/000129281425000480/nufs4q24_6k.htm)
 
 Para los carruseles se revisaron [21st.dev](https://dev.21st.dev/%40kedhareswer/library/image-carousels), [Magic UI Marquee](https://magicui.design/docs/components/marquee) y [Aceternity Cards](https://ui.aceternity.com/categories/card). Se llevó el patrón de tarjetas con avance manual y foco a la vista previa. Para las portadas se revisó la profundidad de [React Bits Tilted Card](https://reactbits.dev/get-started/index) y se llevó el énfasis a luz, recorte y perspectiva de las imágenes. Los controles conservan coordenadas estables al tocar o navegar por teclado.
+
+## Arkez Visual Stories
+
+La [guía de Arkez Visual Stories](ARKEZ-VISUAL-STORIES.md) define la línea complementaria de ilustración y narración para piezas educativas seleccionadas. Incluye criterios de aplicación, formatos, accesibilidad y comandos creativos reutilizables. Los informes y gráficos de Research mantienen su tratamiento institucional.
