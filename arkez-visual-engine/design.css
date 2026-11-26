@@ -254,3 +254,9 @@ body:has(.ve) > :is(.site-header,.site-footer) { display:none; }
 @media (max-width:700px) { .ve-ai-directory { grid-template-columns:minmax(0,1fr); } .ve-ai-directory ul { max-height:10rem; } }
 
 .ve-chain-map-link,.ve-ai-companies > .ve-cta { margin-block:.75rem; }
+.ve-ai-network { display:grid; gap:.55rem; list-style:none; padding:0; margin:1rem 0; }
+.ve-ai-network li { display:flex; align-items:center; flex-wrap:wrap; gap:.5rem; }
+.ve-ai-network li span { display:inline-flex; align-items:center; gap:.4rem; }
+.ve-ai-network button { border:1px solid #677c91; border-radius:.35rem; min-height:44px; padding:.35rem .65rem; font-weight:750; }
+
+.ve-ai-network button[aria-pressed="true"] { background:#0f3556;color:white; }

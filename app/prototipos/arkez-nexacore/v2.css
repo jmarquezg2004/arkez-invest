@@ -238,3 +238,11 @@
   .nx-product-comparison meter::-webkit-meter-optimum-value { transition: width .38s var(--nx-ease); }
   .nx-method-display::before { transition: transform .45s var(--nx-ease); }
 }
+
+.nx-service-brief { display:grid; align-content:start; gap:.65rem; padding:1rem; }
+.nx-service-brief > svg { color:#f1c978; }
+.nx-service-brief dl { display:grid; gap:.65rem; margin:0; }
+.nx-service-brief dt { font-weight:800; }
+.nx-service-brief dd { margin:.12rem 0 0; }
+
+.nx-comparison-scenario { display:flex; align-items:center; min-height:44px; padding:.45rem 1rem; gap:.55rem; font-weight:750; }

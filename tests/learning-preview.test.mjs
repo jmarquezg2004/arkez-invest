@@ -62,7 +62,7 @@ test("el feed de noticias ignora fuentes caídas, enlaces ajenos, HTML y duplica
   assert.equal(results[0].image, "https://content-media.investing.com/news/ejemplo.jpg");
   assert.equal(results[1].image, undefined);
   assert.deepEqual(await news(), results);
-  assert.equal(requests, 3);
+  assert.equal(requests, 4);
 });
 
 test("recupera el src original de la descripción RSS sin mostrar su HTML", async () => {

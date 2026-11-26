@@ -4,7 +4,7 @@ export const resourceTypes = [
   { id: "graficos", title: "Gráficos financieros", detail: "Evolución y comparativas", art: "study" },
   { id: "mapa", title: "Presencia regional", detail: "Brasil, México y Colombia", art: "globe" },
   { id: "modelo", title: "Modelo de negocio", detail: "Cómo se relacionan sus actividades", art: "chain" },
-  { id: "estudio", title: "Estudio completo", detail: "Todos los módulos en una lectura", art: "study" },
+  { id: "estudio", title: "Estudio completo", detail: "Actividad guiada y respuestas", art: "study" },
 ] as const;
 export type ResourceId = (typeof resourceTypes)[number]["id"];
 

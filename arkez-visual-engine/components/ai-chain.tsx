@@ -25,6 +25,7 @@ export function AiChain({ directory }: { directory?: React.ReactNode } = {}) {
         {stages.map(({ title, detail, output, Icon }, index) => <section className="ve-chain-detail" key={title} id={`etapa-ia-${index + 1}`} tabIndex={-1} aria-labelledby={`titulo-ia-${index + 1}`}>
           <Icon size={36} aria-hidden="true" />
           <div><h3 id={`titulo-ia-${index + 1}`}>{title}</h3><p>{detail}</p><strong>{output}</strong>
+            <p><a download={`etapa-ia-${index + 1}.txt`} href={`data:text/plain;charset=utf-8,${encodeURIComponent(`Arkez Invest · Cadena de valor de la IA\nEtapa ${index + 1}: ${title}\n\n${detail}\n\nQué aporta: ${output}\n`)}`}>Descargar ficha de la etapa</a></p>
             {index < stages.length - 1 && <a className="ve-chain-next" href={`#etapa-ia-${index + 2}`}>Siguiente: {stages[index + 1].title} <ArrowRight size={16} aria-hidden="true" /></a>}
           </div>
         </section>)}

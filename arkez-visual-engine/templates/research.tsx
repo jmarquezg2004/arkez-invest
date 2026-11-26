@@ -78,12 +78,22 @@ export function ResearchResource({ data, id }: { data: Research; id: ResourceId 
       <nav className="ve-breadcrumb" aria-label={`Recursos de ${data.name}`}><a href={companyPath(data)}>← Recursos de {data.name}</a><span>{resource.title}</span></nav>
       <ExportActions slug={`${data.slug}-${id}`} />
       <h2 className="ve-document-title">{resource.title} · {data.name}</h2>
-      {(id === "informe" || id === "ficha" || full) && <Indicators data={data} />}
-      {(id === "ficha" || full) && <Profile data={data} />}
-      {(id === "graficos" || id === "informe" || full) && <Financials data={data.financials} company={data.slug} />}
-      {(id === "mapa" || full) && <Markets markets={data.markets} />}
-      {(id === "modelo" || full) && <Model data={data} />}
-      {(id === "informe" || full) && <Reading data={data} />}
+      {(id === "informe" || id === "ficha") && <Indicators data={data} />}
+      {id === "ficha" && <Profile data={data} />}
+      {(id === "graficos" || id === "informe") && <Financials data={data.financials} period="Ejercicios 2024 y 2025" company={data.slug} />}
+      {id === "mapa" && <Markets markets={data.markets} />}
+      {id === "modelo" && <Model data={data} />}
+      {id === "informe" && <Reading data={data} />}
+      {full && <section className="ve-document-section">
+        <h3>Investiga el caso en tres pasos</h3>
+        <ol>
+          <li><a href={companyPath(data) + "modelo/"}>Identifica quién paga</a> y separa los ingresos del crédito de los de otros servicios.</li>
+          <li><a href={companyPath(data) + "graficos/"}>Compara ingresos y beneficio bruto</a>. Calcula el margen bruto dividiendo beneficio bruto entre ingresos.</li>
+          <li><a href={companyPath(data) + "mapa/"}>Contrasta los mercados</a> e identifica una pregunta sobre cuál puede explicar el cambio.</li>
+        </ol>
+        <p>Pregunta de cierre. ¿Qué pudo hacer que en 2025 creciera el beneficio bruto en dólares y al mismo tiempo bajara el margen?</p>
+        <details><summary>Comparar con la explicación</summary><p>Los costos directos aumentaron más rápido que los ingresos. El margen bruto pasó de aproximadamente 45,6 % a 42,0 %. Revisa los gastos financieros y las pérdidas crediticias en los estados auditados.</p></details>
+      </section>}
       <SourceLine data={data} />
     </div>
   </article>;

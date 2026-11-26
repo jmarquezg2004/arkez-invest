@@ -47,7 +47,8 @@ export function Ecosystem() {
       <div><h3>Propuestas de planes educativos</h3>
         <details><summary>Guía de comparación · US$5</summary><p>Propuesta: lista de criterios, glosario y ejemplos de costos para practicar.</p></details>
         <details><summary>Taller autoguiado · US$10</summary><p>Propuesta: guía, plantilla de escenarios y un caso resuelto con cifras ficticias.</p></details>
-        <p>Precios de prueba. Los planes aún no están a la venta.</p>
+        <p>Precios de referencia para la vista previa. Los planes aún no están a la venta.</p>
+        <a className="avs-reading-link" href={base + "/contacto/"}>Solicitar una conversación para cotizar consultoría</a>
         <EcosystemInterest />
       </div>
     </section>

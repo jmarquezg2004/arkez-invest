@@ -15,11 +15,17 @@ export type Art = "chip" | "bank" | "security" | "energy" | "report" | "globe" |
 export type CatalogItem = { id: string; name: string; ticker?: string; category: Category; topic: string; summary: string; art: Art; palette: string; href?: string };
 
 export const catalog: CatalogItem[] = [
+  { id: "microsoft", name: "Microsoft", ticker: "MSFT", category: "tecnologia", topic: "Software · Nube", summary: "Licencias, suscripciones y consumo de infraestructura en Azure.", art: "chain", palette: "blue" },
+  { id: "alphabet", name: "Alphabet", ticker: "GOOGL", category: "tecnologia", topic: "Publicidad · Nube", summary: "Busca qué peso tienen los anuncios, las suscripciones y Google Cloud.", art: "study", palette: "blue" },
+  { id: "jpmorgan", name: "JPMorgan Chase", ticker: "JPM", category: "finanzas", topic: "Banca · Servicios", summary: "Distingue ingresos por intereses, comisiones y servicios a empresas.", art: "bank", palette: "blue" },
+  { id: "exxon", name: "Exxon Mobil", ticker: "XOM", category: "energia", topic: "Petróleo · Gas", summary: "Compara extracción, refinación y comercialización en un mismo grupo.", art: "energy", palette: "gold" },
+  { id: "lilly", name: "Eli Lilly", ticker: "LLY", category: "salud", topic: "Medicamentos · Investigación", summary: "Observa cómo las ventas de medicamentos financian investigación y fabricación.", art: "report", palette: "blue" },
+  { id: "amazon", name: "Amazon", ticker: "AMZN", category: "consumo", topic: "Comercio · Nube", summary: "Compara las ventas directas, las comisiones, la publicidad y AWS.", art: "globe", palette: "orange" },
   { id: "nvidia", name: "NVIDIA", ticker: "NVDA", category: "tecnologia", topic: "Chips · Centros de datos", summary: "Una entrada a la función de los aceleradores y al costo de ejecutar modelos de IA.", art: "chip", palette: "green" },
   { id: "palantir", name: "Palantir", ticker: "PLTR", category: "tecnologia", topic: "Datos · Software empresarial", summary: "Una guía para distinguir una plataforma de datos de los modelos que puede integrar.", art: "chain", palette: "blue" },
   { id: "amd", name: "AMD", ticker: "AMD", category: "tecnologia", topic: "Diseño de chips · CPU y GPU", summary: "Explora la diferencia entre diseñar una arquitectura y fabricar el chip.", art: "chip", palette: "orange" },
   { id: "nube-ia", name: "Economía de la nube", category: "tecnologia", topic: "Cómputo · Costos de inferencia", summary: "Relaciona el volumen de uso con el costo de servir un modelo.", art: "globe", palette: "blue" },
-  { id: "nubank", name: "Nubank", ticker: "NU", category: "finanzas", topic: "Banca digital · América Latina", summary: "Estudia sus resultados de 2024, presencia regional y modelo de negocio en seis recursos.", art: "bank", palette: "purple", href: "nubank/" },
+  { id: "nubank", name: "Nubank", ticker: "NU", category: "finanzas", topic: "Banca digital · América Latina", summary: "Estudia sus resultados de 2025, presencia regional y modelo de negocio en seis recursos.", art: "bank", palette: "purple", href: "nubank/" },
   { id: "sofi", name: "SoFi", ticker: "SOFI", category: "finanzas", topic: "Crédito · Servicios financieros", summary: "Preguntas para comparar ingresos por crédito, depósitos y comisiones.", art: "study", palette: "blue" },
   { id: "mercadolibre", name: "Mercado Libre", ticker: "MELI", category: "finanzas", topic: "Pagos · Comercio", summary: "Qué cambia cuando un mercado digital añade medios de pago y crédito.", art: "report", palette: "gold" },
   { id: "creditos", name: "Ciclo del crédito", category: "finanzas", topic: "Riesgo · Margen financiero", summary: "Identifica qué pasa entre originar un préstamo, financiarlo y cubrir las pérdidas esperadas.", art: "report", palette: "blue" },

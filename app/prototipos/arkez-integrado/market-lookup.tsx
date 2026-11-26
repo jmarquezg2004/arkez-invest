@@ -3,7 +3,8 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { ArrowUpRight, ChartCandlestick, Search } from "lucide-react";
 
-import { oddityStoryPath, visualStoriesPath } from "./routes";
+import { catalog } from "@/arkez-visual-engine/catalog";
+import { base, oddityStoryPath, visualStoriesPath } from "./routes";
 
 type Issuer = {
   name: string; exchange?: string; sector?: string;
@@ -76,6 +77,8 @@ export function MarketLookup() {
     select(input);
   }
 
+  const ticker = symbol.split(":").at(-1);
+  const profile = catalog.find((item) => ticker && item.ticker === ticker);
   const odditySelected = /^(?:NASDAQ:)?ODD$/.test(symbol);
 
   return <section id="consultar-ticker" className="ai-market" aria-labelledby="ai-market-title">
@@ -89,6 +92,15 @@ export function MarketLookup() {
     <div className="ai-market-samples" aria-label="Símbolos de ejemplo">{samples.map((sample) => <button key={sample} type="button" aria-pressed={symbol === sample} onClick={() => select(sample)}>{sample}</button>)}</div>
     {message && <p role="status">{message}</p>}
     {symbol && <div className="ai-market-result">
+      <div className="ai-market-issuer">
+        <h3>{odditySelected ? "ODDITY Tech" : profile?.name ?? issuer?.name ?? symbol} · Ficha rápida</h3>
+        {odditySelected ? <p>Vende productos de belleza y bienestar por internet. El cliente de la marca paga directamente por el producto.</p>
+          : profile ? <p>{profile.topic}. {profile.summary}</p>
+            : issuer?.sector ? <p>Actividad informada en EDGAR: {issuer.sector}.</p>
+              : <p>Consulta los documentos del emisor para identificar quién le paga, qué vende y dónde registra sus ingresos.</p>}
+        {odditySelected && <a className="avs-reading-link" href={oddityStoryPath}>Cómo gana dinero ODDITY, en cuatro viñetas <ArrowUpRight size={16} aria-hidden="true" /></a>}
+        {symbol === "NYSE:NU" && <a className="avs-reading-link" href={base + "/explore/nubank/modelo/"}>Ver el modelo de negocio de Nubank <ArrowUpRight size={16} aria-hidden="true" /></a>}
+      </div>
       <h3>Gráfico de {symbol}</h3>
       <iframe key={symbol} title={`Gráfico de ${symbol} en TradingView`} src={chartUrl(symbol)} sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
       <a href={`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(symbol)}`}>Abrir gráfico en TradingView <ArrowUpRight size={15} aria-hidden="true" /></a>
@@ -100,9 +112,7 @@ export function MarketLookup() {
           : <p>Sin documentos recientes de los tipos que muestra este buscador.</p>}
       </div>}
     </div>}
-    <p className="ai-market-source"><a className="avs-reading-link" href={odditySelected ? oddityStoryPath : visualStoriesPath + "#historia-fuentes"}>
-      {odditySelected ? "Cómo gana dinero ODDITY, en cuatro viñetas" : "Cómo comprobar el periodo y la fuente de una cifra"} <ArrowUpRight size={16} aria-hidden="true" />
-    </a></p>
+    {!odditySelected && <p className="ai-market-source"><a className="avs-reading-link" href={visualStoriesPath + "#historia-fuentes"}>Cómo comprobar el periodo y la fuente de una cifra <ArrowUpRight size={16} aria-hidden="true" /></a></p>}
     <p className="ai-market-source">Precios de TradingView. La cobertura y el retraso varían por mercado. Documentos de EDGAR para emisores registrados en la SEC.</p>
   </section>;
 }

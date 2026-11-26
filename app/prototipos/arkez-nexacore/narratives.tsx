@@ -36,6 +36,8 @@ const sources = [
 
 export function Comparison() {
   const { active, playing, select, play } = useSequence(2);
+  const [repair, setRepair] = useState(false);
+  const coverage = repair ? "2,0" : "3,5";
   return <section className="nx-compare nx-pad" aria-labelledby="nx-compare-title">
     <div className="nx-wrap nx-compare-layout">
       <header className="nx-heading">
@@ -61,8 +63,12 @@ export function Comparison() {
               <dl><div><dt>Ahorro disponible</dt><dd>4,2 M</dd></div><div><dt>Capital invertido</dt><dd>6,8 M</dd></div><div><dt>Gasto mensual</dt><dd>1,2 M</dd></div></dl>
             </motion.div>}
           </div>
+          {active === 2 && <label className="nx-comparison-scenario">
+            <input type="checkbox" checked={repair} onChange={(event) => setRepair(event.currentTarget.checked)} />
+            Restar un gasto imprevisto de COP 1,8 M
+          </label>}
           <div className="nx-reading" aria-live="polite">
-            {active === 2 ? <><CircleCheck size={23} /><div><strong>El ahorro cubre 3,5 meses al gasto actual.</strong><small>4,2 M disponibles ÷ 1,2 M al mes. El capital invertido queda fuera de ese cálculo.</small></div></>
+            {active === 2 ? <><CircleCheck size={23} /><div><strong>El ahorro cubre {coverage} meses al gasto actual.</strong><small>{repair ? "Quedan COP 2,4 M después del imprevisto. " : ""}{repair ? "2,4 M" : "4,2 M"} disponibles ÷ 1,2 M al mes. El capital invertido queda fuera de ese cálculo.</small></div></>
               : <span>{active === 1 ? "El gasto mensual queda separado del capital." : "Aún no hay una lectura conjunta. Cada fuente aporta un dato distinto."}</span>}
           </div>
         </div>

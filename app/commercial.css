@@ -67,11 +67,15 @@
 .compound-chart svg { display: block; width: 100%; }
 .compound-chart text { fill: #415671; font-weight: 700; font-size: 18px; }
 .compound-gridline { fill: none; stroke: #a5b6c7; stroke-width: 1; }
-.compound-line-a, .compound-line-b { fill: none; stroke: #1a5283; stroke-width: 3; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.compound-line-a, .compound-line-b, .compound-line-cash { fill: none; stroke: #1a5283; stroke-width: 3; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
 .compound-line-b { stroke: #8a601e; stroke-dasharray: 6 4; }
 .compound-legend { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: .4rem; font-weight: 690; }
 .compound-legend span::before { content: ""; display: inline-block; width: 1.25rem; border-top: 3px solid #1a5283; vertical-align: middle; margin-inline-end: .25rem; }
-.compound-legend span + span::before { border-top: 3px dashed #8a601e; }
+.compound-legend [data-line="b"]::before { border-color: #8a601e; }
+.compound-line-cash { stroke: #1a5283; stroke-width: 2; stroke-dasharray: 2 5; }
+[data-scenario="b"] .compound-line-cash { stroke: #8a601e; }
+.compound-legend [data-line^="cash"]::before { border-top-style: dotted; }
+.compound-legend [data-line="cash-b"]::before { border-color: #8a601e; }
 .compound-yearly { margin-top: 1rem; }
 .compound-yearly summary { min-height: 44px; cursor: pointer; font-weight: 750; }
 .compound-yearly table { table-layout: fixed; width: 100%; border-collapse: collapse; margin-block: .5rem 1.2rem; font-variant-numeric: tabular-nums; }

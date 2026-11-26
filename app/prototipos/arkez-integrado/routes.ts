@@ -4,7 +4,6 @@ import { resourceTypes } from "@/arkez-visual-engine/schemas/research";
 export const base = "/prototipos/arkez-integrado";
 export const aiChainPath = base + "/explore/ecosistema-ia/";
 export const aiMapPath = aiChainPath + "#empresas-cadena-ia";
-export const aiMapDownload = base + "/archivos/mapa-relaciones-ia.zip";
 export const visualStoriesRoute = "/research/visual-stories/";
 export const visualStoriesPath = base + visualStoriesRoute;
 export const oddityStoryRoute = "/research/oddity/historia/";

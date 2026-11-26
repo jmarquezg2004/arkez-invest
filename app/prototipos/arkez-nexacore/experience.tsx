@@ -22,7 +22,7 @@ export function NexaExperience({ standalone = true, learningHref, children }: { 
           <em>Aprovecha la tecnología.</em>
         </h1>
         <p>Formación, guía y simuladores para tomar decisiones con más criterio y con menos afán.</p>
-        <div className="nx-hero-actions"><a className="nx-button nx-button-light" href="#nx-herramientas">Probar herramientas <ArrowRight size={18} /></a>{learningHref ? <a href={learningHref}>Encuentra tu ruta de aprendizaje <ArrowRight size={17} /></a> : <a href="#nx-caminos">Elegir mi nivel <ArrowDown size={17} /></a>}</div>
+        <div className="nx-hero-actions"><a className="nx-button nx-button-light" href="#nx-herramientas">Probar herramientas <ArrowRight size={18} /></a>{learningHref ? <a className="nx-button nx-button-learning" href={learningHref}>Encuentra tu ruta de aprendizaje <ArrowRight size={17} /></a> : <a href="#nx-caminos">Elegir mi nivel <ArrowDown size={17} /></a>}</div>
       </div>
       <a className="nx-hero-index" href="#nx-servicios">Explorar servicios <ArrowDown size={16} /></a>
     </section>

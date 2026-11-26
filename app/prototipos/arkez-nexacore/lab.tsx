@@ -84,7 +84,7 @@ function PortfolioLab() {
       <p className="nx-lab-caption">Datos ficticios</p>
       <label><span id="nx-platform-label">Plataforma</span><select aria-labelledby="nx-platform-label" value={platform} onChange={(event) => setPlatform(event.currentTarget.value)}>{["Todas", ...positions.map(({ platform }) => platform)].map((item) => <option key={item}>{item}</option>)}</select></label>
       <label><span id="nx-period-label">Mes del registro</span><select aria-labelledby="nx-period-label" value={month} onChange={(event) => setMonth(Number(event.currentTarget.value))}>{periods.map((period, i) => <option key={period} value={i}>{period}</option>)}</select></label>
-      <p className="nx-method-note">Los saldos de ejemplo pueden incluir aportes. Su variación no representa rentabilidad.</p>
+      <p className="nx-method-note">Registro simulado de enero a junio. Los montos en pesos colombianos se definieron para este ejercicio y pueden incluir aportes. El panel suma los saldos del mes y calcula el peso de cada posición. No aplica tasas ni estima rentabilidad.</p>
     </div>
     <div className="nx-lab-report">
       <p className="nx-lab-caption">Saldo registrado · {periods[month]}</p>

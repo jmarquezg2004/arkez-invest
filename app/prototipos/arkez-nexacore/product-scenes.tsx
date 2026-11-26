@@ -91,7 +91,13 @@ export function ServiceDeck() {
             <p><Icon size={17} />{tag}</p>
             <h3><button type="button" aria-expanded={selected === index} aria-controls={`nx-service-${index}`} onClick={() => setSelected(selected === index ? -1 : index)}>{title}<span aria-hidden="true">{selected === index ? "−" : "+"}</span></button></h3>
           </header>
-          <ProductScene variant={index} expanded={selected === index} />
+          <div className="nx-product-surface nx-service-brief">
+            <Icon size={30} aria-hidden="true" />
+            <dl>
+              <div><dt>Punto de partida</dt><dd>{["Un objetivo con fecha", "Un resultado que necesita contexto", "Un problema del equipo por definir"][index]}</dd></div>
+              <div><dt>Qué practicas</dt><dd>{["Plazo, liquidez y costos", "Contrastar supuestos con fuentes", "Acordar criterios y próximos pasos"][index]}</dd></div>
+            </dl>
+          </div>
           <div id={`nx-service-${index}`} className="nx-product-details" hidden={selected !== index}>
             <p>{description}</p><a href={href}>Explorar servicio <ArrowUpRight size={17} /></a>
           </div>

@@ -57,7 +57,7 @@ function CompoundChart({ scenarios, currency }: {
   scenarios: ReturnType<typeof calculateCompound>[];
   currency: Currency;
 }) {
-  const maximum = Math.max(1, ...scenarios.flatMap(({ rows }) => rows.map(({ balance }) => balance)));
+  const maximum = Math.max(1, ...scenarios.flatMap(({ rows }) => rows.flatMap(({ balance, contributed }) => [balance, contributed])));
   const lastYear = Math.max(...scenarios.map(({ final }) => final.year));
   const y = (balance: number) => 188 - 163 * balance / maximum;
   const x = (year: number) => 67 + 387 * year / lastYear;
@@ -67,7 +67,7 @@ function CompoundChart({ scenarios, currency }: {
   return (
     <figure className="compound-chart">
       <figcaption>Capital al cierre de cada año ({currency})</figcaption>
-      <svg viewBox="0 0 470 226" role="img" aria-label="Evolución anual estimada. Los valores exactos están en la tabla anual.">
+      <svg viewBox="0 0 470 226" role="img" aria-label="Evolución anual con tasa y ahorro sin intereses. Los valores exactos están en la tabla anual.">
         {levels.map((level) => (
           <g key={level}>
             <path className="compound-gridline" d={`M67 ${y(maximum * level)}H454`} />
@@ -77,11 +77,14 @@ function CompoundChart({ scenarios, currency }: {
         <text x={x(0)} y="211">Año 0</text>
         <text x={x(lastYear)} y="211" textAnchor="end">Año {lastYear}</text>
         {scenarios.map(({ rows }, index) => (
-          <polyline key={index} className={index === 0 ? "compound-line-a" : "compound-line-b"}
-            points={rows.map(({ year, balance }) => `${x(year)},${y(balance)}`).join(" ")} />
+          <g key={index} data-scenario={index === 0 ? "a" : "b"}>
+            <polyline className={index === 0 ? "compound-line-a" : "compound-line-b"}
+              points={rows.map(({ year, balance }) => `${x(year)},${y(balance)}`).join(" ")} />
+            <polyline className="compound-line-cash" points={rows.map(({ year, contributed }) => `${x(year)},${y(contributed)}`).join(" ")} />
+          </g>
         ))}
       </svg>
-      {scenarios.length > 1 && <p className="compound-legend"><span>Escenario A</span><span>Escenario B</span></p>}
+      <p className="compound-legend"><span>A · con tasa</span><span data-line="cash">A · sin intereses</span>{scenarios.length > 1 && <><span data-line="b">B · con tasa</span><span data-line="cash-b">B · sin intereses</span></>}</p>
     </figure>
   );
 }
@@ -158,8 +161,8 @@ export function CompoundCalculator() {
           {results.map(({ final }, index) => (
             <dl key={index} aria-label={index === 0 ? "Escenario A" : "Escenario B"}>
               <div className="compound-total"><dt>Capital final{results.length > 1 && (index === 0 ? " · A" : " · B")}</dt><dd>{money.format(final.balance)}</dd></div>
-              <div><dt>Total aportado</dt><dd>{money.format(final.contributed)}</dd></div>
-              <div><dt>Crecimiento estimado</dt><dd>{money.format(final.growth)}</dd></div>
+              <div><dt>Ahorro sin intereses</dt><dd>{money.format(final.contributed)}</dd></div>
+              <div><dt>Diferencia frente al ahorro sin intereses</dt><dd>{money.format(final.growth)}</dd></div>
             </dl>
           ))}
           <CompoundChart scenarios={results} currency={currency} />

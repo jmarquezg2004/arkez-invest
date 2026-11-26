@@ -63,7 +63,7 @@ export default function InnovationPage() {
         <div className="container-shell">
           <div className="hub-editorial-heading" data-reveal>
             <h2 id="innovation-lab-title">Un mismo escenario, dos portafolios</h2>
-            <p>Cambia primero el peso y luego la variación de los activos digitales. Observa cuánto se aleja la cartera híbrida de la referencia y por qué.</p>
+            <p>Usa este ejercicio para responder una pregunta: ¿cuánto puede cambiar el resultado total por una posición pequeña? Mantén fijo el choque, compara dos pesos y anota qué exposición explica la diferencia.</p>
           </div>
           <PortfolioLab />
         </div>

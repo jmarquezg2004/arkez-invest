@@ -1,4 +1,5 @@
 const sources = [
+  { name: "Reserva Federal", feed: "https://www.federalreserve.gov/feeds/press_monetary.xml", hosts: ["www.federalreserve.gov"] },
   { name: "Investing España", feed: "https://es.investing.com/rss/news_285.rss", hosts: ["es.investing.com"] },
   { name: "Cointelegraph", feed: "https://es.cointelegraph.com/rss", hosts: ["es.cointelegraph.com", "cointelegraph.com"] },
   { name: "Yahoo Finanzas", feed: "https://es.finance.yahoo.com/news/rss", hosts: ["es.finance.yahoo.com", "finance.yahoo.com"] },
@@ -75,7 +76,8 @@ export function createPreviewNews({ load = fetch, now = Date.now } = {}) {
     request = Promise.allSettled(sources.map((source) => readFeed(source, load))).then((results) => {
       const seen = new Set();
       return results.flatMap((result) => result.status === "fulfilled" ? result.value : [])
-        .reverse().sort((a, b) => b.date.slice(0, 10).localeCompare(a.date.slice(0, 10)))
+        .reverse().sort((a, b) => Number(b.source === "Reserva Federal") - Number(a.source === "Reserva Federal")
+          || b.date.slice(0, 10).localeCompare(a.date.slice(0, 10)))
         .filter(({ href }) => {
           if (seen.has(href)) return false;
           seen.add(href);
