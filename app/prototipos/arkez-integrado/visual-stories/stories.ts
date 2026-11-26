@@ -1,12 +1,19 @@
 import oddity from "./oddity-en-cuatro-vinetas.webp";
+import oddityCover from "./portada-oddity.webp";
 import cash from "./cobros-y-caja.webp";
+import cashCover from "./portada-cash.webp";
 import apples from "./manzanas-y-riesgo.webp";
+import applesCover from "./portada-apples.webp";
 import scenarios from "./comparar-escenarios.webp";
-
+import scenariosCover from "./portada-scenarios.webp";
 import sources from "./verificar-la-cifra.webp";
+import sourcesCover from "./portada-sources.webp";
 import inflation from "./mismas-monedas.webp";
+import inflationCover from "./portada-inflation.webp";
 import timing from "./fecha-y-disponibilidad.webp";
+import timingCover from "./portada-timing.webp";
 import payments from "./pago-y-abono.webp";
+import paymentsCover from "./portada-payments.webp";
 
 export const stories = {
   caja: {
@@ -15,6 +22,7 @@ export const stories = {
     reel: "reel-caja.mp4",
     title: "Vendimos. ¿Y la caja?",
     image: cash,
+    cover: cashCover,
     heading: "h3",
     panels: [
       { dialogue: "Pedido entregado.", alt: "Inés entrega un cuenco de cerámica envuelto a una clienta.", caption: "Lunes. Inés entrega el pedido y emite la factura." },
@@ -29,6 +37,7 @@ export const stories = {
     reel: "reel-diversificacion.mp4",
     title: "Todas las manzanas en una bolsa",
     image: apples,
+    cover: applesCover,
     heading: "h2",
     panels: [
       { dialogue: "Una bolsa basta.", alt: "Inés pone todas las manzanas verdes en una misma bolsa.", caption: "Una sola bolsa. Todo parece más fácil." },
@@ -43,6 +52,7 @@ export const stories = {
     reel: "reel-escenarios.mp4",
     title: "Una cosa a la vez",
     image: scenarios,
+    cover: scenariosCover,
     heading: "h3",
     panels: [
       { dialogue: "¿Qué cambió?", alt: "Inés observa dos alternativas de entrega en su taller de cerámica.", caption: "Si cambian el plazo y el costo a la vez, cuesta entender qué explica el resultado." },
@@ -56,6 +66,7 @@ export const stories = {
     topic: "Verificación de datos",
     title: "¿La misma cifra?",
     image: sources,
+    cover: sourcesCover,
     heading: "h3",
     panels: [
       { dialogue: "¿Cómo que cambió?", alt: "Inés mira dos hojas con barras distintas.", caption: "Dos publicaciones muestran resultados distintos para lo que parece la misma cifra." },
@@ -69,6 +80,7 @@ export const stories = {
     topic: "Poder adquisitivo",
     title: "El mismo dinero, una bolsa más pequeña",
     image: inflation,
+    cover: inflationCover,
     heading: "h3",
     panels: [
       { dialogue: "Me alcanza.", alt: "Inés sostiene unas monedas junto a una bolsa de mercado llena.", caption: "Inés compra su habitual selección de alimentos." },
@@ -82,6 +94,7 @@ export const stories = {
     topic: "Plazos y disponibilidad",
     title: "El calendario también cuenta",
     image: timing,
+    cover: timingCover,
     heading: "h3",
     panels: [
       { dialogue: "El curso ya tiene fecha.", alt: "Inés marca una fecha en el calendario, junto a un folleto de cerámica.", caption: "Lo primero que apunta Inés es cuándo tendrá que pagar el curso." },
@@ -95,6 +108,7 @@ export const stories = {
     topic: "Tecnología de pagos",
     title: "El pitido y el abono",
     image: payments,
+    cover: paymentsCover,
     heading: "h3",
     panels: [
       { dialogue: "Ya pasó la tarjeta.", alt: "Una clienta acerca una tarjeta al terminal del taller.", caption: "La compra con tarjeta se autoriza en el mostrador." },
@@ -108,6 +122,7 @@ export const stories = {
     reel: "reel-oddity.mp4",
     title: "¿Cómo gana dinero ODDITY?",
     image: oddity,
+    cover: oddityCover,
     heading: "h2",
     panels: [
       { dialogue: "¿Qué tono me queda?", alt: "Inés compara tonos de maquillaje en un teléfono.", caption: "Qué hace. ODDITY desarrolla marcas de belleza y bienestar. En este ejemplo, una clienta busca maquillaje de IL MAKIAGE en internet." },

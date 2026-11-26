@@ -23,9 +23,9 @@ export function StoryLibrary() {
         <h2 id="avs-library-topics">Explora por tema</h2>
         <ul className="avs-cards" role="list">{entries.map((key) => {
           const story = stories[key];
-          const { image, topic, title } = story;
+          const { cover, topic, title } = story;
           return <li key={key}><a href={key === "oddity" ? oddityStoryPath : "#" + storyAnchor(key)}>
-            <img src={image.src} width={image.width} height={image.height} alt="" loading="lazy" decoding="async" />
+            <img src={cover.src} width={cover.width} height={cover.height} alt="" loading="lazy" decoding="async" />
             <span><small>{topic}{"reel" in story ? " · Reel" : ""}</small><strong>{title}</strong></span>
             <ArrowRight size={20} aria-hidden="true" />
           </a></li>;

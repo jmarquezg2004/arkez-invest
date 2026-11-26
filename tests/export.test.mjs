@@ -276,6 +276,9 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     const collectionPath = base + "research/visual-stories/";
     const oddityPath = base + "research/oddity/historia/";
     const collection = read(collectionPath);
+    const covers = Array.from(collection.matchAll(/<img[^>]+src="([^"]*portada-[^"]+\.webp)"[^>]+width="480" height="270"/g), ([, src]) => src);
+    assert.equal(new Set(covers).size, 8);
+    for (const cover of covers) assert.ok(readFileSync(new URL(cover.slice(1), output)).length > 0, cover);
     const storyLinks = Array.from(collection.matchAll(/href="#(historia-[a-z]+)"/g), ([, anchor]) => anchor);
     assert.equal(new Set(storyLinks).size, 7);
     for (const anchor of storyLinks) assert.ok(collection.includes(`id="${anchor}"`), anchor);
