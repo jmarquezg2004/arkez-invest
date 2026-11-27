@@ -4,6 +4,7 @@ import { Sparkles, X } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useLanguage } from "./language";
 import { base } from "./routes";
+import { answerFromLibrary } from "./isa-knowledge";
 
 const text = {
   es: {
@@ -12,7 +13,8 @@ const text = {
     example: "¿Me das un ejemplo?", resources: "Ver una guía", reading: "Estás leyendo",
     label: "Tu pregunta", ask: "Preguntar", waiting: "Buscando una explicación…",
     note: "Ayuda educativa. Evita incluir datos personales o financieros.",
-    unavailable: "La IA está pendiente de activación en esta vista previa. Puedes usar las respuestas guiadas.",
+    unavailable: "Esta pregunta requiere una explicación que todavía no tengo en la biblioteca. Prueba preguntando por transferencias de criptomonedas, interés compuesto, diversificación o inflación.",
+    quota: "El servicio de preguntas abiertas alcanzó su límite temporal. Las respuestas de la biblioteca siguen disponibles.",
     error: "ISA no pudo responder esta vez. Prueba con un ejemplo guiado.",
     link: "Abrir recurso",
   },
@@ -22,7 +24,8 @@ const text = {
     example: "Can you give an example?", resources: "Find a guide", reading: "You're reading",
     label: "Your question", ask: "Ask", waiting: "Looking for an explanation…",
     note: "For learning. Please leave out personal and financial information.",
-    unavailable: "AI is awaiting activation in this preview. Guided answers are available.",
+    unavailable: "This question needs an explanation I don't have in the library yet. Try asking about cryptocurrency transfers, compound interest, diversification, or inflation.",
+    quota: "The open-question service reached its temporary limit. Library answers are still available.",
     error: "ISA couldn't answer this time. Try a guided example.",
     link: "Open resource",
   },
@@ -101,6 +104,11 @@ export function IsaAssistant() {
   async function ask(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!question.trim() || request.current) return;
+    const local = answerFromLibrary(question, locale);
+    if (local) {
+      setAnswer({ message: local.message, href: base + local.href });
+      return;
+    }
     const current = new AbortController();
     request.current = current;
     setBusy(true);
@@ -111,6 +119,7 @@ export function IsaAssistant() {
       });
       if (current.signal.aborted) return;
       if ([404, 503].includes(response.status)) { setAnswer({ message: copy.unavailable }); return; }
+      if (response.status === 429) { setAnswer({ message: copy.quota }); return; }
       const result = response.ok ? await response.json() : null;
       if (!current.signal.aborted) setAnswer({ message: typeof result?.answer === "string" ? result.answer : copy.error });
     } catch {

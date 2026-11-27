@@ -22,8 +22,10 @@ en `english.ts`. Si el navegador dispone del traductor local de ES a EN, el sele
 completar el resto dentro del prototipo. Los documentos descargables y marcos externos
 conservan el idioma de origen.
 
-ISA incluye respuestas guiadas en ambos idiomas. Para preguntas libres en Cloudflare Pages,
-habilita Workers AI con un binding llamado `AI` **en el proyecto de staging**. El endpoint
-`/api/isa` envía al modelo de Cloudflare la pregunta y un extracto visible del apartado
-actual. El código de Arkez no guarda la conversación. La vista estática sigue funcionando
-cuando falta el binding.
+ISA busca primero en el catálogo bilingüe de `isa-knowledge.ts` dentro del navegador. Las
+coincidencias se resuelven sin enviar la pregunta al servidor ni consumir tokens. Las
+preguntas fuera del catálogo usan `/api/isa`, disponible con un binding `AI` **en el proyecto
+de staging**. Ese endpoint envía la pregunta y un extracto visible del apartado al modelo
+de Cloudflare. El código de Arkez no guarda la conversación. El límite de solicitudes del
+Worker ayuda a contener el uso. La cuota de Cloudflare y el presupuesto se administran
+por separado. El catálogo funciona con el binding desactivado.

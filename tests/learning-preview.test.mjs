@@ -4,6 +4,19 @@ import { readFileSync } from "node:fs";
 import { beginnerTopics, learningPath, learningQuestions } from "../app/prototipos/arkez-integrado/learning-path.ts";
 import { createNewsPhoto, createPreviewNews } from "../scripts/preview-news.mjs";
 import { createPreviewServer } from "../scripts/preview.mjs";
+import { answerFromLibrary } from "../app/prototipos/arkez-integrado/isa-knowledge.ts";
+
+test("ISA responde la consulta de transferencias desde el catálogo bilingüe", () => {
+  const spanish = answerFromLibrary("Cómo se realiza una transferencia de criptomonedas.", "es");
+  assert.match(spanish.message, /billetera.*firma/);
+  assert.equal(spanish.href, "/research/visual-stories/#historia-tema-cripto");
+  assert.match(answerFromLibrary("How do I send crypto?", "en").message, /wallet signs/);
+  assert.match(answerFromLibrary("¿Qué es una transferencia de cripto?", "es").message, /identificador/);
+  assert.match(answerFromLibrary("¿Qué es el interés compuesto?", "es").message, /USD 121/);
+  assert.equal(answerFromLibrary("¿Qué es el teatro?", "es"), undefined);
+  assert.equal(answerFromLibrary("¿Qué criptomoneda me recomiendas enviar?", "es"), undefined);
+  assert.equal(answerFromLibrary("¿Qué es una criptomoneda y cómo funciona el interés compuesto?", "es"), undefined);
+});
 
 test("la ruta educativa valida las respuestas y selecciona recursos según el objetivo y el formato", () => {
   const base = { goal: "fundamentos", topic: "ahorro", level: "inicio", time: "hoy", format: "practica" };
