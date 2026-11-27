@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Newspaper } from "lucide-react";
 import { createPreviewNews } from "@/scripts/preview-news.mjs";
-import { archivedHeadlines } from "@/scripts/news-archive.mjs";
+import { archivedHeadlines, directoryArchive } from "@/scripts/news-archive.mjs";
 import { useLanguage } from "./language";
+import { directoryBatch, directoryGroups, directorySources } from "./news-mix";
 
 type Story = { title: string; href: string; date: string; source: string; image?: string; archived?: boolean };
 
@@ -67,7 +68,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
       try {
         const response = await fetch("/api/noticias/preview", { signal: controller.signal });
         const stories: unknown = response.ok ? await response.json() : null;
-        if (Array.isArray(stories) && stories.length && stories.some((story) => story?.image)) return stories as Story[];
+        if (Array.isArray(stories) && stories.length && (directoryPage || stories.some((story) => story?.image))) return stories as Story[];
         const direct = await readBrowserFeeds();
         return direct.length ? direct : Array.isArray(stories) ? stories as Story[] : [];
       } catch {
@@ -80,7 +81,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
     refresh();
     const timer = window.setInterval(refresh, rotationMs);
     return () => { controller.abort(); window.clearInterval(timer); };
-  }, []);
+  }, [directoryPage]);
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -90,25 +91,27 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
     return () => query.removeEventListener("change", update);
   }, []);
 
-  const count = directoryPage ? 6 : 2;
+  const count = 2;
   const archive = archivedHeadlines.filter(({ href }) => !live?.some((story) => story.href === href));
   const photoAvailable = ({ image }: Story) => Boolean(image && !unavailable.has(image));
   const published = live ?? [];
   const withPhoto = published.filter(photoAvailable);
   const backupPhotos = archive.filter(photoAvailable);
-  const stories = directoryPage
-    ? published.length > count ? published : [...published, ...archive]
-    : [...withPhoto, ...backupPhotos, ...published.filter((story) => !photoAvailable(story)), ...archive.filter((story) => !photoAvailable(story))];
-  const pool = !directoryPage && stories.filter(photoAvailable).length >= count ? stories.filter(photoAvailable) : stories;
+  const stories = [...withPhoto, ...backupPhotos, ...published.filter((story) => !photoAvailable(story)), ...archive.filter((story) => !photoAvailable(story))];
+  const pool = withPhoto.length + backupPhotos.length >= count ? [...withPhoto, ...backupPhotos] : stories;
+  const groups = directoryGroups(published, [...directoryArchive, ...archive]);
+  const canRotate = directoryPage ? groups.some(({ stories, slots }) => stories.length > slots) : pool.length > count;
 
   useEffect(() => {
-    if (!rotating || pool.length <= count) return;
+    if (!rotating || !canRotate) return;
     const timer = window.setInterval(() => {
-      if (!document.hidden && !articleList.current?.contains(document.activeElement)) setBatch((current) => (current + 1) % pool.length);
+      if (!document.hidden && !articleList.current?.contains(document.activeElement)) setBatch((current) => current + 1);
     }, rotationMs);
     return () => window.clearInterval(timer);
-  }, [rotating, count, pool.length]);
-  const shown = pool.length <= count ? pool : Array.from({ length: count }, (_, i) => pool[(batch * count + i) % pool.length]);
+  }, [rotating, canRotate]);
+  const shown = directoryPage ? directoryBatch(groups, batch)
+    : pool.length <= count ? pool : Array.from({ length: count }, (_, i) => pool[(batch * count + i) % pool.length]);
+  const sourceLinks = directoryPage ? directorySources.map(({ source, href }) => [source, href] as const) : publishers;
 
   return <section className="ai-news" id="noticias" aria-labelledby="preview-news-heading">
     <div className="container-shell">
@@ -127,20 +130,21 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
                 onUnavailable={() => { if (image) setUnavailable((current) => new Set([...current, image])); }} />
               <div className="ai-news-copy">
                 <p><time dateTime={date} data-arkez-localized>{dateFormat[locale].format(new Date(date))}</time>{story.archived && <span> · Archivo</span>}</p>
-                <h3 translate="no" lang={story.source === "Reserva Federal" ? "en" : "es"}>{title}</h3>
+                <h3 translate="no" lang={story.source === "Reserva Federal" || story.source === "The Wall Street Journal"
+                  || /https:\/\/(finance\.yahoo\.com|cointelegraph\.com)\//.test(href) ? "en" : "es"}>{title}</h3>
                 <ArrowUpRight size={21} aria-hidden="true" />
               </div>
             </a>
           </article>
         </li>; })}
       </ul>
-      {pool.length > count && <div className="ai-news-sources">
-        <button type="button" onClick={() => setBatch((current) => (current + 1) % pool.length)}>Ver otros titulares</button>
+      {canRotate && <div className="ai-news-sources">
+        <button type="button" onClick={() => setBatch((current) => current + 1)}>Ver otros titulares</button>
         <button type="button" aria-pressed={rotating} onClick={() => setRotating(!rotating)}>Rotación cada 5 minutos</button>
       </div>}
       <div className="ai-news-sources">
         <span>Consultar directamente</span>
-        {publishers.map(([name, href]) => <a key={name} href={href} target="_blank" rel="noopener noreferrer">{name} <ArrowUpRight size={14} aria-hidden="true" /></a>)}
+        {sourceLinks.map(([name, href]) => <a key={name} href={href} target="_blank" rel="noopener noreferrer">{name} <ArrowUpRight size={14} aria-hidden="true" /></a>)}
       </div>
       {directoryPage && <><div className="ai-news-sources">
         <span>Lectura de América Latina</span>

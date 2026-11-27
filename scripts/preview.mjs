@@ -7,7 +7,7 @@ import { commonHeaders, contentPolicy, previewPolicyOptions } from "./pages-head
 
 import { createMarketLookup } from "./preview-market.mjs";
 import { createNewsPhoto, createPreviewNews } from "./preview-news.mjs";
-import { archivedHeadlines } from "./news-archive.mjs";
+import { archivedHeadlines, directoryArchive } from "./news-archive.mjs";
 
 const defaultRoot = fileURLToPath(new URL("../out/", import.meta.url));
 const contactPath = "/api/contacto/prueba";
@@ -47,7 +47,7 @@ function limiter(max) {
   };
 }
 
-export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs = 800, news = createPreviewNews(), newsPhoto = createNewsPhoto(news, fetch, archivedHeadlines), market = createMarketLookup() } = {}) {
+export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs = 800, news = createPreviewNews(), newsPhoto = createNewsPhoto(news, fetch, [...archivedHeadlines, ...directoryArchive]), market = createMarketLookup() } = {}) {
   const contactChallenges = new Map();
   const allowIssue = limiter(24);
   const allowSubmit = limiter(8);

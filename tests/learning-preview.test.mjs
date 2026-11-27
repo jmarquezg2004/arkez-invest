@@ -5,6 +5,8 @@ import { beginnerTopics, learningPath, learningQuestions } from "../app/prototip
 import { createNewsPhoto, createPreviewNews } from "../scripts/preview-news.mjs";
 import { createPreviewServer } from "../scripts/preview.mjs";
 import { answerFromLibrary } from "../app/prototipos/arkez-integrado/isa-knowledge.ts";
+import { directoryBatch, directoryGroups } from "../app/prototipos/arkez-integrado/news-mix.ts";
+import { archivedHeadlines, directoryArchive } from "../scripts/news-archive.mjs";
 
 test("ISA responde la consulta de transferencias desde el catálogo bilingüe", () => {
   const spanish = answerFromLibrary("Cómo se realiza una transferencia de criptomonedas.", "es");
@@ -89,7 +91,40 @@ test("el feed de noticias ignora fuentes caídas, enlaces ajenos, HTML y duplica
   assert.equal(results[0].image, "https://content-media.investing.com/news/ejemplo.jpg");
   assert.equal(results[1].image, undefined);
   assert.deepEqual(await news(), results);
-  assert.equal(requests, 5);
+  assert.equal(requests, 12);
+});
+
+test("Actualidad mantiene las cuotas por fuente al rotar y al usar el archivo", () => {
+  const archive = [...directoryArchive, ...archivedHeadlines];
+  const live = [{ source: "Yahoo Finanzas", href: "https://finance.yahoo.com/news/live-test" }, ...archive.slice(0, 1)];
+  const expected = ["Yahoo Finanzas", "Yahoo Finanzas", "The Wall Street Journal", "The Wall Street Journal", "Investing España", "Cointelegraph"];
+  for (const feeds of [live, []]) {
+    const groups = directoryGroups(feeds, archive);
+    const first = directoryBatch(groups, 0);
+    const next = directoryBatch(groups, 1);
+    for (const batch of [first, next]) {
+      assert.deepEqual(batch.map(({ source }) => source), expected);
+      assert.equal(new Set(batch.map(({ href }) => href)).size, 6);
+    }
+    assert.notDeepEqual(first, next);
+    assert.equal(first.filter(({ href }) => href === archive[0].href).length, 1);
+  }
+});
+
+test("Actualidad lee RSS de Yahoo o Cointelegraph si el conversor falla", async () => {
+  const news = createPreviewNews({ load: async (url) => {
+    if (url.hostname !== "cointelegraph.com") return new Response(null, { status: 503 });
+    return new Response(`<rss><channel><item>
+      <title><![CDATA[Noticia de prueba]]></title>
+      <link>https://cointelegraph.com/news/prueba</link>
+      <pubDate>Fri, 27 Nov 2026 12:00:00 GMT</pubDate>
+      <media:content url="https://images.cointelegraph.com/image.jpg" />
+    </item></channel></rss>`);
+  } });
+  assert.deepEqual(await news(), [{
+    title: "Noticia de prueba", href: "https://cointelegraph.com/news/prueba", date: "2026-11-27T12:00:00.000Z",
+    source: "Cointelegraph", image: "https://images.cointelegraph.com/image.jpg",
+  }]);
 });
 
 test("recupera el src original de la descripción RSS sin mostrar su HTML", async () => {

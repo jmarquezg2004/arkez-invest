@@ -65,3 +65,81 @@ export const archivedHeadlines = [
     "archived": true
   }
 ];
+
+// Publisher articles checked on 2026-11-27, used when a source feed is unavailable.
+export const directoryArchive = [
+  {
+    "title": "Private-Equity Firms Have a Surprising New Source for Debt: the Nordic Bond Market",
+    "href": "https://www.wsj.com/finance/investing/private-equity-firms-have-a-surprising-new-source-for-debt-the-nordic-bond-market-24163a71",
+    "date": "2026-11-27T15:30:00Z",
+    "source": "The Wall Street Journal",
+    "image": "https://images.wsj.net/im-13374188",
+    "archived": true
+  },
+  {
+    "title": "Tech Stocks Rise as Investors Take a Break From AI Jitters",
+    "href": "https://www.wsj.com/finance/stocks/stocks-poised-to-end-week-strong-as-investors-take-break-from-ai-jitters-ce6b2846",
+    "date": "2026-11-27T14:46:00Z",
+    "source": "The Wall Street Journal",
+    "image": "https://images.wsj.net/im-22450552",
+    "archived": true
+  },
+  {
+    "title": "Allstate Joins Growing List of Companies Hit by Tech Outages",
+    "href": "https://www.wsj.com/finance/allstate-joins-growing-list-of-companies-hit-by-tech-outages-77dbb488",
+    "date": "2026-11-27T12:48:00Z",
+    "source": "The Wall Street Journal",
+    "image": "https://images.wsj.net/im-93543392",
+    "archived": true
+  },
+  {
+    "title": "Asian Markets Rise as AI Sentiment Stabilizes",
+    "href": "https://www.wsj.com/finance/asian-markets-mostly-higher-as-sentiment-stabilizes-8f998c4d",
+    "date": "2026-11-27T05:53:00Z",
+    "source": "The Wall Street Journal",
+    "image": "https://images.wsj.net/im-39619442",
+    "archived": true
+  },
+  {
+    "title": "Chip stocks lead a Black Friday rally, but Nvidia misses out: AlphaCheck",
+    "href": "https://finance.yahoo.com/markets/article/chip-stocks-lead-a-black-friday-rally-but-nvidia-misses-out-alphacheck-145727185.html",
+    "date": "2026-11-27T14:57:27Z",
+    "source": "Yahoo Finanzas",
+    "archived": true
+  },
+  {
+    "title": "Stock market today: Dow, S&P 500, Nasdaq gain on Black Friday as AI jitters steady",
+    "href": "https://finance.yahoo.com/markets/live/stock-market-today-firday-november-27-dow-sp-500-nasdaq-black-friday-holiday-091152065.html",
+    "date": "2026-11-27T15:37:00Z",
+    "source": "Yahoo Finanzas",
+    "archived": true
+  },
+  {
+    "title": "Stocks snap from a $6 trillion washout to a $3 trillion surge as Nvidia, Micron, and SpaceX bounce back",
+    "href": "https://finance.yahoo.com/markets/article/stocks-snap-from-a-6-trillion-washout-to-a-3-trillion-surge-as-nvidia-micron-and-spacex-bounce-back-151218930.html",
+    "date": "2026-11-27T15:12:18Z",
+    "source": "Yahoo Finanzas",
+    "archived": true
+  },
+  {
+    "title": "Sliding stock market confronts jobs data, rate view as next tests",
+    "href": "https://finance.yahoo.com/markets/stocks/articles/sliding-stock-market-confronts-jobs-110203054.html",
+    "date": "2026-11-27T11:02:03Z",
+    "source": "Yahoo Finanzas",
+    "archived": true
+  },
+  {
+    "title": "China sets March 2027 rollout for blockchain identity regulations",
+    "href": "https://cointelegraph.com/news/china-march-2027-rollout-blockchain-identity-regulations",
+    "date": "2026-11-27",
+    "source": "Cointelegraph",
+    "archived": true
+  },
+  {
+    "title": "Ethereum devs set Glamsterdam’s Hoodi rollout for mid-December after delays",
+    "href": "https://cointelegraph.com/news/ethereum-devs-set-glamsterdams-hoodi-rollout-for-mid-december-after-delays",
+    "date": "2026-11-27",
+    "source": "Cointelegraph",
+    "archived": true
+  }
+];

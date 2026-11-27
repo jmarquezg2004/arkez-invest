@@ -3,9 +3,12 @@ const sources = [
   { name: "Investing España", feed: "https://es.investing.com/rss/news_285.rss", hosts: ["es.investing.com"] },
   { name: "Investing España", feed: "https://es.investing.com/rss/news.rss", hosts: ["es.investing.com"] },
   { name: "Cointelegraph", feed: "https://es.cointelegraph.com/rss", hosts: ["es.cointelegraph.com", "cointelegraph.com"] },
+  { name: "Cointelegraph", feed: "https://cointelegraph.com/rss", hosts: ["cointelegraph.com"] },
   { name: "Yahoo Finanzas", feed: "https://es.finance.yahoo.com/news/rss", hosts: ["es.finance.yahoo.com", "finance.yahoo.com"] },
+  { name: "Yahoo Finanzas", feed: "https://feeds.finance.yahoo.com/rss/2.0/headline?s=%5EGSPC,%5EDJI,%5EIXIC&region=US&lang=en-US", hosts: ["finance.yahoo.com", "es.finance.yahoo.com"] },
+  { name: "The Wall Street Journal", feed: "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain", hosts: ["www.wsj.com", "wsj.com"] },
 ];
-export const newsImageHosts = ["content-media.investing.com", "images.cointelegraph.com", "s.yimg.com", "media.zenfs.com"];
+export const newsImageHosts = ["content-media.investing.com", "images.cointelegraph.com", "s.yimg.com", "media.zenfs.com", "images.wsj.net"];
 const maxBytes = 1_000_000;
 
 const namedEntities = { amp: "&", quot: '"', apos: "'", nbsp: " ", lt: "<", gt: ">", ndash: "–", mdash: "—", hellip: "…" };
@@ -28,16 +31,15 @@ function headlineImage(item) {
     if (typeof candidate !== "string" || candidate.length > 1024) continue;
     const image = URL.parse(decodeHeadline(candidate));
     if (image?.protocol === "https:" && !image.username && !image.password && !image.port
-        && newsImageHosts.includes(image.hostname) && /\.(?:jpe?g|png|webp|avif)$/i.test(image.pathname)) {
+        && newsImageHosts.includes(image.hostname) && (/\.(?:jpe?g|png|webp|avif)$/i.test(image.pathname)
+          || (image.hostname === "images.wsj.net" && /^\/im-\d+$/.test(image.pathname)))) {
       image.hash = "";
       return image.href;
     }
   }
 }
 
-async function readFeed(source, load) {
-  const url = new URL("https://api.rss2json.com/v1/api.json");
-  url.searchParams.set("rss_url", source.feed);
+async function feedBody(url, load) {
   const response = await load(url, { signal: AbortSignal.timeout(5000), redirect: "error" });
   if (!response.ok || !response.body) return [];
   let size = 0;
@@ -51,9 +53,30 @@ async function readFeed(source, load) {
     if (size > maxBytes) { await reader.cancel(); return []; }
     body += decoder.decode(chunk, { stream: true });
   }
-  const data = JSON.parse(body + decoder.decode());
-  if (data.status !== "ok" || !Array.isArray(data.items)) return [];
-  return data.items.slice(0, source.limit ?? 10).flatMap((item) => {
+  return body + decoder.decode();
+}
+
+function rssItems(xml) {
+  if (typeof xml !== "string") return [];
+  return Array.from(xml.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item\s*>/gi), ([, item]) => {
+    const field = (tag) => (item.match(new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)</${tag}\\s*>`, "i"))?.[1] ?? "")
+      .trim().replace(/^<!\[CDATA\[([\s\S]*)\]\]>$/, "$1").trim();
+    const date = Date.parse(field("pubDate"));
+    const media = /<(?:enclosure|media:content|media:thumbnail)\b[^<>]*?\surl\s*=\s*(?:"([^"]+)"|'([^']+)')/i.exec(item);
+    return { title: field("title"), link: decodeHeadline(field("link")), description: field("description"),
+      pubDate: Number.isFinite(date) ? new Date(date).toISOString().slice(0, 19).replace("T", " ") : "",
+      enclosure: media ? { link: media[1] ?? media[2] } : undefined };
+  });
+}
+
+async function readFeed(source, load) {
+  const url = new URL("https://api.rss2json.com/v1/api.json");
+  url.searchParams.set("rss_url", source.feed);
+  const data = await feedBody(url, load).then((body) => JSON.parse(body)).catch(() => null);
+  const useDirect = ["Cointelegraph", "Yahoo Finanzas"].includes(source.name);
+  const items = data?.status === "ok" && Array.isArray(data.items) && data.items.length
+    ? data.items : useDirect ? rssItems(await feedBody(new URL(source.feed), load).catch(() => null)) : [];
+  return items.slice(0, source.limit ?? 10).flatMap((item) => {
     if (typeof item?.title !== "string" || typeof item.link !== "string" || typeof item.pubDate !== "string") return [];
     const title = decodeHeadline(item.title);
     if (!title || title.length > 240 || /[<>]/.test(title) || !/^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/.test(item.pubDate)) return [];

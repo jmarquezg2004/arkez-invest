@@ -1,7 +1,7 @@
 // The staging packager provides the CSP map and the shared news loader above this module.
 const integratedHome = "/prototipos/arkez-integrado/";
 const getHeadlines = createPreviewNews();
-const getNewsPhoto = createNewsPhoto(getHeadlines, fetch, archivedHeadlines);
+const getNewsPhoto = createNewsPhoto(getHeadlines, fetch, [...archivedHeadlines, ...directoryArchive]);
 const getMarket = createMarketLookup();
 const askIsa = createIsaHandler();
 const stagingHeaders = {
