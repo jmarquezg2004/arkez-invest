@@ -1,5 +1,4 @@
 import { spawnSync } from "node:child_process";
-import { cpSync, mkdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
@@ -16,9 +15,4 @@ function run(file, ...args) {
 }
 
 run(require.resolve("next/dist/bin/next"), "build");
-if (env.ARKEZ_LOCAL_PREVIEW === "1" && env.ARKEZ_INDEXABLE !== "1") {
-  const assets = new URL("../out/prototipos/arkez-integrado/archivos/", import.meta.url);
-  mkdirSync(assets, { recursive: true });
-  cpSync(new URL("../resources/prototipos/visual-stories/", import.meta.url), new URL("visual-stories/", assets), { recursive: true });
-}
 run(fileURLToPath(new URL(stage ? "./package-staging.mjs" : "./pages-headers.mjs", import.meta.url)), ...(stage ? ["--in-place"] : []));

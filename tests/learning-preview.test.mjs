@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { learningPath, learningQuestions } from "../app/prototipos/arkez-integrado/learning-path.ts";
+import { beginnerTopics, learningPath, learningQuestions } from "../app/prototipos/arkez-integrado/learning-path.ts";
 import { createNewsPhoto, createPreviewNews } from "../scripts/preview-news.mjs";
 import { createPreviewServer } from "../scripts/preview.mjs";
 
@@ -10,6 +10,8 @@ test("la ruta educativa valida las respuestas y selecciona recursos según el ob
   assert.equal(learningQuestions(base).length, 5);
   assert.equal(learningPath(base).first.path, "/herramientas/interes-compuesto/");
   assert.equal(learningPath(base).level, "Empieza");
+  assert.equal(learningPath(base).story, "ahorro");
+  assert.ok(Object.values(beginnerTopics).every(({ panels }) => panels.length === 4));
   assert.equal(learningPath({ ...base, format: "lectura" }).first.path, "/recursos/guias/primeros-pasos/");
   assert.equal(learningPath({ ...base, topic: "ia" }), null);
   const beginnerOptions = learningQuestions({ ...base, goal: "empresa" }).find(({ id }) => id === "topic").options;
@@ -39,6 +41,8 @@ test("cada combinación válida enlaza a tres recursos distintos con destinos y 
       return;
     }
     const result = learningPath(answers);
+    assert.equal(result.story, answers.focus === "historia" ? answers.story : answers.topic);
+    assert.equal(beginnerTopics[result.story].panels.length, 4);
     const links = [result.first, ...result.next].map(({ path }) => path);
     assert.equal(new Set(links).size, 3);
     for (const link of links) {

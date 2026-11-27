@@ -1,7 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import type { CatalogItem } from "@/arkez-visual-engine/catalog";
 import { base } from "../routes";
-import genericArt from "./ticker-vinetas.webp";
 import tradeDeskArt from "./ttd-vinetas.webp";
 
 type Filing = { form: string; date: string; href: string };
@@ -26,7 +25,7 @@ export function TickerStory({ ticker, name, sector, profile, filings }: {
   ticker: string; name: string; sector?: string; profile?: CatalogItem; filings: Filing[];
 }) {
   const model = models[ticker];
-  const illustration = ticker === "TTD" ? tradeDeskArt : genericArt;
+  const illustration = ticker === "TTD" ? tradeDeskArt : undefined;
   const primary = ticker === "TTD" ? tradeDeskFiling : filings.find(({ form }) => ["10-K", "20-F", "40-F"].includes(form)) ?? filings[0];
   const parts = [
     profile?.summary ?? (sector ? `EDGAR clasifica a este emisor en «${sector}». Abre sus documentos para identificar los productos y servicios.` : "Identifica sus productos y servicios en los documentos del emisor."),
@@ -35,12 +34,12 @@ export function TickerStory({ ticker, name, sector, profile, filings }: {
     primary ? `Consulta el documento ${primary.form} publicado el ${primary.date} y contrasta el periodo, la moneda y las fuentes.`
       : ticker === "SPY" ? "Comprueba en la ficha oficial del fondo su objetivo, sus gastos y la composición del índice." : "Busca el informe anual y lee las notas por segmento. Comprueba la bolsa y el nombre del emisor.",
   ];
-  return <section className="ticker-story" aria-label={`Arkez Visual Stories: ${name}`}>
-    <p className="ve-kicker">Arkez Visual Stories · {ticker}</p>
-    <h3>{name} en cuatro viñetas</h3>
+  return <section className="ticker-story" aria-label={illustration ? `Arkez Visual Stories: ${name}` : `Ficha educativa: ${name}`}>
+    <p className="ve-kicker">{illustration ? "Arkez Visual Stories" : "Ficha educativa"} · {ticker}</p>
+    <h3>{illustration ? `${name} en cuatro viñetas` : name}</h3>
     {!model && <p>Guía de lectura para este símbolo. La información pública disponible determina el detalle de la ficha.</p>}
     <ol>{parts.map((part, index) => <li key={chapters[index]} data-panel={index + 1}>
-      <div className="ticker-story-art"><img src={illustration.src} width={illustration.width} height={illustration.height} alt="" loading="lazy" decoding="async" /></div>
+      {illustration && <div className="ticker-story-art"><img src={illustration.src} width={illustration.width} height={illustration.height} alt="" loading="lazy" decoding="async" /></div>}
       <div><h4>{chapters[index]}</h4><p>{part}</p></div>
     </li>)}</ol>
     {primary && <a href={primary.href} target="_blank" rel="noopener noreferrer">Consultar el documento en EDGAR <ArrowUpRight size={15} aria-hidden="true" /></a>}

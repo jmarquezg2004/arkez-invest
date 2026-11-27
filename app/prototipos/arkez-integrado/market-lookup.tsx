@@ -136,7 +136,7 @@ export function MarketLookup() {
     {blocked && <div className="ai-market-issuer" role="status"><p>Ya usaste la consulta gratuita de este navegador. Puedes volver al mismo ticker o revisar los planes.</p>
       <a className="ve-cta" href={base + "/research/#planes-research"}>Ver planes de Research</a></div>}
     {symbol && !blocked && <div className="ai-market-result" ref={result} tabIndex={-1}>
-      {odditySelected ? <><StoryStrip story="oddity" reelDirectory={base + "/archivos/visual-stories/"} />
+      {odditySelected ? <><StoryStrip story="oddity" />
         <a href={oddityStoryPath}>Explorar los escenarios y fuentes de ODDITY <ArrowUpRight size={15} aria-hidden="true" /></a></>
         : hasStory && <TickerStory ticker={ticker} name={profile?.name ?? issuer?.name ?? "SPDR S&P 500 ETF Trust"}
             sector={issuer?.sector} profile={profile} filings={issuer?.filings ?? []} />}

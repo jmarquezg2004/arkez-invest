@@ -30,9 +30,6 @@
 @media (max-width:620px) { .avs-dialogue { font-size:clamp(.95rem,4.2vw,1.2rem); } }
 
 .avs-controls { display:flex; flex-wrap:wrap; gap:.45rem; }
-.avs-reel:not([hidden]) { display:grid; justify-items:center; margin:0 0 .85rem; background:#122d43; border-radius:.45rem; padding:.5rem; }
-.avs-reel video { width:min(100%,18rem); height:auto; aspect-ratio:9 / 16; }
-@media (prefers-reduced-motion:reduce) { .avs .avs-reel-toggle { display:inline-flex; } }
 
 .avs-library { color:#152f45; background:#f3f6fa; }
 .avs-library > .container-shell { padding-block:clamp(1.65rem,5vw,4.2rem); }
@@ -79,3 +76,6 @@
 .avs-chart-key { display:flex; flex-wrap:wrap; gap:.45rem 1rem; margin:.3rem 0 .85rem; font-weight:740; font-size:.88rem; }
 .avs-chart-key span::before { content:""; display:inline-block; width:1.2rem; vertical-align:middle; margin-right:.38rem; border-top:3px solid #183c60; }
 .avs-chart-key span + span::before { border-top:3px dashed #8f551d; }
+.ticker-story li > div:only-child { padding:.65rem; }
+.ai-quiz-panel .avs { margin-block:1rem; }
+.ai-quiz-panel .avs h3 { font-size:clamp(1.45rem,3vw,2rem); }

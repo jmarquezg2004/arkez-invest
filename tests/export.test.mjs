@@ -311,7 +311,17 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
     assert.equal(new Set(storyLinks).size, 7);
     for (const anchor of storyLinks) assert.ok(collection.includes(`id="${anchor}"`), anchor);
     assert.equal((collection.match(/data-visual-story=/g) ?? []).length, 7);
-    assert.equal((collection.match(/>Ver reel</g) ?? []).length, 3);
+    assert.doesNotMatch(collection, /<video|>Ver reel</);
+    assert.ok(!readdirSync(output, { recursive: true }).some((file) => /\.(mp4|webm|mov)$/i.test(file)));
+    const illustrated = Array.from(collection.matchAll(/<figure[^>]+id="(?:historia-tema-[^"]+|indicador-[^"]+|etapas-weinstein)"[^>]*>([\s\S]*?)<\/figure>/g), ([, body]) => body);
+    assert.equal(illustrated.length, 28);
+    const images = illustrated.map((body) => {
+      const frames = [...body.matchAll(/<img src="([^"]+\.webp)"/g)].map(([, src]) => src);
+      assert.equal(frames.length, 4);
+      return frames[0];
+    });
+    assert.equal(new Set(images).size, 28);
+
     for (const [, path, anchor] of collection.matchAll(/class="avs-reading-link" href="([^"#]+)(?:#([^"]+))?"/g)) {
       if (!path.startsWith("/")) continue;
       const reading = read(path);
@@ -326,13 +336,9 @@ test("el catálogo de rutas cubre todas las páginas exportadas", () => {
       if ([collectionPath, oddityPath].includes(path)) continue;
       assert.doesNotMatch(read(path), /data-visual-story=|class="avs-cards"|>Ver reel</, path);
     }
-    for (const name of ["caja", "diversificacion", "escenarios", "oddity"]) {
-      const reel = readFileSync(new URL(`prototipos/arkez-integrado/archivos/visual-stories/reel-${name}.mp4`, output));
-      assert.equal(reel.subarray(4, 8).toString(), "ftyp");
-    }
     const oddity = read(oddityPath);
     assert.match(oddity, /data-panels="4"/);
-    assert.match(oddity, />Ver reel</);
+    assert.doesNotMatch(oddity, /<video|>Ver reel</);
     assert.match(oddity, /Dos escenarios a 3–5 años/);
     assert.ok(oddity.includes(`href="${base}research/oddity/modelo/"`));
     assert.throws(() => readFileSync(new URL("prototipos/arkez-integrado/archivos/mapa-relaciones-ia.zip", output)), { code: "ENOENT" });

@@ -19,7 +19,6 @@ export const stories = {
   caja: {
     route: "/recursos/guias/#liquidez-operativa",
     topic: "Flujo de caja",
-    reel: "reel-caja.mp4",
     title: "Vendimos. ¿Y la caja?",
     image: cash,
     cover: cashCover,
@@ -34,7 +33,6 @@ export const stories = {
   diversificacion: {
     route: "/recursos/articulos/que-es-diversificar/",
     topic: "Diversificación",
-    reel: "reel-diversificacion.mp4",
     title: "Todas las manzanas en una bolsa",
     image: apples,
     cover: applesCover,
@@ -49,7 +47,6 @@ export const stories = {
   escenarios: {
     route: "/recursos/guias/#comparar-escenarios",
     topic: "Comparación de escenarios",
-    reel: "reel-escenarios.mp4",
     title: "Una cosa a la vez",
     image: scenarios,
     cover: scenariosCover,
@@ -119,7 +116,6 @@ export const stories = {
   },
   oddity: {
     topic: "Modelos de negocio",
-    reel: "reel-oddity.mp4",
     title: "¿Cómo gana dinero ODDITY?",
     image: oddity,
     cover: oddityCover,

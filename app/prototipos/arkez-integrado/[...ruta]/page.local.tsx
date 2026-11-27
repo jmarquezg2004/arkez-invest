@@ -84,7 +84,7 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
     heroActions={service?.intro} sectionExtras={readingStories}>
     {path === "/actualidad/" && <PreviewNews directory={base + path} directoryPage />}
     {path === "/ecosistema/" ? <Ecosystem /> : service?.body ?? <CommercialPages path={path} />}
-    {path === "/recursos/" && <><ResourceLibrary /><a className="avs-reading-link" href={visualStoriesPath}>Explorar historias y reels en Research</a></>}
+    {path === "/recursos/" && <><ResourceLibrary /><a className="avs-reading-link" href={visualStoriesPath}>Explorar historias en Research</a></>}
     {relatedStory && <a className="avs-reading-link" href={relatedStory}>Ver la historia relacionada en Research</a>}
     {path === "/contacto/" && <p className="ai-contact-note">Vista previa para revisar el sitio. El envío de mensajes se habilita en la versión pública cuando esté disponible.</p>}
   </ContentPage></main>;

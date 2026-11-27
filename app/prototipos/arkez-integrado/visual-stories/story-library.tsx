@@ -7,7 +7,6 @@ import { stories, storyAnchor, type StoryKey } from "./stories";
 import { StoryStrip } from "./story-strip";
 
 const entries = ["oddity", "caja", "diversificacion", "escenarios", "fuentes", "inflacion", "plazos", "pagos"] as const satisfies readonly StoryKey[];
-const reels = base + "/archivos/visual-stories/";
 
 export function StoryLibrary() {
   return <main className="avs-library">
@@ -16,7 +15,7 @@ export function StoryLibrary() {
         <ArtImage art="study" eager />
         <div><p className="ve-kicker">Arkez Research</p>
           <h1>Arkez Visual Stories</h1>
-          <p>Historietas y reels para entender cómo funciona un negocio, leer una cifra o comparar escenarios.</p>
+          <p>Historietas para entender cómo funciona un negocio, leer una cifra o comparar escenarios.</p>
         </div>
       </header>
     </div>
@@ -28,7 +27,7 @@ export function StoryLibrary() {
           const { cover, topic, title } = story;
           return <li key={key}><a href={key === "oddity" ? oddityStoryPath : "#" + storyAnchor(key)}>
             <img src={cover.src} width={cover.width} height={cover.height} alt="" loading="lazy" decoding="async" />
-            <span><small>{topic}{"reel" in story ? " · Reel" : ""}</small><strong>{title}</strong></span>
+            <span><small>{topic}</small><strong>{title}</strong></span>
             <ArrowRight size={20} aria-hidden="true" />
           </a></li>;
         })}</ul>
@@ -38,7 +37,7 @@ export function StoryLibrary() {
       <section aria-labelledby="avs-library-stories">
         <h2 id="avs-library-stories">Lee y anima las viñetas</h2>
         {entries.filter((key) => key !== "oddity").map((key) => <div key={key}>
-          <StoryStrip story={key} heading="h3" reelDirectory={reels} />
+          <StoryStrip story={key} heading="h3" />
           <a className="avs-reading-link" href={base + stories[key].route}>Ampliar el tema: {stories[key].topic} <ArrowUpRight size={16} aria-hidden="true" /></a>
         </div>)}
       </section>

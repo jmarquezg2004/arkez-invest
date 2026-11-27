@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BarChart3, BookOpen, Building2, Calculator, Check, Clock3, Compass, Layers3, RotateCcw, ScanLine } from "lucide-react";
 import mapData from "@/arkez-visual-engine/ai-map-source.json";
+import { TopicStory } from "./visual-stories/topic-story";
 import { storyForReading } from "./visual-stories/story-links";
 import { beginnerKeys, beginnerTopics, learningPath, learningQuestions, type Answers, type BeginnerTopic } from "./learning-path";
 
@@ -55,7 +56,8 @@ export function LearningQuiz({ base }: { base: string }) {
           : { ...previous, [question.id]: value });
   }
 
-  const relatedStory = result ? [result.first, ...result.next].map(({ path }) => storyForReading(path)).find(Boolean) : undefined;
+  const relatedStory = result ? [result.first, ...result.next].map(({ path }) => storyForReading(path))
+    .find((href) => href && !href.endsWith(`#historia-tema-${result.story}`)) : undefined;
   const showCompany = question.id === "focus" && answers.focus === "infraestructura";
   const showStory = question.id === "focus" && answers.focus === "historia";
   const search = normalize(companyInput);
@@ -79,11 +81,12 @@ export function LearningQuiz({ base }: { base: string }) {
       <div className="ai-quiz-status"><Compass size={18} aria-hidden="true" /> {result.level} · {result.session}</div>
       <h2 ref={heading} tabIndex={-1}>{result.title}</h2>
       <p className="ai-quiz-prompt">{result.prompt} {result.focus}</p>
-      <section className="ai-quiz-first" aria-labelledby="learning-first">
+      <TopicStory topic={result.story} />
+      {result.first.format !== "Visual Story" && <section className="ai-quiz-first" aria-labelledby="learning-first">
         <p className="ai-quiz-status" id="learning-first">Empieza aquí · {result.first.format}</p>
         <h3>{result.first.title}</h3><p>{result.first.task}</p>
         <a className="ai-quiz-primary" href={base + result.first.path}>Abrir primer recurso <ArrowUpRight size={18} aria-hidden="true" /></a>
-      </section>
+      </section>}
       <h3 className="ai-quiz-next-title">{answers.time === "hoy" ? "Si quieres seguir después" : "Tus próximas dos sesiones"}</h3>
       <ol className="ai-quiz-next" start={2}>
         {result.next.map(({ path, format, title, task }) => <li key={path}>
