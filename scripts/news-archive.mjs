@@ -147,19 +147,19 @@ export const directoryArchive = [
 // These covers are linked by the publishers on the corresponding article pages.
 directoryArchive.push(
   {
-    title: "Advisor Insights — Brought to You By The Motley Fool",
-    href: "https://www.fool.com/retirement/advisor/2026/11/27/advisor-insights-brought-to-you-by-the-motley-fool/",
-    date: "2026-11-27T18:08:00Z",
+    title: "El impacto de la ley fiscal de EE. UU. en la Seguridad Social",
+    href: "https://www.fool.com/retirement/2026/11/26/president-donald-trump-big-beautiful-bill-dropped-169-billion-bombshell-on-social-security/",
+    date: "2026-11-26",
     source: "The Motley Fool",
-    image: "https://g.foolcdn.com/misc-assets/email-header-advisor-insights-1.png",
+    image: "https://g.foolcdn.com/image/?op=resize&url=https%3A%2F%2Fcdn.content.foolcdn.com%2Fimages%2F1umn9qeh%2Fproduction%2F0042b2f01c0e67ac94aa16c1db3c2e86a2431911-3000x2000.jpg&w=3840",
     archived: true,
   },
   {
-    title: "Breakfast News: Black Friday — Stocks on Sale!",
-    href: "https://www.fool.com/investing/breakfast-news/2026/11/27/breakfast-news/",
-    date: "2026-11-27T12:30:00Z",
+    title: "Cómo se concentra la cartera de Berkshire Hathaway bajo Greg Abel",
+    href: "https://www.fool.com/investing/2026/11/27/warren-buffett-successor-greg-abel-has-47-berkshire-hathaway-346-billion-portfolio-invested-3-proven-winners/",
+    date: "2026-11-27",
     source: "The Motley Fool",
-    image: "https://g.foolcdn.com/misc-assets/email-header-breakfast-news-tag5.png",
+    image: "https://g.foolcdn.com/image/?op=resize&url=https%3A%2F%2Fcdn.content.foolcdn.com%2Fimages%2F1umn9qeh%2Fproduction%2Fb436aa54c2a8bbb266f5d52862f3c53fbdc88fc4-3000x2076.jpg&w=3840",
     archived: true,
   },
   {

@@ -131,7 +131,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
                 onUnavailable={() => { if (image) setUnavailable((current) => new Set([...current, image])); }} />
               <div className="ai-news-copy">
                 <p><time dateTime={date} data-arkez-localized>{dateFormat[locale].format(new Date(date))}</time>{story.archived && <span> · Archivo</span>}</p>
-                <h3 translate="no" lang={href.startsWith("https://es.") ? "es" : "en"}>{title}</h3>
+                <h3 translate="no" lang={href.startsWith("https://es.") || (story.archived && story.source === "The Motley Fool") ? "es" : "en"}>{title}</h3>
                 <ArrowUpRight size={21} aria-hidden="true" />
               </div>
             </a>

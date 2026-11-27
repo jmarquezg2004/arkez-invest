@@ -8,10 +8,10 @@ const sources = [
   { name: "Yahoo Finanzas", feed: "https://feeds.finance.yahoo.com/rss/2.0/headline?s=%5EGSPC,%5EDJI,%5EIXIC&region=US&lang=en-US", hosts: ["finance.yahoo.com", "es.finance.yahoo.com"] },
   { name: "The Wall Street Journal", feed: "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain", hosts: ["www.wsj.com", "wsj.com"] },
   { name: "CNBC", feed: "https://www.cnbc.com/id/100003114/device/rss/rss.html", hosts: ["www.cnbc.com", "cnbc.com"], direct: true },
-  { name: "The Motley Fool", feed: "https://www.fool.com/feeds/index.aspx", hosts: ["www.fool.com", "fool.com"], direct: true },
 ];
+const foolTrending = "https://www.fool.com/trending-news/";
 export const newsImageHosts = ["content-media.investing.com", "images.cointelegraph.com", "s.yimg.com", "media.zenfs.com", "images.wsj.net",
-  "image.cnbcfm.com", "g.foolcdn.com", "www.coingecko.com", "assets.coingecko.com", "coin-images.coingecko.com",
+  "image.cnbcfm.com", "g.foolcdn.com", "cdn.content.foolcdn.com", "www.coingecko.com", "assets.coingecko.com", "coin-images.coingecko.com",
   "s3.coinmarketcap.com", "academy-public.coinmarketcap.com"];
 const articleHosts = {
   "Yahoo Finanzas": ["finance.yahoo.com", "es.finance.yahoo.com"],
@@ -42,6 +42,15 @@ function headlineImage(item) {
   for (const candidate of [item.enclosure?.link, ...(item.media ?? []), ...embedded, item.thumbnail]) {
     if (typeof candidate !== "string" || candidate.length > 1024) continue;
     const image = URL.parse(decodeHeadline(candidate));
+    if (image?.origin === "https://g.foolcdn.com" && /^\/image\/?$/.test(image.pathname)) {
+      const original = URL.parse(image.searchParams.get("url") ?? "");
+      if (original && ["https://cdn.content.foolcdn.com", "https://g.foolcdn.com"].includes(original.origin)
+        && !original.username && !original.password && /\.(?:jpe?g|png|webp|avif)$/i.test(original.pathname)) {
+        const resized = new URL("https://g.foolcdn.com/image/");
+        resized.search = new URLSearchParams({ op: "resize", url: original.origin + original.pathname, w: "960" }).toString();
+        return resized.href;
+      }
+    }
     if (image?.protocol === "https:" && !image.username && !image.password && !image.port
         && newsImageHosts.includes(image.hostname) && (/\.(?:jpe?g|png|webp|avif)$/i.test(image.pathname)
           || (image.hostname === "images.wsj.net" && /^\/im-\d+$/.test(image.pathname))
@@ -51,6 +60,42 @@ function headlineImage(item) {
       return image.href;
     }
   }
+}
+
+async function readFoolTrending(load) {
+  const html = await feedBody(new URL(foolTrending), load, 2_000_000);
+  if (typeof html !== "string") return [];
+  const start = /<h[1-6]\b[^>]*>\s*Recent Articles\s*<\/h[1-6]>/i.exec(html);
+  if (!start) return [];
+  const listing = html.slice(start.index + start[0].length).split(/<\/main\s*>|<footer\b/i)[0];
+  const articles = new Map();
+  const addCard = (link, heading, images) => {
+    const href = URL.parse(decodeHeadline(link ?? ""), foolTrending);
+    const date = href?.pathname.match(/\/(\d{4})\/(\d\d)\/(\d\d)\/[\w-]+\/?$/);
+    const title = decodeHeadline(heading.replace(/<[^>]*>/g, "").replace(/\s+/g, " "));
+    if (href?.origin !== "https://www.fool.com" || href.username || href.password
+      || !date || !title || title.length > 240) return;
+    const published = `${date[1]}-${date[2]}-${date[3]}`;
+    if (!Number.isFinite(Date.parse(published))) return;
+    href.search = "";
+    href.hash = "";
+    const image = headlineImage({ media: Array.from(images.matchAll(/<img\b[^>]*>/gi), ([tag]) => {
+      const attrs = tagAttributes(tag);
+      const image = URL.parse(decodeHeadline(attrs["data-src"] ?? attrs.src ?? ""), foolTrending);
+      return image?.href;
+    }) });
+    if (!articles.has(href.href)) articles.set(href.href, {
+      title, href: href.href, date: published, source: "The Motley Fool", ...(image ? { image } : {}),
+    });
+  };
+  for (const [, tag, card] of listing.matchAll(/(<a\b[^>]*>)([\s\S]*?)<\/a\s*>/gi)) {
+    const heading = card.match(/<h[2-6]\b[^>]*>([\s\S]*?)<\/h[2-6]>/i)?.[1];
+    if (heading) addCard(tagAttributes(tag).href, heading, card);
+  }
+  for (const [, tag, heading] of listing.matchAll(/<h[2-6]\b[^>]*>\s*(<a\b[^>]*>)([\s\S]*?)<\/a\s*>\s*<\/h[2-6]>/gi)) {
+    addCard(tagAttributes(tag).href, heading, "");
+  }
+  return [...articles.values()].slice(0, 10);
 }
 
 function tagAttributes(tag) {
@@ -140,7 +185,8 @@ export function createPreviewNews({ load = fetch, now = Date.now, enrich = false
   return () => {
     if (request && now() < expires) return request;
     expires = now() + 5 * 60_000;
-    request = Promise.allSettled(sources.map((source) => readFeed(source, load))).then((results) => {
+    request = Promise.allSettled([...sources.map((source) => readFeed(source, load)),
+      ...(enrich ? [readFoolTrending(load)] : [])]).then((results) => {
       const seen = new Map();
       for (const story of results.flatMap((result) => result.status === "fulfilled" ? result.value : [])
         .sort((a, b) => b.date.localeCompare(a.date))) {
@@ -150,7 +196,10 @@ export function createPreviewNews({ load = fetch, now = Date.now, enrich = false
       }
       const stories = [...seen.values()];
       if (!enrich) return stories;
-      const selected = [...stories, ...archive.filter(({ href }) => !seen.has(href))];
+      const archiveByHref = new Map(archive.map((story) => [story.href, story]));
+      const selected = [...stories.map((story) => ({
+        ...story, image: story.image ?? archiveByHref.get(story.href)?.image,
+      })), ...archive.filter(({ href }) => !seen.has(href))];
       const tried = new Map();
       return Promise.all(selected.map((story) => {
         const count = tried.get(story.source) ?? 0;

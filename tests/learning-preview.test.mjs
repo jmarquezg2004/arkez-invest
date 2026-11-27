@@ -91,7 +91,7 @@ test("el feed de noticias ignora fuentes caídas, enlaces ajenos, HTML y duplica
   assert.equal(results[0].image, "https://content-media.investing.com/news/ejemplo.jpg");
   assert.equal(results[1].image, undefined);
   assert.deepEqual(await news(), results);
-  assert.equal(requests, 16);
+  assert.equal(requests, 14);
 });
 
 test("Actualidad conserva seis tarjetas y sustituye fuentes si falta la foto", () => {
@@ -159,6 +159,32 @@ test("recupera el src original de la descripción RSS sin mostrar su HTML", asyn
   const [story] = await news();
   assert.equal(story.image, "https://content-media.investing.com/news/original.jpg?w=960&h=540");
   assert.equal(Object.hasOwn(story, "description"), false);
+});
+
+test("Motley Fool toma enlaces de Trending News y adapta la foto del artículo al ancho de la tarjeta", async () => {
+  const listing = "https://www.fool.com/trending-news/";
+  const article = "https://www.fool.com/investing/2026/11/27/mercados/";
+  const original = "https://cdn.content.foolcdn.com/images/production/mercados.jpg";
+  const resized = `https://g.foolcdn.com/image/?op=resize&url=${encodeURIComponent(original)}&w=3840`;
+  const news = createPreviewNews({ enrich: true, load: async (url) => {
+    if (url.href === listing) return new Response(`<main>
+      <a href="/investing/2026/11/27/ajeno/"><h3>Fuera de la lista</h3></a>
+      <h2>Recent Articles</h2>
+      <a href="/investing/2026/11/27/mercados/?source=trending"><h3>Mercados &amp; economía</h3><p>Resumen</p></a>
+      <a href="https://example.com/investing/2026/11/27/ajeno/"><h3>Otro sitio</h3></a>
+      </main>`);
+    if (url.href === article) return new Response(`<head><meta property="og:image" content="${resized.replaceAll("&", "&amp;")}"></head>`);
+    return new Response(null, { status: 403 });
+  } });
+  const [story, extra] = await news();
+  assert.equal(extra, undefined);
+  assert.equal(story.title, "Mercados & economía");
+  assert.equal(story.href, article);
+  assert.equal(story.source, "The Motley Fool");
+  const photo = new URL(story.image);
+  assert.equal(photo.hostname, "g.foolcdn.com");
+  assert.equal(photo.searchParams.get("url"), original);
+  assert.equal(photo.searchParams.get("w"), "960");
 });
 
 test("la ruta local de noticias devuelve JSON y admite únicamente GET", async () => {

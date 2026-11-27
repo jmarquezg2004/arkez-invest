@@ -4,7 +4,7 @@ export const directorySources = [
   { source: "Investing España", href: "https://es.investing.com/news/" },
   { source: "Cointelegraph", href: "https://cointelegraph.com/category/latest-news" },
   { source: "CNBC", href: "https://www.cnbc.com/markets/" },
-  { source: "The Motley Fool", href: "https://www.fool.com/investing-news/" },
+  { source: "The Motley Fool", href: "https://www.fool.com/trending-news/" },
   { source: "CoinGecko", href: "https://www.coingecko.com/research/latest" },
   { source: "CoinMarketCap", href: "https://coinmarketcap.com/academy" },
 ] as const;
