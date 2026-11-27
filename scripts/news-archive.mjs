@@ -143,3 +143,54 @@ export const directoryArchive = [
     "archived": true
   }
 ];
+
+// These covers are linked by the publishers on the corresponding article pages.
+directoryArchive.push(
+  {
+    title: "Advisor Insights — Brought to You By The Motley Fool",
+    href: "https://www.fool.com/retirement/advisor/2026/11/27/advisor-insights-brought-to-you-by-the-motley-fool/",
+    date: "2026-11-27T18:08:00Z",
+    source: "The Motley Fool",
+    image: "https://g.foolcdn.com/misc-assets/email-header-advisor-insights-1.png",
+    archived: true,
+  },
+  {
+    title: "Breakfast News: Black Friday — Stocks on Sale!",
+    href: "https://www.fool.com/investing/breakfast-news/2026/11/27/breakfast-news/",
+    date: "2026-11-27T12:30:00Z",
+    source: "The Motley Fool",
+    image: "https://g.foolcdn.com/misc-assets/email-header-breakfast-news-tag5.png",
+    archived: true,
+  },
+  {
+    title: "The price of gold today, Nov. 27, 2026",
+    href: "https://www.cnbc.com/select/the-price-of-gold-today-nov-27-2026/",
+    date: "2026-11-27",
+    source: "CNBC",
+    archived: true,
+  },
+  {
+    title: "CEX & DEX Trading Activity Report 2026",
+    href: "https://www.coingecko.com/research/publications/cex-dex-trading-activity-report-2026",
+    date: "2026-11-24",
+    source: "CoinGecko",
+    image: "https://assets.coingecko.com/coingecko/public/ckeditor_assets/pictures/102136782/content_CG_Report_Cover_%28Learn_Article%29_%287%29.webp",
+    archived: true,
+  },
+  {
+    title: "2026 Q3 Crypto Industry Report",
+    href: "https://www.coingecko.com/research/publications/2026-q3-crypto-industry-report",
+    date: "2026-10-15",
+    source: "CoinGecko",
+    image: "https://assets.coingecko.com/coingecko/public/ckeditor_assets/pictures/102136545/content_CG_Report_Cover_%28Learn_Article%29_%285%29.webp",
+    archived: true,
+  },
+  {
+    title: "CMC Market Pulse: Forget Quantum, AI is Coming for Cryptography",
+    href: "https://coinmarketcap.com/academy/article/cmc-market-pulse-forget-quantum-ai-is-coming-for-cryptography",
+    date: "2026-11-27",
+    source: "CoinMarketCap",
+    image: "https://academy-public.coinmarketcap.com/optimized-uploads/0adf2d37356a437d9bb97f7dd92ef490.png",
+    archived: true,
+  },
+);

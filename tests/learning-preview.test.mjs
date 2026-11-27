@@ -91,24 +91,41 @@ test("el feed de noticias ignora fuentes caídas, enlaces ajenos, HTML y duplica
   assert.equal(results[0].image, "https://content-media.investing.com/news/ejemplo.jpg");
   assert.equal(results[1].image, undefined);
   assert.deepEqual(await news(), results);
-  assert.equal(requests, 12);
+  assert.equal(requests, 16);
 });
 
-test("Actualidad mantiene las cuotas por fuente al rotar y al usar el archivo", () => {
+test("Actualidad conserva seis tarjetas y sustituye fuentes si falta la foto", () => {
   const archive = [...directoryArchive, ...archivedHeadlines];
-  const live = [{ source: "Yahoo Finanzas", href: "https://finance.yahoo.com/news/live-test" }, ...archive.slice(0, 1)];
-  const expected = ["Yahoo Finanzas", "Yahoo Finanzas", "The Wall Street Journal", "The Wall Street Journal", "Investing España", "Cointelegraph"];
-  for (const feeds of [live, []]) {
-    const groups = directoryGroups(feeds, archive);
-    const first = directoryBatch(groups, 0);
-    const next = directoryBatch(groups, 1);
-    for (const batch of [first, next]) {
-      assert.deepEqual(batch.map(({ source }) => source), expected);
+  const live = [
+    { source: "Yahoo Finanzas", href: "https://finance.yahoo.com/news/a", image: "yahoo-a" },
+    { source: "Yahoo Finanzas", href: "https://finance.yahoo.com/news/b", image: "yahoo-b" },
+    { source: "Cointelegraph", href: "https://cointelegraph.com/news/a", image: "coin" },
+    { source: "CNBC", href: "https://www.cnbc.com/2026/11/27/a.html", image: "cnbc" },
+  ];
+  for (const broken of [[], ["yahoo-b", "coin"], ["yahoo-b", "coin", ...archive.filter((item) => item.source === "CoinGecko").map((item) => item.image)]]) {
+    const groups = directoryGroups(live, archive, ({ image }) => Boolean(image && !broken.includes(image)));
+    const expected = broken.length === 0 ? ["Yahoo Finanzas", "Yahoo Finanzas", "Cointelegraph"]
+      : ["CNBC", "The Motley Fool", broken.length === 2 ? "CoinGecko" : "CoinMarketCap"];
+    for (const batch of [directoryBatch(groups, 0), directoryBatch(groups, 1)]) {
+      assert.deepEqual(batch.map(({ source }) => source), [...expected.slice(0,2), "The Wall Street Journal", "The Wall Street Journal", "Investing España", expected[2]]);
       assert.equal(new Set(batch.map(({ href }) => href)).size, 6);
+      assert.ok(batch.every(({ image }) => image && !broken.includes(image)));
     }
-    assert.notDeepEqual(first, next);
-    assert.equal(first.filter(({ href }) => href === archive[0].href).length, 1);
   }
+});
+
+test("recupera la imagen editorial del artículo si el RSS de Yahoo no trae foto", async () => {
+  const href = "https://finance.yahoo.com/markets/article/ejemplo.html";
+  const image = "https://s.yimg.com/ny/api/res/example";
+  const news = createPreviewNews({ enrich: true, load: async (url) => {
+    if (url.href === href) return new Response(`<html><head>
+      <meta content="https://example.org/untrusted.png" property="og:image">
+      <meta content="${image}" property="og:image:secure_url"></head></html>`);
+    return url.searchParams.get("rss_url")?.includes("feeds.finance.yahoo.com")
+      ? Response.json({ status: "ok", items: [{ title: "Article", link: href, pubDate: "2026-11-27 12:00:00" }] })
+      : new Response(null, { status: 404 });
+  } });
+  assert.equal((await news())[0].image, image);
 });
 
 test("Actualidad lee RSS de Yahoo o Cointelegraph si el conversor falla", async () => {

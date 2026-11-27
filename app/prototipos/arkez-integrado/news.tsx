@@ -68,7 +68,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
       try {
         const response = await fetch("/api/noticias/preview", { signal: controller.signal });
         const stories: unknown = response.ok ? await response.json() : null;
-        if (Array.isArray(stories) && stories.length && (directoryPage || stories.some((story) => story?.image))) return stories as Story[];
+        if (Array.isArray(stories) && stories.length && (directoryPage || stories.some((story) => story?.image && !story.archived))) return stories as Story[];
         const direct = await readBrowserFeeds();
         return direct.length ? direct : Array.isArray(stories) ? stories as Story[] : [];
       } catch {
@@ -94,12 +94,12 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
   const count = 2;
   const archive = archivedHeadlines.filter(({ href }) => !live?.some((story) => story.href === href));
   const photoAvailable = ({ image }: Story) => Boolean(image && !unavailable.has(image));
-  const published = live ?? [];
+  const published = (live ?? []).filter((story) => !story.archived);
   const withPhoto = published.filter(photoAvailable);
   const backupPhotos = archive.filter(photoAvailable);
   const stories = [...withPhoto, ...backupPhotos, ...published.filter((story) => !photoAvailable(story)), ...archive.filter((story) => !photoAvailable(story))];
   const pool = withPhoto.length + backupPhotos.length >= count ? [...withPhoto, ...backupPhotos] : stories;
-  const groups = directoryGroups(published, [...directoryArchive, ...archive]);
+  const groups = directoryGroups(published, [...(live ?? []).filter((story) => story.archived), ...directoryArchive, ...archive], photoAvailable);
   const canRotate = directoryPage ? groups.some(({ stories, slots }) => stories.length > slots) : pool.length > count;
 
   useEffect(() => {
@@ -111,7 +111,8 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
   }, [rotating, canRotate]);
   const shown = directoryPage ? directoryBatch(groups, batch)
     : pool.length <= count ? pool : Array.from({ length: count }, (_, i) => pool[(batch * count + i) % pool.length]);
-  const sourceLinks = directoryPage ? directorySources.map(({ source, href }) => [source, href] as const) : publishers;
+  const sourceLinks = directoryPage ? directorySources.filter(({ source }) => shown.some((story) => story.source === source))
+    .map(({ source, href }) => [source, href] as const) : publishers;
 
   return <section className="ai-news" id="noticias" aria-labelledby="preview-news-heading">
     <div className="container-shell">
@@ -121,7 +122,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
         {!directoryPage && <a href={directory}>Ver toda la actualidad <ArrowUpRight size={17} aria-hidden="true" /></a>}
       </header>
       <p className="ai-news-status" role="status">{live === null ? "Buscando titulares recientes."
-        : live.length ? "Titulares de las fuentes disponibles." : "Selección de archivo mientras se restablecen los titulares."}</p>
+        : published.length ? "Titulares de las fuentes disponibles." : "Selección de archivo mientras se restablecen los titulares."}</p>
       <ul className="ai-news-stories" data-directory={directoryPage || undefined} role="list" ref={articleList}>
         {shown.map((story) => { const { title, href, date, image } = story; return <li key={href}>
           <article>
@@ -130,8 +131,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
                 onUnavailable={() => { if (image) setUnavailable((current) => new Set([...current, image])); }} />
               <div className="ai-news-copy">
                 <p><time dateTime={date} data-arkez-localized>{dateFormat[locale].format(new Date(date))}</time>{story.archived && <span> · Archivo</span>}</p>
-                <h3 translate="no" lang={story.source === "Reserva Federal" || story.source === "The Wall Street Journal"
-                  || /https:\/\/(finance\.yahoo\.com|cointelegraph\.com)\//.test(href) ? "en" : "es"}>{title}</h3>
+                <h3 translate="no" lang={href.startsWith("https://es.") ? "es" : "en"}>{title}</h3>
                 <ArrowUpRight size={21} aria-hidden="true" />
               </div>
             </a>

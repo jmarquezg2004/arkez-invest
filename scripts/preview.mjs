@@ -47,7 +47,7 @@ function limiter(max) {
   };
 }
 
-export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs = 800, news = createPreviewNews(), newsPhoto = createNewsPhoto(news, fetch, [...archivedHeadlines, ...directoryArchive]), market = createMarketLookup() } = {}) {
+export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs = 800, news = createPreviewNews({ enrich: true, archive: directoryArchive }), newsPhoto = createNewsPhoto(news, fetch, [...archivedHeadlines, ...directoryArchive]), market = createMarketLookup() } = {}) {
   const contactChallenges = new Map();
   const allowIssue = limiter(24);
   const allowSubmit = limiter(8);
