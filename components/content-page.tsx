@@ -16,7 +16,13 @@ const dateFormat = new Intl.DateTimeFormat("es-CO", {
   day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
 });
 
-export function ContentPage({ page, path, heroArt, heroActions, sectionExtras, children }: { page: PageData; path: string; heroArt?: ReactNode; heroActions?: ReactNode; sectionExtras?: Readonly<Record<string, ReactNode>>; children?: ReactNode }) {
+type SectionArt = (section: number, topic?: number) => ReactNode;
+
+function IllustratedText({ children, art }: { children: ReactNode; art?: ReactNode }) {
+  return art ? <div className="ai-lesson-row"><div>{children}</div>{art}</div> : children;
+}
+
+export function ContentPage({ page, path, heroArt, heroActions, sectionExtras, sectionArt, children }: { page: PageData; path: string; heroArt?: ReactNode; heroActions?: ReactNode; sectionExtras?: Readonly<Record<string, ReactNode>>; sectionArt?: SectionArt; children?: ReactNode }) {
   const trail = breadcrumbs(path);
   const Body = page.editorial ? "article" : "div";
 
@@ -52,15 +58,13 @@ export function ContentPage({ page, path, heroArt, heroActions, sectionExtras, c
         )}
         {children}
         {page.sections && (
-          <div className="content-sections">
-            {page.sections.map(({ id, title, body, topics, links, preview, edition }) => (
+          <div className={sectionArt ? "content-sections ai-illustrated-sections" : "content-sections"}>
+            {page.sections.map(({ id, title, body, topics, links, preview, edition }, index) => (
               <section key={title} id={id}>
-                <h2>{title}</h2>
-                <p>{body}</p>
-                {topics?.map((topic) => (
+                <IllustratedText art={sectionArt?.(index)}><h2>{title}</h2><p>{body}</p></IllustratedText>
+                {topics?.map((topic, topicIndex) => (
                   <div className="content-topic" key={topic.title}>
-                    <h3>{topic.title}</h3>
-                    <p>{topic.body}</p>
+                    <IllustratedText art={sectionArt?.(index, topicIndex)}><h3>{topic.title}</h3><p>{topic.body}</p></IllustratedText>
                   </div>
                 ))}
                 {id && sectionExtras?.[id]}

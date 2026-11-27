@@ -23,6 +23,8 @@ import { MarketLookup } from "../market-lookup";
 import { PreviewNews } from "../news";
 import { LearningQuiz } from "../learning-quiz";
 import { OddityReport, ReportLibrary } from "../reports";
+import { LessonIllustration } from "../lesson-illustration";
+import { lessonArtwork } from "../lesson-scenes";
 
 const sectionArtwork: Record<string, Art> = {
   servicios: "study", herramientas: "report", recursos: "report", nosotros: "globe",
@@ -74,6 +76,7 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
   const page = pages[path];
   if (!page) notFound();
   const service = serviceEditorial(path);
+  const scenes = lessonArtwork(path);
   const readingStories = Object.fromEntries((page.sections ?? []).flatMap(({ id }) => {
     const href = id && storyForReading(path + "#" + id);
     return href ? [[id, <a className="avs-reading-link" href={href}>Ver el ejemplo ilustrado en Research</a>]] : [];
@@ -81,7 +84,11 @@ export default async function Page({ params }: { params: Promise<{ ruta: string[
   const relatedStory = storyForReading(path);
   return <main className="ai-inner" data-service-tone={service?.tone}><ContentPage page={page} path={path}
     heroArt={service?.hero ?? <ArtImage art={sectionArtwork[ruta[0]] ?? "report"} eager />}
-    heroActions={service?.intro} sectionExtras={readingStories}>
+    heroActions={service?.intro} sectionExtras={readingStories}
+    sectionArt={scenes && ((section, topic) => {
+      const scene = scenes[topic === undefined ? section : `${section}.${topic}`];
+      return scene && <LessonIllustration image={scene[0]} x={scene[1]} y={scene[2]} />;
+    })}>
     {path === "/actualidad/" && <PreviewNews directory={base + path} directoryPage />}
     {path === "/ecosistema/" ? <Ecosystem /> : service?.body ?? <CommercialPages path={path} />}
     {path === "/recursos/" && <><ResourceLibrary /><a className="avs-reading-link" href={visualStoriesPath}>Explorar historias en Research</a></>}

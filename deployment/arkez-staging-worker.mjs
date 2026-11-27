@@ -1,8 +1,9 @@
 // The staging packager provides the CSP map and the shared news loader above this module.
 const integratedHome = "/prototipos/arkez-integrado/";
 const getHeadlines = createPreviewNews();
-const getNewsPhoto = createNewsPhoto(getHeadlines);
+const getNewsPhoto = createNewsPhoto(getHeadlines, fetch, archivedHeadlines);
 const getMarket = createMarketLookup();
+const askIsa = createIsaHandler();
 const stagingHeaders = {
   "X-Robots-Tag": "noindex, nofollow",
   "X-Content-Type-Options": "nosniff",
@@ -14,6 +15,7 @@ const stagingHeaders = {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.pathname === isaRoot) return askIsa(request, env);
     if (request.method !== "GET" && request.method !== "HEAD") {
       return new Response(null, { status: 405, headers: { ...stagingHeaders, Allow: "GET, HEAD" } });
     }

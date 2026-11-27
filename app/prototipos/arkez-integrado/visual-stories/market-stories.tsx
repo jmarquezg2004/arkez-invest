@@ -28,22 +28,22 @@ const stories = [
     "Si los cierres de la ventana son 12, 14 y 16, ¿cuál sale del cálculo al incorporar un nuevo cierre de 18?",
   ] },
   { id: "per", title: "PER · Precio sobre beneficio", source: "https://www.investor.gov/introduction-investing/investing-basics/glossary/price-earnings-pe-ratio", lines: [
-    "Inés pone una etiqueta de precio junto al informe de una empresa. El PER compara lo que cuesta una acción con el beneficio que le corresponde.",
+    "Isa pone una etiqueta de precio junto al informe de una empresa. El PER compara lo que cuesta una acción con el beneficio que le corresponde.",
     "La acción ficticia cuesta USD 60 y el beneficio anual por acción es USD 3. Con la calculadora obtiene un PER de 20 veces.",
-    "Antes de comparar una fábrica con una tienda, Inés mira si ambos beneficios corresponden al mismo periodo y si son históricos o estimados.",
+    "Antes de comparar una fábrica con una tienda, Isa mira si ambos beneficios corresponden al mismo periodo y si son históricos o estimados.",
     "Llega un informe con un beneficio menor. Si cae a USD 2 por acción y el precio sigue en USD 60, ¿qué PER resulta?",
   ] },
   { id: "roic", title: "ROIC · Retorno sobre el capital invertido", lines: [
-    "Mientras riega sus plantas, Inés se pregunta cuánto produjo el vivero con los recursos que necesitó para operar.",
+    "Mientras riega sus plantas, Isa se pregunta cuánto produjo el vivero con los recursos que necesitó para operar.",
     "El vivero ficticio obtiene USD 12 de beneficio operativo después de impuestos sobre USD 100 de capital invertido promedio. El ROIC del ejemplo es 12 %.",
-    "Al comparar el vivero con otro negocio, Inés comprueba si ambos cálculos incluyen las mismas partidas, como arrendamientos o adquisiciones.",
+    "Al comparar el vivero con otro negocio, Isa comprueba si ambos cálculos incluyen las mismas partidas, como arrendamientos o adquisiciones.",
     "El vivero se amplía. Si ahora usa USD 150 de capital y el beneficio sigue en USD 12, ¿cómo cambia su retorno?",
   ] },
   { id: "peg", title: "PEG · PER frente al crecimiento", lines: [
-    "Inés tiene una etiqueta con el PER y un gráfico de beneficios estimados. El PEG compara el PER con el crecimiento esperado del beneficio por acción.",
+    "Isa tiene una etiqueta con el PER y un gráfico de beneficios estimados. El PEG compara el PER con el crecimiento esperado del beneficio por acción.",
     "Al leer las proyecciones, encuentra un crecimiento anual del 10 %. Con un PER de 20, anota 20 ÷ 10 = 2.",
     "Comprueba de dónde sale la previsión y qué años abarca. Con crecimiento de cero, la división queda indefinida.",
-    "Inés dibuja una trayectoria más lenta. Si el PER se mantiene en 20 y la previsión baja al 5 %, ¿cuál sería el nuevo PEG?",
+    "Isa dibuja una trayectoria más lenta. Si el PER se mantiene en 20 y la previsión baja al 5 %, ¿cuál sería el nuevo PEG?",
   ] },
 ] as const;
 

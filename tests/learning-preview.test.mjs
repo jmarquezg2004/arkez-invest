@@ -76,7 +76,7 @@ test("el feed de noticias ignora fuentes caídas, enlaces ajenos, HTML y duplica
   assert.equal(results[0].image, "https://content-media.investing.com/news/ejemplo.jpg");
   assert.equal(results[1].image, undefined);
   assert.deepEqual(await news(), results);
-  assert.equal(requests, 4);
+  assert.equal(requests, 5);
 });
 
 test("recupera el src original de la descripción RSS sin mostrar su HTML", async () => {
@@ -111,7 +111,7 @@ test("la ruta local de noticias devuelve JSON y admite únicamente GET", async (
   }
 });
 
-test("las noticias toman los dos primeros del RSS antes de ordenarlos como el sitio original", async () => {
+test("las noticias conservan los titulares necesarios para dos filas y los ordenan por publicación", async () => {
   const news = createPreviewNews({ load: async (url) => Response.json({
     status: "ok",
     items: url.searchParams.get("rss_url").includes("investing.com") ? [
@@ -120,7 +120,7 @@ test("las noticias toman los dos primeros del RSS antes de ordenarlos como el si
       { title: "Tercera", link: "https://es.investing.com/news/tercera", pubDate: "2026-11-26 08:00:00" },
     ] : [],
   }) });
-  assert.deepEqual((await news()).map(({ title }) => title), ["Segunda", "Primera"]);
+  assert.deepEqual((await news()).map(({ title }) => title), ["Tercera", "Primera", "Segunda"]);
 });
 
 

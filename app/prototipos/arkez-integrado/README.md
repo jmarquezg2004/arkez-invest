@@ -13,3 +13,17 @@ La portada y Actualidad consultan titulares mediante `/api/noticias/preview` en 
 El proyecto conectado a GitHub usa `npm run build` y el directorio `out`. Al detectar la URL de Cloudflare Pages de `arkez-invest-staging`, el build incluye automáticamente la vista integrada y el Worker. Para preparar una carga directa, compila el perfil local y ejecuta `node scripts/package-staging.mjs`. El directorio generado contiene los archivos y el Worker para subir al proyecto de prueba `arkez-invest-staging`. El Worker dirige la raíz a la portada integrada, sirve las noticias e impone `noindex` y la CSP por documento. Comprueba primero en Cloudflare que el proyecto de prueba no tenga el dominio principal vinculado. Con una sesión autorizada en esa cuenta, se puede cargar el contenido del directorio desde el proyecto o mediante `wrangler pages deploy <directorio> --project-name arkez-invest-staging --branch <rama-principal-del-proyecto-de-prueba>`. Para actualizar el subdominio fijo hay que verificar la rama principal de ese proyecto. Para crear solo una vista previa de rama, usa una rama distinta y conserva la URL devuelta por Cloudflare.
 
 Explore y Research incorporan un gráfico gratuito servido por TradingView. La cobertura y el retraso dependen del mercado. La API local de consulta de empresas usa EDGAR de la SEC sin clave para localizar fichas y enlazar documentos recientes. Esos documentos solo existen para emisores cubiertos por EDGAR. El gráfico se carga al elegir un ticker y la CSP limita el marco a Explore y Research.
+
+### ISA e idioma
+
+El prototipo usa el primer idioma compatible de la lista del navegador (ES o EN). El selector
+guarda la elección explícita en almacenamiento local. Los textos ingleses revisados están
+en `english.ts`. Si el navegador dispone del traductor local de ES a EN, el selector puede
+completar el resto dentro del prototipo. Los documentos descargables y marcos externos
+conservan el idioma de origen.
+
+ISA incluye respuestas guiadas en ambos idiomas. Para preguntas libres en Cloudflare Pages,
+habilita Workers AI con un binding llamado `AI` **en el proyecto de staging**. El endpoint
+`/api/isa` envía al modelo de Cloudflare la pregunta y un extracto visible del apartado
+actual. El código de Arkez no guarda la conversación. La vista estática sigue funcionando
+cuando falta el binding.

@@ -1,6 +1,7 @@
 const sources = [
-  { name: "Reserva Federal", feed: "https://www.federalreserve.gov/feeds/press_monetary.xml", hosts: ["www.federalreserve.gov"] },
+  { name: "Reserva Federal", feed: "https://www.federalreserve.gov/feeds/press_monetary.xml", hosts: ["www.federalreserve.gov"], limit: 3 },
   { name: "Investing España", feed: "https://es.investing.com/rss/news_285.rss", hosts: ["es.investing.com"] },
+  { name: "Investing España", feed: "https://es.investing.com/rss/news.rss", hosts: ["es.investing.com"] },
   { name: "Cointelegraph", feed: "https://es.cointelegraph.com/rss", hosts: ["es.cointelegraph.com", "cointelegraph.com"] },
   { name: "Yahoo Finanzas", feed: "https://es.finance.yahoo.com/news/rss", hosts: ["es.finance.yahoo.com", "finance.yahoo.com"] },
 ];
@@ -52,10 +53,11 @@ async function readFeed(source, load) {
   }
   const data = JSON.parse(body + decoder.decode());
   if (data.status !== "ok" || !Array.isArray(data.items)) return [];
-  return data.items.slice(0, 2).flatMap((item) => {
+  return data.items.slice(0, source.limit ?? 10).flatMap((item) => {
     if (typeof item?.title !== "string" || typeof item.link !== "string" || typeof item.pubDate !== "string") return [];
     const title = decodeHeadline(item.title);
     if (!title || title.length > 240 || /[<>]/.test(title) || !/^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/.test(item.pubDate)) return [];
+    if (source.name === "Investing España" && /hazte con|descuento|disparan esta semana en el black friday|posiciónate ahora/i.test(title)) return [];
     const href = URL.parse(item.link);
     const date = Date.parse(item.pubDate.replace(" ", "T") + "Z");
     if (!href || href.protocol !== "https:" || href.username || href.password || href.port ||
@@ -76,8 +78,7 @@ export function createPreviewNews({ load = fetch, now = Date.now } = {}) {
     request = Promise.allSettled(sources.map((source) => readFeed(source, load))).then((results) => {
       const seen = new Set();
       return results.flatMap((result) => result.status === "fulfilled" ? result.value : [])
-        .reverse().sort((a, b) => Number(b.source === "Reserva Federal") - Number(a.source === "Reserva Federal")
-          || b.date.slice(0, 10).localeCompare(a.date.slice(0, 10)))
+        .sort((a, b) => b.date.localeCompare(a.date))
         .filter(({ href }) => {
           if (seen.has(href)) return false;
           seen.add(href);
@@ -89,13 +90,13 @@ export function createPreviewNews({ load = fetch, now = Date.now } = {}) {
 }
 
 
-export function createNewsPhoto(getNews, load = fetch) {
+export function createNewsPhoto(getNews, load = fetch, archive = []) {
   return async (url, method) => {
     const link = url.searchParams.get("url");
     const reject = (status) => new Response(null, { status, headers: { "Cache-Control": "no-store" } });
     if (!link || link.length > 1024 || !newsImageHosts.includes(URL.parse(link)?.hostname)) return reject(404);
     // Only relay an original image attached to a story currently returned by the curated feeds.
-    if (!(await getNews()).some((story) => story.image === link)) return reject(404);
+    if (!archive.some((story) => story.image === link) && !(await getNews()).some((story) => story.image === link)) return reject(404);
     try {
       const upstream = await load(link, { redirect: "error", signal: AbortSignal.timeout(4500) });
       const type = upstream.headers.get("content-type")?.split(";")[0];

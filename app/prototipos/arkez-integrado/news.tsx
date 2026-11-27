@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Newspaper } from "lucide-react";
 import { createPreviewNews } from "@/scripts/preview-news.mjs";
-import { editorialNews } from "@/lib/external-directory";
+import { archivedHeadlines } from "@/scripts/news-archive.mjs";
+import { useLanguage } from "./language";
 
-type Story = { title: string; href: string; date: string; source: string; image?: string };
+type Story = { title: string; href: string; date: string; source: string; image?: string; archived?: boolean };
 
 const readBrowserFeeds = createPreviewNews();
-const fallback: Story[] = Object.values(editorialNews);
+const rotationMs = 5 * 60_000;
 const publishers = [
   ["Investing España", "https://es.investing.com/news/"],
   ["Cointelegraph", "https://es.cointelegraph.com/"],
@@ -31,22 +32,31 @@ const socialSources = [
   ["Bank of America", "https://x.com/BankofAmerica"],
   ["The Wall Street Journal", "https://x.com/WSJ"],
 ] as const;
-const dateFormat = new Intl.DateTimeFormat("es-CO", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+const dateFormat = {
+  es: new Intl.DateTimeFormat("es-CO", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }),
+  en: new Intl.DateTimeFormat("en-US", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }),
+};
 
-function StoryCover({ story }: { story: Story }) {
+function StoryCover({ story, onUnavailable }: { story: Story; onUnavailable(): void }) {
   const [attempt, setAttempt] = useState(0);
   const src = story.image && attempt < 2
     ? attempt === 0 ? story.image : `/api/noticias/imagen?url=${encodeURIComponent(story.image)}`
     : undefined;
   return <div className="ai-news-cover" data-original={src ? undefined : "unavailable"}>
-    {src ? <img key={src} src={src} alt="" width="960" height="540" loading="lazy" decoding="async" onError={() => setAttempt((value) => value + 1)} />
+    {src ? <img key={src} src={src} alt="" width="960" height="540" loading="lazy" decoding="async" onError={() => {
+      setAttempt(attempt + 1);
+      if (attempt === 1) onUnavailable();
+    }} />
       : <small>Foto original no disponible</small>}
     <span>{story.source}</span>
   </div>;
 }
 
 export function PreviewNews({ directory, directoryPage = false }: { directory: string; directoryPage?: boolean }) {
+  const { locale } = useLanguage();
+  const articleList = useRef<HTMLUListElement>(null);
   const [live, setLive] = useState<Story[] | null>(null);
+  const [unavailable, setUnavailable] = useState<ReadonlySet<string>>(new Set());
 
   const [batch, setBatch] = useState(0);
   const [rotating, setRotating] = useState(false);
@@ -68,7 +78,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
       if (!controller.signal.aborted) setLive((previous) => stories.length ? stories : previous ?? []);
     }); };
     refresh();
-    const timer = window.setInterval(refresh, 120_000);
+    const timer = window.setInterval(refresh, rotationMs);
     return () => { controller.abort(); window.clearInterval(timer); };
   }, []);
 
@@ -80,16 +90,25 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
     return () => query.removeEventListener("change", update);
   }, []);
 
-  const stories = live?.length ? live : fallback;
-  const pages = Math.max(1, Math.ceil(stories.length / 2));
+  const count = directoryPage ? 6 : 2;
+  const archive = archivedHeadlines.filter(({ href }) => !live?.some((story) => story.href === href));
+  const photoAvailable = ({ image }: Story) => Boolean(image && !unavailable.has(image));
+  const published = live ?? [];
+  const withPhoto = published.filter(photoAvailable);
+  const backupPhotos = archive.filter(photoAvailable);
+  const stories = directoryPage
+    ? published.length > count ? published : [...published, ...archive]
+    : [...withPhoto, ...backupPhotos, ...published.filter((story) => !photoAvailable(story)), ...archive.filter((story) => !photoAvailable(story))];
+  const pool = !directoryPage && stories.filter(photoAvailable).length >= count ? stories.filter(photoAvailable) : stories;
+
   useEffect(() => {
-    if (!rotating || directoryPage || pages < 2) return;
+    if (!rotating || pool.length <= count) return;
     const timer = window.setInterval(() => {
-      if (!document.hidden) setBatch((current) => (current + 1) % pages);
-    }, 120_000);
+      if (!document.hidden && !articleList.current?.contains(document.activeElement)) setBatch((current) => (current + 1) % pool.length);
+    }, rotationMs);
     return () => window.clearInterval(timer);
-  }, [rotating, directoryPage, pages]);
-  const offset = (batch % pages) * 2;
+  }, [rotating, count, pool.length]);
+  const shown = pool.length <= count ? pool : Array.from({ length: count }, (_, i) => pool[(batch * count + i) % pool.length]);
 
   return <section className="ai-news" id="noticias" aria-labelledby="preview-news-heading">
     <div className="container-shell">
@@ -98,25 +117,26 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
           <h2 id="preview-news-heading">Noticias y actualidad</h2></div>
         {!directoryPage && <a href={directory}>Ver toda la actualidad <ArrowUpRight size={17} aria-hidden="true" /></a>}
       </header>
-      <p className="ai-news-status" role="status">{live === null ? "Buscando titulares recientes. Puedes consultar la selección editorial mientras tanto."
-        : live.length ? "Titulares recientes de las fuentes disponibles." : "Los titulares automáticos no están disponibles. Consulta la selección editorial."}</p>
-      <ul className="ai-news-stories" role="list">
-        {(directoryPage ? stories : stories.slice(offset, offset + 2)).map((story) => { const { title, href, date } = story; return <li key={href}>
+      <p className="ai-news-status" role="status">{live === null ? "Buscando titulares recientes."
+        : live.length ? "Titulares de las fuentes disponibles." : "Selección de archivo mientras se restablecen los titulares."}</p>
+      <ul className="ai-news-stories" data-directory={directoryPage || undefined} role="list" ref={articleList}>
+        {shown.map((story) => { const { title, href, date, image } = story; return <li key={href}>
           <article>
             <a href={href} target="_blank" rel="noopener noreferrer">
-              <StoryCover key={story.image} story={story} />
+              <StoryCover key={image} story={unavailable.has(image ?? "") ? { ...story, image: undefined } : story}
+                onUnavailable={() => { if (image) setUnavailable((current) => new Set([...current, image])); }} />
               <div className="ai-news-copy">
-                <p><time dateTime={date}>{dateFormat.format(new Date(date))}</time></p>
-                <h3>{title}</h3>
+                <p><time dateTime={date} data-arkez-localized>{dateFormat[locale].format(new Date(date))}</time>{story.archived && <span> · Archivo</span>}</p>
+                <h3 translate="no" lang={story.source === "Reserva Federal" ? "en" : "es"}>{title}</h3>
                 <ArrowUpRight size={21} aria-hidden="true" />
               </div>
             </a>
           </article>
         </li>; })}
       </ul>
-      {!directoryPage && pages > 1 && <div className="ai-news-sources">
-        <button type="button" onClick={() => setBatch((current) => (current + 1) % pages)}>Ver otros titulares</button>
-        <button type="button" aria-pressed={rotating} onClick={() => setRotating(!rotating)}>Rotación automática</button>
+      {pool.length > count && <div className="ai-news-sources">
+        <button type="button" onClick={() => setBatch((current) => (current + 1) % pool.length)}>Ver otros titulares</button>
+        <button type="button" aria-pressed={rotating} onClick={() => setRotating(!rotating)}>Rotación cada 5 minutos</button>
       </div>}
       <div className="ai-news-sources">
         <span>Consultar directamente</span>
@@ -124,7 +144,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
       </div>
       {directoryPage && <><div className="ai-news-sources">
         <span>Lectura de América Latina</span>
-        <a href={regionalReading.href} target="_blank" rel="noopener noreferrer">{regionalReading.title} · {regionalReading.source} · <time dateTime={regionalReading.date}>{dateFormat.format(new Date(regionalReading.date))}</time></a>
+        <a href={regionalReading.href} target="_blank" rel="noopener noreferrer">{regionalReading.title} · {regionalReading.source} · <time dateTime={regionalReading.date} data-arkez-localized>{dateFormat[locale].format(new Date(regionalReading.date))}</time></a>
       </div><div className="ai-news-sources"><span>Fuentes por región</span>
         {regionalSources.map(([region, name, href]) => <a key={href} href={href} target="_blank" rel="noopener noreferrer">{region} · {name} <ArrowUpRight size={14} aria-hidden="true" /></a>)}
       </div><div className="ai-news-sources"><span>Cuentas en X</span>

@@ -2,6 +2,8 @@ import { ArrowDownRight, ArrowUpRight, Compass, LibraryBig, Network } from "luci
 import { Brand } from "@/components/brand";
 import { contactLink, legalLinks, mainNavigation, type SiteLink } from "@/lib/navigation";
 import { PreviewLinks } from "./preview-links";
+import { LanguageSwitch, PreviewLanguage } from "./language";
+import { IsaAssistant } from "./isa";
 import { aiChainPath, aiMapPath, base, learningPathRoute, previewHref, visualStoriesPath } from "./routes";
 
 const library = [
@@ -21,18 +23,20 @@ const groups: readonly (SiteLink | (SiteLink & { children: readonly SiteLink[] }
 ];
 
 export function IntegratedShell({ children }: { children: React.ReactNode }) {
-  return <div className="ai-preview">
+  return <PreviewLanguage><div className="ai-preview">
     <header className="ai-preview-header">
       <div className="ai-preview-nav">
         <Brand href={base + "/"} />
         <details className="ai-preview-mobile"><summary>Menú <ArrowDownRight size={16} /></summary><Nav label="Menú móvil de Arkez" /></details>
         <div className="ai-preview-desktop"><Nav label="Menú principal de Arkez" /></div>
+        <LanguageSwitch />
         <a className="ai-contact" href={previewHref(contactLink.href)}>Contacto <ArrowUpRight size={16} /></a>
       </div>
     </header>
     <PreviewLinks>{children}</PreviewLinks>
     <footer className="ai-preview-footer"><a href={base + "/"}>Arkez Invest</a><div>{legalLinks.map(({ label, href }) => <a key={href} href={previewHref(href)}>{label}</a>)}</div></footer>
-  </div>;
+    <IsaAssistant />
+  </div></PreviewLanguage>;
 }
 
 function Nav({ label }: { label: string }) {

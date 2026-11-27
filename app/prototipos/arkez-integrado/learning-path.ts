@@ -1,7 +1,7 @@
 export const beginnerTopics = {
   bolsa: { label: "Bolsa de valores", panels: [
     "Una acción representa una pequeña parte de una empresa. La bolsa reúne compradores y vendedores bajo unas reglas.",
-    "Inés ve una orden de compra por USD 10 y una de venta por USD 11. Mientras nadie acepte el precio de la otra parte, esas órdenes no se cruzan.",
+    "Isa ve una orden de compra por USD 10 y una de venta por USD 11. Mientras nadie acepte el precio de la otra parte, esas órdenes no se cruzan.",
     "Cuando uno acepta el precio del otro, la operación se registra. Esa operación fija un precio observado, no el valor de todo el negocio.",
     "¿Qué sabes por el precio de una operación y qué tendrías que comprobar en los informes de la empresa?",
   ] },
@@ -19,7 +19,7 @@ export const beginnerTopics = {
   ] },
   fondos: { label: "Fondos de inversión", panels: [
     "Un fondo reúne dinero de muchas personas y lo administra según una política. Cada partícipe tiene una parte del fondo.",
-    "Inés compara dos fondos con nombres distintos y descubre que ambos tienen las mismas empresas entre sus principales posiciones.",
+    "Isa compara dos fondos con nombres distintos y descubre que ambos tienen las mismas empresas entre sus principales posiciones.",
     "Que el dinero se reparta entre dos fondos no elimina una exposición compartida. Busca también el costo y el plazo de cada fondo.",
     "¿Qué se repite entre los fondos? ¿Qué cobran y cuándo permiten recuperar el dinero?",
   ] },
@@ -30,13 +30,13 @@ export const beginnerTopics = {
     "Si pasa un mes vacío, ¿qué ingreso desaparece y qué gastos podrían continuar?",
   ] },
   depositos: { label: "Depósitos a plazo", panels: [
-    "En la sucursal, a Inés le ofrecen un depósito a plazo. La entidad indica una tasa y una fecha de vencimiento.",
+    "En la sucursal, a Isa le ofrecen un depósito a plazo. La entidad indica una tasa y una fecha de vencimiento.",
     "En el contrato figura un plazo de seis meses. Algunos depósitos restringen el retiro anticipado o aplican una penalización.",
-    "Al poner las dos fechas en el calendario, Inés ve que la matrícula del curso vence cuatro meses antes que el depósito.",
+    "Al poner las dos fechas en el calendario, Isa ve que la matrícula del curso vence cuatro meses antes que el depósito.",
     "¿Qué condiciones de retiro tendría que leer para saber si el dinero estará disponible a tiempo?",
   ] },
   cuentas: { label: "Cuentas remuneradas", panels: [
-    "En su teléfono, Inés ve una cuenta que puede pagar intereses sobre el saldo.",
+    "En su teléfono, Isa ve una cuenta que puede pagar intereses sobre el saldo.",
     "Divide un saldo ficticio de USD 700 en dos montones. La tasa anunciada se aplica a los primeros USD 500. Los otros USD 200 tienen otra condición.",
     "Revisa si el porcentaje es anual, en qué momento se abona el interés y si la entidad puede cambiar la tasa.",
     "¿Qué parte del saldo recibe esa tasa y durante cuánto tiempo? ¿Hay comisiones?",
@@ -48,7 +48,7 @@ export const beginnerTopics = {
     "¿Qué documento define el derecho? ¿Qué ocurre si el proyecto no genera los ingresos previstos?",
   ] },
   pensiones: { label: "Fondos de pensiones", panels: [
-    "En su primer empleo, Inés ve un aporte para el retiro en su recibo. Un fondo de pensiones administra recursos según las reglas del sistema.",
+    "En su primer empleo, Isa ve un aporte para el retiro en su recibo. Un fondo de pensiones administra recursos según las reglas del sistema.",
     "Años de aportes aparecen en un historial. Revisarlo permite detectar meses que faltan o montos que no coinciden.",
     "Dos compañeros se jubilan en fechas distintas. Sus aportes y las reglas aplicables pueden producir resultados diferentes.",
     "¿Qué parte del resultado depende del tiempo, de los aportes y de las reglas aplicables?",
@@ -60,7 +60,7 @@ export const beginnerTopics = {
     "¿Cómo verificarías la mejora si no hay un precio diario de bolsa? ¿Quién podría comprar esa participación?",
   ] },
   crowdfunding: { label: "Crowdfunding", panels: [
-    "Inés diseña una lámpara. Para fabricar el primer lote, publica su proyecto en una plataforma de financiamiento colectivo.",
+    "Isa diseña una lámpara. Para fabricar el primer lote, publica su proyecto en una plataforma de financiamiento colectivo.",
     "Muchas personas aportan pequeñas cantidades. Juntas cubren el objetivo ficticio de USD 3.000.",
     "Una campaña promete una lámpara como recompensa. Otra usaría un contrato de préstamo para acordar la devolución del dinero.",
     "El taller se retrasa. ¿Qué espera recibir cada participante y qué condiciones debería consultar?",
