@@ -29,3 +29,9 @@ de staging**. Ese endpoint envía la pregunta y un extracto visible del apartado
 de Cloudflare. El código de Arkez no guarda la conversación. El límite de solicitudes del
 Worker ayuda a contener el uso. La cuota de Cloudflare y el presupuesto se administran
 por separado. El catálogo funciona con el binding desactivado.
+
+Las consultas fuera del catálogo usan primero el modelo integrado del navegador cuando
+el dispositivo lo tiene disponible. Si el servicio remoto falla y el navegador admite
+una descarga, ISA ofrece iniciarla de forma explícita. Sin un modelo local compatible,
+las preguntas abiertas dependen del binding `AI` de Cloudflare Pages. Las consultas
+resueltas desde el catálogo o el modelo local no requieren una llamada a Workers AI.

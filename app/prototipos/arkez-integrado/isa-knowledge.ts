@@ -1,4 +1,5 @@
-type Language = "es" | "en";
+export type IsaLanguage = "es" | "en";
+export type IsaAnswer = { message: string; href?: string; sources?: readonly { label: string; href: string }[]; localModel?: boolean };
 type Entry = {
   mentions: RegExp;
   intent: RegExp;
@@ -49,13 +50,29 @@ const entries: readonly Entry[] = [
   },
 ];
 
-export function answerFromLibrary(question: string, locale: Language) {
+export function answerFromLibrary(question: string, locale: IsaLanguage): IsaAnswer | undefined {
   const normalized = question.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
     .replace(/[^a-z0-9]+/g, " ").trim();
 
   // Refer broad, multi-part and personalized queries to the existing fallback.
   if (/\b(recomienda\w*|cual me conviene|should i|recommend\w*|pronostic\w*|predic\w*)\b/.test(normalized)
       || question.indexOf("?") !== question.lastIndexOf("?")) return;
+
+  if (/\b(colombia\w*)\b/.test(normalized)
+    && /\b(estados unidos|united states|ee uu|usa|u s|us|nyse|wall street)\b/.test(normalized)
+    && !/\b(nasdaq|otc|todas?|all|complete|completa)\b/.test(normalized)
+    && /\b(cotiza\w*|list\w*|traded?|bolsa|acciones|stock exchange|adr|ads)\b/.test(normalized)) {
+    return {
+      message: locale === "es"
+        ? "Tres ejemplos documentados en la Bolsa de Nueva York (NYSE) son Ecopetrol (EC), Grupo Cibest (CIB) y Grupo Aval (AVAL). Se negocian mediante ADS, certificados que representan acciones. CIB identifica a Grupo Cibest desde mayo de 2025, cuando reemplazó a Bancolombia como emisor de esos ADS. La selección es ilustrativa y se basa en reportes de la SEC de 2026."
+        : "Three documented examples on the New York Stock Exchange are Ecopetrol (EC), Grupo Cibest (CIB), and Grupo Aval (AVAL). They trade through ADSs, which represent shares. Since May 2025, CIB has identified Grupo Cibest, which replaced Bancolombia as the issuer of those ADSs. These examples are based on 2026 SEC filings.",
+      sources: [
+        { label: "SEC · Ecopetrol (EC)", href: "https://www.sec.gov/Archives/edgar/data/1444406/000110465926053172/ec-20251231x20f.htm" },
+        { label: "SEC · Grupo Cibest (CIB)", href: "https://www.sec.gov/Archives/edgar/data/2058897/000205889726000125/cib-20251231.htm" },
+        { label: "SEC · Grupo Aval (AVAL)", href: "https://www.sec.gov/Archives/edgar/data/1504764/000110465926044493/aval-20251231x20f.htm" },
+      ],
+    };
+  }
 
   const matches = entries.filter(({ mentions, intent, exclude }) => mentions.test(normalized) && intent.test(normalized) && !exclude?.test(normalized));
   if (matches.length === 1) return { message: matches[0][locale], href: matches[0].href };

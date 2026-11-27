@@ -1,10 +1,11 @@
 "use client";
 
 import { Sparkles, X } from "lucide-react";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "./language";
 import { base } from "./routes";
-import { answerFromLibrary } from "./isa-knowledge";
+import { answerFromLibrary, type IsaAnswer } from "./isa-knowledge";
+import { answerOnDevice, isaLocalAvailability } from "./isa-local-model";
 
 const text = {
   es: {
@@ -13,7 +14,10 @@ const text = {
     example: "¿Me das un ejemplo?", resources: "Ver una guía", reading: "Estás leyendo",
     label: "Tu pregunta", ask: "Preguntar", waiting: "Buscando una explicación…",
     note: "Ayuda educativa. Evita incluir datos personales o financieros.",
-    unavailable: "Esta pregunta requiere una explicación que todavía no tengo en la biblioteca. Prueba preguntando por transferencias de criptomonedas, interés compuesto, diversificación o inflación.",
+    unavailable: "No encontré una respuesta en la biblioteca y el servicio de preguntas abiertas no está disponible. Puedes consultar los informes de Arkez Research.",
+    download: "Descargar IA en este navegador",
+    downloading: "Preparando el modelo en este navegador…",
+    localModel: "Respuesta generada en este navegador. Verifica los datos antes de usarlos.",
     quota: "El servicio de preguntas abiertas alcanzó su límite temporal. Las respuestas de la biblioteca siguen disponibles.",
     error: "ISA no pudo responder esta vez. Prueba con un ejemplo guiado.",
     link: "Abrir recurso",
@@ -24,7 +28,10 @@ const text = {
     example: "Can you give an example?", resources: "Find a guide", reading: "You're reading",
     label: "Your question", ask: "Ask", waiting: "Looking for an explanation…",
     note: "For learning. Please leave out personal and financial information.",
-    unavailable: "This question needs an explanation I don't have in the library yet. Try asking about cryptocurrency transfers, compound interest, diversification, or inflation.",
+    unavailable: "I couldn't find an answer in the library, and the open-question service is unavailable. You can browse Arkez Research reports.",
+    download: "Download AI in this browser",
+    downloading: "Setting up the model in this browser…",
+    localModel: "Answer generated in this browser. Verify facts before relying on them.",
     quota: "The open-question service reached its temporary limit. Library answers are still available.",
     error: "ISA couldn't answer this time. Try a guided example.",
     link: "Open resource",
@@ -71,8 +78,9 @@ export function IsaAssistant() {
   const launcher = useRef<HTMLButtonElement>(null);
   const [context, setContext] = useState({ heading: "", excerpt: "" });
   const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState<{ message: string; href?: string } | null>(null);
-  const [busy, setBusy] = useState(false);
+  const [answer, setAnswer] = useState<IsaAnswer | null>(null);
+  const [busy, setBusy] = useState<"ask" | "download" | false>(false);
+  const [canDownload, setCanDownload] = useState(false);
   const request = useRef<AbortController | null>(null);
 
   useEffect(() => () => request.current?.abort(), []);
@@ -89,6 +97,7 @@ export function IsaAssistant() {
     setContext({ heading: nearby?.textContent?.trim().slice(0, 130) ?? "", excerpt: paragraph?.tagName === "P" ? paragraph.textContent?.trim().slice(0, 360) ?? "" : "" });
     setAnswer(null);
     setQuestion("");
+    setCanDownload(false);
     dialog.current?.showModal();
   }
 
@@ -101,27 +110,37 @@ export function IsaAssistant() {
     });
   }
 
-  async function ask(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function ask(allowDownload: boolean) {
     if (!question.trim() || request.current) return;
     const local = answerFromLibrary(question, locale);
     if (local) {
-      setAnswer({ message: local.message, href: base + local.href });
+      setAnswer({ ...local, href: local.href ? base + local.href : undefined });
+      setCanDownload(false);
       return;
     }
     const current = new AbortController();
     request.current = current;
-    setBusy(true);
+    setBusy(allowDownload ? "download" : "ask");
+    setCanDownload(false);
     try {
+      const onDevice = await answerOnDevice(question.trim(), locale, context, current.signal, allowDownload).catch(() => undefined);
+      if (current.signal.aborted) return;
+      if (onDevice) { setAnswer({ message: onDevice, localModel: true }); return; }
+      if (allowDownload) { setAnswer({ message: copy.error }); return; }
       const response = await fetch("/api/isa", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: question.trim(), locale, ...context }), signal: current.signal,
+        body: JSON.stringify({ question: question.trim(), locale, ...context }), signal: AbortSignal.any([current.signal, AbortSignal.timeout(15_000)]),
       });
       if (current.signal.aborted) return;
-      if ([404, 503].includes(response.status)) { setAnswer({ message: copy.unavailable }); return; }
-      if (response.status === 429) { setAnswer({ message: copy.quota }); return; }
       const result = response.ok ? await response.json() : null;
-      if (!current.signal.aborted) setAnswer({ message: typeof result?.answer === "string" ? result.answer : copy.error });
+      if (current.signal.aborted) return;
+      if (typeof result?.answer === "string" && result.answer.trim()) {
+        setAnswer({ message: result.answer });
+      } else {
+        setAnswer({ message: response.status === 429 ? copy.quota : copy.unavailable, href: base + "/research/" });
+        const availability = await isaLocalAvailability(locale);
+        if (!current.signal.aborted) setCanDownload(availability === "downloadable" || availability === "downloading");
+      }
     } catch {
       if (!current.signal.aborted) setAnswer({ message: copy.error });
     } finally {
@@ -145,22 +164,29 @@ export function IsaAssistant() {
       <p>{copy.intro}</p>
       {context.heading && <p className="isa-small">{copy.reading} · {context.heading}</p>}
       <div className="isa-actions">
-        <button type="button" disabled={busy} onClick={example}>{copy.example}</button>
-        <button type="button" disabled={busy} onClick={() => setAnswer({
+        <button type="button" disabled={Boolean(busy)} onClick={example}>{copy.example}</button>
+        <button type="button" disabled={Boolean(busy)} onClick={() => setAnswer({
           message: locale === "es" ? "La guía de primeros pasos tiene preguntas sobre objetivo, plazo, costos, pérdida y fuentes."
             : "The first steps guide has questions about goals, deadlines, costs, losses and sources.",
           href: base + "/recursos/guias/primeros-pasos/",
         })}>{copy.resources}</button>
       </div>
       <div role="status">{(busy || answer) && <div className="isa-response">
-        <p>{busy ? copy.waiting : answer?.message}</p>
+        <p>{busy === "download" ? copy.downloading : busy ? copy.waiting : answer?.message}</p>
         {!busy && answer?.href && <a href={answer.href}>{copy.link}</a>}
+        {!busy && answer?.sources && <ul>{answer.sources.map(({ label, href }) => <li key={href}>
+          <a href={href} target="_blank" rel="noopener noreferrer">{label}</a>
+        </li>)}</ul>}
+        {!busy && answer?.localModel && <p className="isa-small">{copy.localModel}</p>}
       </div>}</div>
-      <form onSubmit={ask}>
+      <form onSubmit={(event) => { event.preventDefault(); void ask(false); }}>
         <label htmlFor="isa-question">{copy.label}</label>
         <textarea id="isa-question" value={question} maxLength={360} required onChange={(event) => setQuestion(event.target.value)} aria-describedby="isa-note" />
-        <button type="submit" disabled={busy} aria-disabled={busy}>{copy.ask}</button>
+        <button type="submit" disabled={Boolean(busy)}>{copy.ask}</button>
       </form>
+      {canDownload && <div className="isa-actions">
+        <button type="button" onClick={() => void ask(true)}>{copy.download}</button>
+      </div>}
       <p className="isa-small" id="isa-note">{copy.note}</p>
     </dialog>
   </div>;
