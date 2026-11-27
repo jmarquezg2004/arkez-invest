@@ -1,6 +1,7 @@
 export const directorySources = [
   { source: "Yahoo Finanzas", href: "https://finance.yahoo.com/" },
   { source: "The Wall Street Journal", href: "https://www.wsj.com/finance" },
+  { source: "Investing.com", href: "https://www.investing.com/news/" },
   { source: "Investing España", href: "https://es.investing.com/news/" },
   { source: "Cointelegraph", href: "https://cointelegraph.com/category/latest-news" },
   { source: "CNBC", href: "https://www.cnbc.com/markets/" },
@@ -10,7 +11,7 @@ export const directorySources = [
 ] as const;
 
 export function directoryGroups<T extends { source: string; href: string }>(
-  live: readonly T[], archive: readonly T[], hasPhoto: (story: T) => boolean,
+  live: readonly T[], archive: readonly T[], hasPhoto: (story: T) => boolean, locale: "en" | "es" = "es",
 ) {
   const unique = new Map(live.map((story) => [story.href, story]));
   for (const story of archive) if (!unique.has(story.href) || (hasPhoto(story) && !hasPhoto(unique.get(story.href)!))) unique.set(story.href, story);
@@ -35,7 +36,7 @@ export function directoryGroups<T extends { source: string; href: string }>(
   const cryptoSources = ["Cointelegraph", "CoinGecko", "CoinMarketCap"];
   const crypto = cryptoSources.map(withPhotos).find((stories) => stories.length)
     ?? cryptoSources.map(forSource).find((stories) => stories.length) ?? [];
-  return [...market, existingGroup("The Wall Street Journal", 2), existingGroup("Investing España", 1),
+  return [...market, existingGroup("The Wall Street Journal", 2), existingGroup(locale === "en" ? "Investing.com" : "Investing España", 1),
     { slots: 1, stories: crypto }];
 }
 
@@ -46,4 +47,9 @@ export function directoryBatch<T>(groups: readonly { slots: number; stories: rea
     const offset = batch * (stories.length % slots === 0 ? slots : 1);
     return Array.from({ length: slots }, (_, index) => stories[(offset + index) % stories.length]);
   });
+}
+
+
+export function newsLanguage(href: string) {
+  return new URL(href).hostname.startsWith("es.") ? "es" : "en";
 }

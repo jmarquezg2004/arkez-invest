@@ -1,3 +1,4 @@
+import { WeinsteinChart } from "./weinstein-chart";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import type { StaticImageData } from "next/image";
 import { indicatorArt } from "./topic-art";
@@ -80,14 +81,7 @@ export function MarketStories() {
     </figure>)}
     <figure className="avs avs-indicator" id="etapas-weinstein" data-panels="4" aria-labelledby="titulo-weinstein">
       <header><div><p className="avs-series">Arkez Visual Stories</p><h3 id="titulo-weinstein">Las cuatro etapas de Stan Weinstein</h3></div></header>
-      <svg className="avs-stage-chart" viewBox="0 0 400 130" role="img" aria-label="Esquema ficticio. Precio y media de 30 semanas recorren base, avance, techo y descenso.">
-        <rect width="400" height="130" fill="#edf3f7" />
-        {[100, 200, 300].map((x) => <path key={x} d={`M${x} 12V110`} stroke="#8195aa" strokeDasharray="3 4" />)}
-        <path d="M10 77L28 90L48 81L64 92L89 84L108 75L125 60L140 66L160 42L185 29L204 32L228 21L248 35L270 28L290 36L309 52L331 56L346 77L364 81L389 105" fill="none" stroke="#183c60" strokeWidth="3" />
-        <path d="M10 70Q60 92 100 84Q150 76 200 42Q246 27 298 39Q344 49 389 90" fill="none" stroke="#8f551d" strokeWidth="2.5" strokeDasharray="6 4" />
-        {[50, 150, 250, 350].map((x, i) => <text key={x} x={x} y="124" textAnchor="middle" fill="#183c60" fontSize="11">{i + 1}</text>)}
-      </svg>
-      <p className="avs-chart-key"><span>Precio semanal</span><span>Media de 30 semanas</span></p>
+      <WeinsteinChart />
       <ol className="avs-panels" aria-label="Cuatro etapas">
         {stages.map(({ name, text }, index) => <li key={name} data-panel={index + 1}>
           <StoryArt image={indicatorArt.weinstein} frame={index + 1} label={name} /><p>{text}</p>

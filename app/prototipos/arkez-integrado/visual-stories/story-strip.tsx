@@ -45,7 +45,7 @@ export function StoryStrip({ story, heading }: { story: StoryKey; heading?: "h2"
     <header>
       <div><p className="avs-series">Arkez Visual Stories</p><Heading id={titleId}>{title}</Heading></div>
       <div className="avs-controls">
-        {canPlay && <button type="button" onClick={play}><Play size={16} aria-hidden="true" /> Animar viñetas</button>}
+        {canPlay && <button className="avs-play" type="button" onClick={play}><Play size={16} aria-hidden="true" /> Animar viñetas</button>}
       </div>
     </header>
     <ol className="avs-panels" ref={strip} aria-label={`Historieta en ${panels.length} viñetas`}>

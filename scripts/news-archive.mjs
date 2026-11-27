@@ -147,7 +147,7 @@ export const directoryArchive = [
 // These covers are linked by the publishers on the corresponding article pages.
 directoryArchive.push(
   {
-    title: "El impacto de la ley fiscal de EE. UU. en la Seguridad Social",
+    title: "How the US tax law affects Social Security",
     href: "https://www.fool.com/retirement/2026/11/26/president-donald-trump-big-beautiful-bill-dropped-169-billion-bombshell-on-social-security/",
     date: "2026-11-26",
     source: "The Motley Fool",
@@ -155,7 +155,7 @@ directoryArchive.push(
     archived: true,
   },
   {
-    title: "Cómo se concentra la cartera de Berkshire Hathaway bajo Greg Abel",
+    title: "Portfolio concentration at Berkshire Hathaway under Greg Abel",
     href: "https://www.fool.com/investing/2026/11/27/warren-buffett-successor-greg-abel-has-47-berkshire-hathaway-346-billion-portfolio-invested-3-proven-winners/",
     date: "2026-11-27",
     source: "The Motley Fool",
@@ -194,3 +194,12 @@ directoryArchive.push(
     archived: true,
   },
 );
+
+directoryArchive.push({
+  title: "European shares rise after a volatile November for AI stocks",
+  href: "https://uk.investing.com/news/stock-market-news/european-shares-extend-rally-but-bruising-november-leaves-ai-scars-5006121",
+  image: "https://content-media.investing.com/news/moved_LYNXMPEM6L1PR_1200_L.jpg",
+  date: "2026-11-27",
+  source: "Investing.com",
+  archived: true,
+});

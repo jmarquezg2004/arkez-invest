@@ -5,7 +5,7 @@ import { ArrowUpRight, Newspaper } from "lucide-react";
 import { createPreviewNews } from "@/scripts/preview-news.mjs";
 import { archivedHeadlines, directoryArchive } from "@/scripts/news-archive.mjs";
 import { useLanguage } from "./language";
-import { directoryBatch, directoryGroups, directorySources } from "./news-mix";
+import { directoryBatch, directoryGroups, directorySources, newsLanguage } from "./news-mix";
 
 type Story = { title: string; href: string; date: string; source: string; image?: string; archived?: boolean };
 
@@ -92,14 +92,16 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
   }, []);
 
   const count = 2;
-  const archive = archivedHeadlines.filter(({ href }) => !live?.some((story) => story.href === href));
+  const inEdition = ({ href }: Story) => locale === "es" || newsLanguage(href) === "en";
+  const archive = archivedHeadlines.filter((story) => inEdition(story) && !live?.some(({ href }) => href === story.href));
   const photoAvailable = ({ image }: Story) => Boolean(image && !unavailable.has(image));
-  const published = (live ?? []).filter((story) => !story.archived);
+  const published = (live ?? []).filter((story) => !story.archived && inEdition(story));
   const withPhoto = published.filter(photoAvailable);
-  const backupPhotos = archive.filter(photoAvailable);
+  const backupPhotos = (locale === "en" ? [...archive, ...directoryArchive.filter(inEdition)] : archive)
+    .filter((story) => photoAvailable(story) && !published.some(({ href }) => href === story.href));
   const stories = [...withPhoto, ...backupPhotos, ...published.filter((story) => !photoAvailable(story)), ...archive.filter((story) => !photoAvailable(story))];
   const pool = withPhoto.length + backupPhotos.length >= count ? [...withPhoto, ...backupPhotos] : stories;
-  const groups = directoryGroups(published, [...(live ?? []).filter((story) => story.archived), ...directoryArchive, ...archive], photoAvailable);
+  const groups = directoryGroups(published, [...(live ?? []).filter((story) => story.archived), ...directoryArchive, ...archive].filter(inEdition), photoAvailable, locale);
   const canRotate = directoryPage ? groups.some(({ stories, slots }) => stories.length > slots) : pool.length > count;
 
   useEffect(() => {
@@ -112,7 +114,8 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
   const shown = directoryPage ? directoryBatch(groups, batch)
     : pool.length <= count ? pool : Array.from({ length: count }, (_, i) => pool[(batch * count + i) % pool.length]);
   const sourceLinks = directoryPage ? directorySources.filter(({ source }) => shown.some((story) => story.source === source))
-    .map(({ source, href }) => [source, href] as const) : publishers;
+    .map(({ source, href }) => [source, href] as const) : locale === "en" ? publishers.map(([name, href]) => name === "Investing España"
+    ? ["Investing.com", "https://www.investing.com/news/"] as const : [name === "Yahoo Finanzas" ? "Yahoo Finance" : name, href.replace("https://es.", "https://")] as const) : publishers;
 
   return <section className="ai-news" id="noticias" aria-labelledby="preview-news-heading">
     <div className="container-shell">
@@ -131,7 +134,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
                 onUnavailable={() => { if (image) setUnavailable((current) => new Set([...current, image])); }} />
               <div className="ai-news-copy">
                 <p><time dateTime={date} data-arkez-localized>{dateFormat[locale].format(new Date(date))}</time>{story.archived && <span> · Archivo</span>}</p>
-                <h3 translate="no" lang={href.startsWith("https://es.") || (story.archived && story.source === "The Motley Fool") ? "es" : "en"}>{title}</h3>
+                <h3 translate="no" lang={newsLanguage(href)}>{title}</h3>
                 <ArrowUpRight size={21} aria-hidden="true" />
               </div>
             </a>
@@ -148,7 +151,7 @@ export function PreviewNews({ directory, directoryPage = false }: { directory: s
       </div>
       {directoryPage && <><div className="ai-news-sources">
         <span>Lectura de América Latina</span>
-        <a href={regionalReading.href} target="_blank" rel="noopener noreferrer">{regionalReading.title} · {regionalReading.source} · <time dateTime={regionalReading.date} data-arkez-localized>{dateFormat[locale].format(new Date(regionalReading.date))}</time></a>
+        <a href={regionalReading.href} target="_blank" rel="noopener noreferrer">{locale === "en" ? "Fintoc introduces cross-border business payments from Mexico" : regionalReading.title} · {regionalReading.source} · <time dateTime={regionalReading.date} data-arkez-localized>{dateFormat[locale].format(new Date(regionalReading.date))}</time></a>
       </div><div className="ai-news-sources"><span>Fuentes por región</span>
         {regionalSources.map(([region, name, href]) => <a key={href} href={href} target="_blank" rel="noopener noreferrer">{region} · {name} <ArrowUpRight size={14} aria-hidden="true" /></a>)}
       </div><div className="ai-news-sources"><span>Cuentas en X</span>

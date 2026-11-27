@@ -7,6 +7,7 @@ import { catalog } from "@/arkez-visual-engine/catalog";
 import { base, oddityStoryPath, visualStoriesPath } from "./routes";
 
 import { StoryStrip } from "./visual-stories/story-strip";
+import { useLanguage } from "./language";
 import { TickerStory } from "./visual-stories/ticker-story";
 
 const freeConsultationKey = "arkez-research-demo-free-ticker-v1";
@@ -20,19 +21,21 @@ type Issuer = {
 };
 
 const samples = ["NASDAQ:ODD", "NYSE:NU", "NASDAQ:TTD", "NASDAQ:AAPL", "AMEX:SPY"];
-const companyExchanges: Record<string, string> = { NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
+const kss = { name: "Kohl’s Corporation", exchange: "NYSE", filings: [{ form: "10-K", date: "2026-03-19", href: "https://www.sec.gov/Archives/edgar/data/885639/000119312526115982/kss-20260131.htm" }] };
+const companyExchanges: Record<string, string> = { KSS: "NYSE", NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
 
 const validSymbol = /^(?:[A-Z0-9_-]{1,20}:)?[A-Z0-9][A-Z0-9._!^=-]{0,22}$/;
-function chartUrl(symbol: string) {
+function chartUrl(symbol: string, locale: string) {
   const url = new URL("https://s.tradingview.com/widgetembed/");
   url.search = new URLSearchParams({
-    symbol, interval: "D", theme: "dark", style: "1", locale: "es",
+    symbol, interval: "D", theme: "dark", style: "1", locale,
     timezone: "Etc/UTC", symboledit: "1", saveimage: "0", hideideas: "1", withdateranges: "1",
   }).toString();
   return url.href;
 }
 
 export function MarketLookup() {
+  const { locale } = useLanguage();
   const [input, setInput] = useState("");
   const [symbol, setSymbol] = useState("");
   const [message, setMessage] = useState("");
@@ -43,13 +46,18 @@ export function MarketLookup() {
   const usedTicker = useRef("");
   const result = useRef<HTMLDivElement>(null);
 
+  function savedTicker() {
+    try { return localStorage.getItem(freeConsultationKey) || usedTicker.current; }
+    catch { return usedTicker.current; }
+  }
+
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     select(input);
   }
 
   function select(input: string) {
-    const requested = input.trim();
+    const requested = input.trim().replace(/^kohl[’']?s(?: corporation)?$/i, "NYSE:KSS");
     const knownCompany = catalog.find(({ name, ticker }) => ticker && normalizeName(name) === normalizeName(requested));
     const next = knownCompany?.ticker ?? (/^oddity(?: tech)?$/i.test(requested) ? "NASDAQ:ODD" : requested.toUpperCase());
     if (!validSymbol.test(next)) {
@@ -61,14 +69,20 @@ export function MarketLookup() {
     if (next !== symbol) {
       setIssuer(null);
       setFilingStatus("");
-      setBlocked(false);
+      const saved = savedTicker();
+      setBlocked(Boolean(saved && saved !== cleanTicker(next)));
       setSymbol(next);
     } else result.current?.focus();
   }
 
   useEffect(() => {
     const ticker = new URLSearchParams(window.location.search).get("ticker")?.toUpperCase() ?? "";
-    if (validSymbol.test(ticker)) { setInput(ticker); setSymbol(ticker); }
+    if (validSymbol.test(ticker)) {
+      const saved = savedTicker();
+      setBlocked(Boolean(saved && saved !== cleanTicker(ticker)));
+      setInput(ticker);
+      setSymbol(ticker);
+    }
   }, []);
 
   const ticker = cleanTicker(symbol);
@@ -77,20 +91,21 @@ export function MarketLookup() {
   const profileMatch = profileFor(symbol);
   const knownExchange = companyExchanges[ticker] ?? (profileMatch ? "NASDAQ" : "");
   const profile = !requestedExchange || requestedExchange === knownExchange ? profileMatch : undefined;
+  const publicIssuer = ticker === "KSS" && (!requestedExchange || requestedExchange === "NYSE") ? kss : null;
+  const chartSymbol = requestedExchange || !knownExchange ? symbol : knownExchange + ":" + ticker;
   const odditySelected = /^(?:NASDAQ:)?ODD$/.test(symbol);
   const fundSelected = /^(?:(?:AMEX|NYSEARCA):)?SPY$/.test(symbol);
 
   useEffect(() => {
     if (!symbol) return;
-    let previous = usedTicker.current;
-    try { previous = localStorage.getItem(freeConsultationKey) || previous; } catch {}
-    if (previous && previous !== ticker) { setBlocked(true); return; }
-    setBlocked(false);
+    const previous = savedTicker();
+    const limited = Boolean(previous && previous !== ticker);
+    setBlocked(limited);
     const reserve = () => {
       usedTicker.current = ticker;
       try { localStorage.setItem(freeConsultationKey, ticker); } catch {}
     };
-    if (profile || odditySelected || fundSelected) reserve();
+    if (!limited && (profile || publicIssuer || odditySelected || fundSelected)) reserve();
     if (!matchingExchange || !/^[A-Z][A-Z0-9-]{0,11}$/.test(ticker)) {
       setFilingStatus("No hay una ficha verificada disponible para ese mercado.");
       return;
@@ -111,44 +126,45 @@ export function MarketLookup() {
           setFilingStatus("La bolsa ingresada no coincide con la ficha recuperada en EDGAR.");
           return;
         }
-        reserve();
+        if (!limited) reserve();
         setIssuer(data);
         setFilingStatus("");
       })
       .catch(() => { if (!controller.signal.aborted) setFilingStatus("La consulta de documentos no está disponible en este momento."); });
     return () => controller.abort();
-  }, [fundSelected, matchingExchange, odditySelected, profile, requestedExchange, symbol, ticker]);
+  }, [fundSelected, matchingExchange, odditySelected, profile, publicIssuer, requestedExchange, symbol, ticker]);
 
-  const hasStory = Boolean(profile || odditySelected || fundSelected || issuer);
+  const publicData = issuer ?? publicIssuer;
+  const hasStory = Boolean(profile || odditySelected || fundSelected || publicData);
   useEffect(() => {
-    if (symbol && !blocked) result.current?.focus({ preventScroll: true });
-  }, [symbol, blocked]);
+    if (symbol) result.current?.focus({ preventScroll: true });
+  }, [symbol]);
   return <section id="consultar-ticker" className="ai-market" aria-labelledby="ai-market-title">
     <p className="ve-kicker"><ChartCandlestick size={19} aria-hidden="true" /> Datos de mercado</p>
     <h2 id="ai-market-title">Consulta un ticker o empresa</h2>
-    <p>La primera consulta con ficha se guarda en este navegador en la vista de prueba. Empieza con el ticker o el nombre de una empresa del catálogo.</p>
+    <p>Consulta gráficos y documentos públicos por ticker. La primera ficha educativa ampliada se guarda en este navegador.</p>
     <form className="ai-market-form" onSubmit={submit}>
       <label className="ve-search"><Search size={20} aria-hidden="true" /><input type="search" maxLength={44} aria-label="Ticker o nombre de empresa" placeholder="Ej. NASDAQ:ODD" value={input} onChange={(event) => setInput(event.target.value)} /></label>
       <button className="ve-cta" type="submit">Consultar ticker</button>
     </form>
     <div className="ai-market-samples" aria-label="Símbolos de ejemplo">{samples.map((sample) => <button key={sample} type="button" aria-pressed={symbol === sample} onClick={() => select(sample)}>{sample}</button>)}</div>
     {message && <p role="status">{message}</p>}
-    {blocked && <div className="ai-market-issuer" role="status"><p>Ya usaste la consulta gratuita de este navegador. Puedes volver al mismo ticker o revisar los planes.</p>
+    {blocked && <div className="ai-market-issuer" role="status"><p>La ficha educativa ampliada de este navegador ya está asignada a otro ticker. Aquí puedes consultar el gráfico y los documentos públicos.</p>
       <a className="ve-cta" href={base + "/research/#planes-research"}>Ver planes de Research</a></div>}
-    {symbol && !blocked && <div className="ai-market-result" ref={result} tabIndex={-1}>
-      {odditySelected ? <><StoryStrip story="oddity" />
+    {symbol && <div className="ai-market-result" ref={result} tabIndex={-1}>
+      {!blocked && (odditySelected ? <><StoryStrip story="oddity" />
         <a href={oddityStoryPath}>Explorar los escenarios y fuentes de ODDITY <ArrowUpRight size={15} aria-hidden="true" /></a></>
-        : hasStory && <TickerStory ticker={ticker} name={profile?.name ?? issuer?.name ?? "SPDR S&P 500 ETF Trust"}
-            sector={issuer?.sector} profile={profile} filings={issuer?.filings ?? []} />}
+        : hasStory && <TickerStory ticker={ticker} name={profile?.name ?? publicData?.name ?? "SPDR S&P 500 ETF Trust"}
+            sector={issuer?.sector} profile={profile} filings={publicData?.filings ?? []} />)}
       {!hasStory && <p className="ai-market-issuer" role="status">{filingStatus || "Buscando una ficha pública para este símbolo."}</p>}
       <h3>Gráfico de {symbol}</h3>
-      <iframe key={symbol} title={`Gráfico de ${symbol} en TradingView`} src={chartUrl(symbol)} sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
-      <a href={`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(symbol)}`} target="_blank" rel="noopener noreferrer">Abrir gráfico en TradingView <ArrowUpRight size={15} aria-hidden="true" /></a>
+      <iframe key={symbol} title={`Gráfico de ${symbol} en TradingView`} src={chartUrl(chartSymbol, locale)} sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
+      <a href={`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(chartSymbol)}`} target="_blank" rel="noopener noreferrer">Abrir gráfico en TradingView <ArrowUpRight size={15} aria-hidden="true" /></a>
       {hasStory && filingStatus && <p role="status">{filingStatus}</p>}
-      {issuer && <div className="ai-market-issuer">
-        <h3>{issuer.name}</h3>
-        <p>{[issuer.exchange, issuer.sector].filter(Boolean).join(" · ")}</p>
-        {issuer.filings.length ? <ul role="list">{issuer.filings.map(({ form, date, href }) => <li key={href}><a href={href} target="_blank" rel="noopener noreferrer">{form} · <time dateTime={date}>{date}</time> <ArrowUpRight size={15} aria-hidden="true" /></a></li>)}</ul>
+      {publicData && <div className="ai-market-issuer">
+        <h3>{publicData.name}</h3>
+        <p>{[publicData.exchange, issuer?.sector].filter(Boolean).join(" · ")}</p>
+        {publicData.filings.length ? <ul role="list">{publicData.filings.map(({ form, date, href }) => <li key={href}><a href={href} target="_blank" rel="noopener noreferrer">{form} · <time dateTime={date}>{date}</time> <ArrowUpRight size={15} aria-hidden="true" /></a></li>)}</ul>
           : <p>Sin documentos recientes de los tipos que muestra este buscador.</p>}
       </div>}
     </div>}

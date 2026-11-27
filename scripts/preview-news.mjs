@@ -2,6 +2,7 @@ const sources = [
   { name: "Reserva Federal", feed: "https://www.federalreserve.gov/feeds/press_monetary.xml", hosts: ["www.federalreserve.gov"], limit: 3 },
   { name: "Investing España", feed: "https://es.investing.com/rss/news_285.rss", hosts: ["es.investing.com"] },
   { name: "Investing España", feed: "https://es.investing.com/rss/news.rss", hosts: ["es.investing.com"] },
+  { name: "Investing.com", feed: "https://www.investing.com/rss/news_285.rss", hosts: ["www.investing.com", "investing.com"], direct: true },
   { name: "Cointelegraph", feed: "https://es.cointelegraph.com/rss", hosts: ["es.cointelegraph.com", "cointelegraph.com"] },
   { name: "Cointelegraph", feed: "https://cointelegraph.com/rss", hosts: ["cointelegraph.com"] },
   { name: "Yahoo Finanzas", feed: "https://es.finance.yahoo.com/news/rss", hosts: ["es.finance.yahoo.com", "finance.yahoo.com"] },
@@ -167,7 +168,7 @@ async function readFeed(source, load) {
     if (typeof item?.title !== "string" || typeof item.link !== "string" || typeof item.pubDate !== "string") return [];
     const title = decodeHeadline(item.title);
     if (!title || title.length > 240 || /[<>]/.test(title) || !/^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/.test(item.pubDate)) return [];
-    if (source.name === "Investing España" && /hazte con|descuento|disparan esta semana en el black friday|posiciónate ahora/i.test(title)) return [];
+    if (source.name.startsWith("Investing") && /hazte con|descuento|disparan esta semana en el black friday|posiciónate ahora/i.test(title)) return [];
     const href = URL.parse(item.link);
     const date = Date.parse(item.pubDate.replace(" ", "T") + "Z");
     if (!href || href.protocol !== "https:" || href.username || href.password || href.port ||

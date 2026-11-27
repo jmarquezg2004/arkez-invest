@@ -91,7 +91,7 @@ test("el feed de noticias ignora fuentes caídas, enlaces ajenos, HTML y duplica
   assert.equal(results[0].image, "https://content-media.investing.com/news/ejemplo.jpg");
   assert.equal(results[1].image, undefined);
   assert.deepEqual(await news(), results);
-  assert.equal(requests, 14);
+  assert.equal(requests, 16);
 });
 
 test("Actualidad conserva seis tarjetas y sustituye fuentes si falta la foto", () => {
