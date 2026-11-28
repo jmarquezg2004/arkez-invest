@@ -1,0 +1,45 @@
+name: Comprobar historias en staging
+
+on:
+  push:
+    branches: [feature/arkez-modernizacion]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arkez-staging-stories
+  cancel-in-progress: true
+
+jobs:
+  stories:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Esperar la revisión publicada y consultar DELL
+        env:
+          STAGING: https://arkez-invest-staging.pages.dev
+        run: |
+          set -euo pipefail
+          ready=false
+          for attempt in {1..30}; do
+            if curl -fsS --max-time 8 -D headers.txt -o /dev/null "$STAGING/prototipos/arkez-integrado/explore/" &&
+              awk -v revision="$GITHUB_SHA" 'tolower($1)=="x-arkez-revision:" && $2 ~ "^" revision "\r?$" { found=1 } END { exit !found }' headers.txt; then
+              ready=true
+              break
+            fi
+            sleep 8
+          done
+          if [[ "$ready" != true ]]; then
+            echo "::error::Staging did not report revision $GITHUB_SHA"
+            grep -i '^x-arkez-revision:' headers.txt || true
+            exit 1
+          fi
+          status=$(curl -sS --max-time 45 -o story.json -w '%{http_code}' "$STAGING/api/mercados/historia?ticker=DELL")
+          if [[ "$status" != 200 ]]; then
+            reason=$(jq -r '.error // "unknown"' story.json 2>/dev/null || echo "invalid response")
+            echo "::error::DELL story returned HTTP $status ($reason)"
+            exit 1
+          fi
+          jq -e '(.es.captions | length) == 4 and (.en.captions | length) == 4 and (.source | startswith("https://"))' story.json >/dev/null
