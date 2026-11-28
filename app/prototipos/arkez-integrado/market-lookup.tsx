@@ -230,7 +230,7 @@ export function MarketLookup() {
     {symbol && <div className="ai-market-result" ref={result} tabIndex={-1}>
       {illustrated ? <CompanyStory symbol={storySymbol} locale={locale} />
         : generated ? <CompanyStory symbol={generatedSymbol} locale={locale} generated={generated} />
-        : requestStory ? <p className="ai-market-issuer" role="status">{storyFailure === "inactive"
+        : requestStory ? <p className="ai-market-issuer" role="status" data-story-error={storyFailure || undefined}>{storyFailure === "inactive"
           ? "El generador de historias está desconectado en este sitio de prueba."
           : storyFailure === "limit"
             ? "Hay muchas consultas en curso. Inténtalo en un minuto."

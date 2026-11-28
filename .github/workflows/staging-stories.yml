@@ -14,11 +14,16 @@ concurrency:
 
 jobs:
   stories:
+    strategy:
+      fail-fast: false
+      matrix:
+        ticker: [DELL, NVDA]
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
-      - name: Esperar la revisión publicada y consultar DELL
+      - name: Esperar la revisión publicada y consultar el ticker
         env:
+          TICKER: ${{ matrix.ticker }}
           STAGING: https://arkez-invest-staging.pages.dev
         run: |
           set -euo pipefail
@@ -36,10 +41,11 @@ jobs:
             grep -i '^x-arkez-revision:' headers.txt || true
             exit 1
           fi
-          status=$(curl -sS --max-time 45 -o story.json -w '%{http_code}' "$STAGING/api/mercados/historia?ticker=DELL")
+          status=$(curl -sS --max-time 45 -o story.json -w '%{http_code}' "$STAGING/api/mercados/historia?ticker=$TICKER")
           if [[ "$status" != 200 ]]; then
             reason=$(jq -r '.error // "unknown"' story.json 2>/dev/null || echo "invalid response")
-            echo "::error::DELL story returned HTTP $status ($reason)"
+            echo "::error::$TICKER story returned HTTP $status ($reason)"
             exit 1
           fi
-          jq -e '(.es.captions | length) == 4 and (.en.captions | length) == 4 and (.source | startswith("https://"))' story.json >/dev/null
+          jq -e '(.es.captions | length) == 4 and (.en.captions | length) == 4 and (.source | startswith("https://")) and (.image | startswith("data:image/"))' story.json >/dev/null
+          echo "$TICKER returned a bilingual illustrated story on revision $GITHUB_SHA"

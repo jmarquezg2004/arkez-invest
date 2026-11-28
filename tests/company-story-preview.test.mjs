@@ -140,3 +140,30 @@ test("usa evidencia alternativa solo si el identificador coincide con el emisor"
   candidateCik = "999";
   assert.equal((await history(query, env)).status, 422);
 });
+
+test("recupera un borrador inválido y acepta JSON de la segunda generación", async () => {
+  const source = "https://www.sec.gov/Archives/edgar/data/1571996/000157199626000001/dell.htm";
+  const history = createCompanyStoryHandler({
+    lookup: async () => Response.json({ symbol: "DELL", exchange: "NYSE", name: "Dell Technologies", storyFilings: [{ form: "10-K", href: source }] }),
+    load: async () => new Response(`<h2>Item 1. Business</h2><p>${"The company sells servers and computers. ".repeat(30)}</p><h2>Item 1A. Risk Factors</h2>`),
+    getCache: () => undefined,
+  });
+  const copy = {
+    title: "Dell Technologies",
+    prompts: ["Product?", "Who pays?", "More orders?", "What changes?"],
+    captions: ["Dell sells servers.", "Companies buy its servers.", "More workloads could raise demand.", "More orders would support that expectation."],
+    watch: ["Orders", "Customers", "Costs"],
+    takeaway: "Businesses pay for computers and servers.",
+  };
+  const calls = [];
+  const env = { AI: { run: async (model) => {
+    calls.push(model);
+    if (model.includes("8b")) return { response: "invalid JSON" };
+    if (model.includes("70b")) return { response: "```json\n" + JSON.stringify({ es: copy, en: copy, scenes: ["Server", "Buyer", "Orders", "Factory"] }) + "\n```" };
+    return { image: "/9j/AAAA" };
+  } } };
+  const result = await history(new Request("https://example.com/api/mercados/historia?ticker=DELL"), env);
+  assert.equal(result.status, 200);
+  assert.equal((await result.json()).source, source);
+  assert.equal(calls.length, 3);
+});
