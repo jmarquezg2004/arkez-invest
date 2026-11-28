@@ -18,12 +18,30 @@ const profileFor = (symbol: string) => catalog.find(({ ticker }) => ticker === c
 
 type Issuer = {
   name: string; exchange?: string; sector?: string;
+  edgar?: string; fromBackup?: boolean; filingsUnavailable?: boolean;
   filings: { form: string; date: string; href: string }[];
 };
 
-const samples = ["NYSE:KSS", "NASDAQ:ODD", "NYSE:NU", "NASDAQ:TTD", "NASDAQ:AAPL", "AMEX:SPY"];
+const samples = ["NYSE:TGLS", "NYSE:KSS", "NASDAQ:ODD", "NYSE:NU", "NASDAQ:TTD", "NASDAQ:AAPL", "AMEX:SPY"];
 const kss = { name: "Kohl’s Corporation", exchange: "NYSE", filings: [{ form: "10-K", date: "2026-03-19", href: "https://www.sec.gov/Archives/edgar/data/885639/000119312526115982/kss-20260131.htm" }] };
-const companyExchanges: Record<string, string> = { KSS: "NYSE", AAPL: "NASDAQ", TTD: "NASDAQ", NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
+const tgls: Issuer = {
+  name: "Tecnoglass Holdings Inc.", exchange: "NYSE",
+  edgar: "https://www.sec.gov/edgar/browse/?CIK=1534675&owner=exclude",
+  filings: [{ form: "10-Q", date: "2026-11-09", href: "https://www.sec.gov/Archives/edgar/data/1534675/000149315226050739/form10-q.htm" }],
+};
+const verifiedIssuers: Record<string, Issuer> = { KSS: kss, TGLS: tgls };
+const companyExchanges: Record<string, string> = { TGLS: "NYSE", KSS: "NYSE", AAPL: "NASDAQ", TTD: "NASDAQ", NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
+
+function IssuerDetails({ issuer }: { issuer: Issuer }) {
+  return <div className="ai-market-issuer">
+    <h3>{issuer.name}</h3>
+    <p>{[issuer.exchange, issuer.sector].filter(Boolean).join(" · ")}</p>
+    {issuer.filings.length > 0 && <ul role="list">{issuer.filings.map(({ form, date, href }) => <li key={href}><a href={href} target="_blank" rel="noopener noreferrer">{form} · <time dateTime={date}>{date}</time> <ArrowUpRight size={15} aria-hidden="true" /></a></li>)}</ul>}
+    {issuer.fromBackup && <p>Identificación basada en una copia del directorio de la SEC.</p>}
+    {issuer.filingsUnavailable && <p>Consulta las publicaciones recientes directamente en EDGAR.</p>}
+    {issuer.edgar && <a href={issuer.edgar} target="_blank" rel="noopener noreferrer">Ver expediente en EDGAR <ArrowUpRight size={15} aria-hidden="true" /></a>}
+  </div>;
+}
 
 const validSymbol = /^(?:[A-Z0-9_-]{1,20}:)?[A-Z0-9][A-Z0-9._!^=-]{0,22}$/;
 function chartUrl(symbol: string, locale: string) {
@@ -58,7 +76,8 @@ export function MarketLookup() {
   }
 
   function select(input: string) {
-    const requested = input.trim().replace(/^kohl[’']?s(?: corporation)?$/i, "NYSE:KSS");
+    const requested = input.trim().replace(/^kohl[’']?s(?: corporation)?$/i, "NYSE:KSS")
+      .replace(/^tecnoglass(?: holdings)?(?: inc\.?)?$/i, "NYSE:TGLS");
     const knownCompany = catalog.find(({ name, ticker }) => ticker && normalizeName(name) === normalizeName(requested));
     const next = knownCompany?.ticker ?? (/^oddity(?: tech)?$/i.test(requested) ? "NASDAQ:ODD" : requested.toUpperCase());
     if (!validSymbol.test(next)) {
@@ -92,7 +111,8 @@ export function MarketLookup() {
   const profileMatch = profileFor(symbol);
   const knownExchange = companyExchanges[ticker] ?? (profileMatch ? "NASDAQ" : "");
   const profile = !requestedExchange || requestedExchange === knownExchange ? profileMatch : undefined;
-  const publicIssuer = ticker === "KSS" && (!requestedExchange || requestedExchange === "NYSE") ? kss : null;
+  const publicIssuer = !requestedExchange || requestedExchange === "NYSE"
+    ? verifiedIssuers[ticker] ?? null : null;
   const chartSymbol = requestedExchange || !knownExchange ? symbol : knownExchange + ":" + ticker;
   const odditySelected = /^(?:NASDAQ:)?ODD$/.test(symbol);
   const fundSelected = /^(?:(?:AMEX|NYSEARCA):)?SPY$/.test(symbol);
@@ -130,10 +150,14 @@ export function MarketLookup() {
           return;
         }
         if (!limited) reserve();
-        setIssuer(data);
+        setIssuer(publicIssuer ? {
+          ...publicIssuer, ...data,
+          name: data.fromBackup ? publicIssuer.name : data.name,
+          filings: data.filings.length ? data.filings : publicIssuer.filings,
+        } : data);
         setFilingStatus("");
       })
-      .catch(() => { if (!controller.signal.aborted) setFilingStatus("La consulta de documentos no está disponible en este momento."); });
+      .catch(() => { if (!controller.signal.aborted) setFilingStatus("La actualización de documentos de la SEC no está disponible en este momento."); });
     return () => controller.abort();
   }, [fundSelected, matchingExchange, odditySelected, profile, publicIssuer, requestedExchange, symbol, ticker]);
 
@@ -154,20 +178,16 @@ export function MarketLookup() {
     {message && <p role="status">{message}</p>}
     {symbol && <div className="ai-market-result" ref={result} tabIndex={-1}>
       {illustrated ? <CompanyStory symbol={storySymbol} locale={locale} />
-        : hasStory && !blocked ? <TickerStory ticker={ticker} name={profile?.name ?? publicData?.name ?? ticker}
+        : profile && !blocked ? <TickerStory ticker={ticker} name={profile?.name ?? publicData?.name ?? ticker}
             sector={issuer?.sector} profile={profile} filings={publicData?.filings ?? []} />
           : !hasStory && <p className="ai-market-issuer" role="status">{filingStatus || "Buscando una ficha pública para este símbolo."}</p>}
+      {!illustrated && publicData && <IssuerDetails issuer={publicData} />}
       {odditySelected && !blocked && <a href={oddityStoryPath}>Explorar los escenarios y fuentes de ODDITY <ArrowUpRight size={15} aria-hidden="true" /></a>}
       <h3>Gráfico de {symbol}</h3>
       <iframe key={symbol} title={`Gráfico de ${symbol} en TradingView`} src={chartUrl(chartSymbol, locale)} sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
       <a href={`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(chartSymbol)}`} target="_blank" rel="noopener noreferrer">Abrir gráfico en TradingView <ArrowUpRight size={15} aria-hidden="true" /></a>
       {hasStory && filingStatus && <p role="status">{filingStatus}</p>}
-      {publicData && <div className="ai-market-issuer">
-        <h3>{publicData.name}</h3>
-        <p>{[publicData.exchange, issuer?.sector].filter(Boolean).join(" · ")}</p>
-        {publicData.filings.length ? <ul role="list">{publicData.filings.map(({ form, date, href }) => <li key={href}><a href={href} target="_blank" rel="noopener noreferrer">{form} · <time dateTime={date}>{date}</time> <ArrowUpRight size={15} aria-hidden="true" /></a></li>)}</ul>
-          : <p>Sin documentos recientes de los tipos que muestra este buscador.</p>}
-      </div>}
+      {illustrated && publicData && <IssuerDetails issuer={publicData} />}
       {blocked && <div className="ai-market-issuer"><a href={base + "/research/#planes-research"}>Ver planes de Research <ArrowUpRight size={15} aria-hidden="true" /></a></div>}
     </div>}
     <p className="ai-market-source"><a className="avs-reading-link" href={visualStoriesPath + "#historias-mercado"}>Entender volumen, indicadores y etapas en viñetas <ArrowUpRight size={16} aria-hidden="true" /></a></p>

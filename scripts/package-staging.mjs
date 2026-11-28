@@ -27,10 +27,11 @@ if (!inPlace) {
 }
 const news = read(join(root, "scripts", "preview-news.mjs"));
 const archive = read(join(root, "scripts", "news-archive.mjs"));
-const market = read(join(root, "scripts", "preview-market.mjs"));
+const marketDirectory = JSON.stringify(JSON.parse(read(join(root, "scripts", "market-directory.json"))));
+const market = read(join(root, "scripts", "preview-market.mjs")).split("\n").slice(1).join("\n");
 const isa = read(join(root, "scripts", "preview-isa.mjs"));
 const worker = read(join(root, "deployment", "arkez-staging-worker.mjs"));
-const program = `const stagingPolicies = ${JSON.stringify(policies)};\n${news}\n${archive}\n${market}\n${isa}\n${worker}`;
+const program = `const stagingPolicies = ${JSON.stringify(policies)};\n${news}\n${archive}\nconst bundledMarketDirectory = ${marketDirectory};\n${market}\n${isa}\n${worker}`;
 writeFileSync(join(destination, "_worker.js"), program);
 writeFileSync(join(destination, "_headers"), "/_next/static/*\n  Cache-Control: public, max-age=31536000, immutable\n");
 console.log(destination);

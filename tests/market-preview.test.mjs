@@ -25,9 +25,30 @@ test("EDGAR acepta tickers fuera del catálogo y enlaza solo a documentos válid
   assert.equal(calls.length, 2);
 });
 
-test("un fallo de la SEC devuelve un estado recuperable", async () => {
+test("un fallo del directorio o de los documentos de la SEC conserva la ficha verificable", async () => {
   const lookup = createMarketLookup({ load: async () => new Response(null, { status: 429 }) });
-  assert.equal((await lookup(new URL("https://example.com/?ticker=ODD"))).status, 503);
+  const response = await lookup(new URL("https://example.com/?ticker=TGLS"));
+  assert.equal(response.status, 200);
+  const result = await response.json();
+  assert.equal(result.exchange, "NYSE");
+  assert.equal(result.edgar, "https://www.sec.gov/edgar/browse/?CIK=1534675&owner=exclude");
+  assert.equal(result.fromBackup, true);
+  assert.equal(result.filingsUnavailable, true);
+  assert.deepEqual(result.filings, []);
+  assert.equal((await lookup(new URL("https://example.com/?ticker=UNKNOWN"))).status, 503);
+});
+
+test("el directorio en vivo conserva los símbolos nuevos aunque fallen sus documentos", async () => {
+  const lookup = createMarketLookup({
+    directory: [],
+    load: async (url) => url.includes("company_tickers")
+      ? Response.json({ data: [[1579878, "Figma, Inc.", "FIG", "NYSE"]] })
+      : new Response(null, { status: 403 }),
+  });
+  const result = await (await lookup(new URL("https://example.com/?ticker=FIG"))).json();
+  assert.equal(result.name, "Figma, Inc.");
+  assert.equal(result.fromBackup, false);
+  assert.equal(result.filingsUnavailable, true);
 });
 
 test("solo Explore y Research permiten el marco externo de TradingView", () => {
