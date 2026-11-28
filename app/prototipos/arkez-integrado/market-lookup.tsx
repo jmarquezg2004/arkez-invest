@@ -6,9 +6,10 @@ import { ArrowUpRight, ChartCandlestick, Search } from "lucide-react";
 import { catalog } from "@/arkez-visual-engine/catalog";
 import { base, oddityStoryPath, visualStoriesPath } from "./routes";
 
-import { StoryStrip } from "./visual-stories/story-strip";
 import { useLanguage } from "./language";
 import { TickerStory } from "./visual-stories/ticker-story";
+import { CompanyStory } from "./visual-stories/company-story";
+import { companyStoryFor } from "./visual-stories/company-stories";
 
 const freeConsultationKey = "arkez-research-demo-free-ticker-v1";
 const cleanTicker = (symbol: string) => symbol.split(":").at(-1)?.replaceAll(".", "-") ?? "";
@@ -20,9 +21,9 @@ type Issuer = {
   filings: { form: string; date: string; href: string }[];
 };
 
-const samples = ["NASDAQ:ODD", "NYSE:NU", "NASDAQ:TTD", "NASDAQ:AAPL", "AMEX:SPY"];
+const samples = ["NYSE:KSS", "NASDAQ:ODD", "NYSE:NU", "NASDAQ:TTD", "NASDAQ:AAPL", "AMEX:SPY"];
 const kss = { name: "Kohl’s Corporation", exchange: "NYSE", filings: [{ form: "10-K", date: "2026-03-19", href: "https://www.sec.gov/Archives/edgar/data/885639/000119312526115982/kss-20260131.htm" }] };
-const companyExchanges: Record<string, string> = { KSS: "NYSE", NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
+const companyExchanges: Record<string, string> = { KSS: "NYSE", AAPL: "NASDAQ", TTD: "NASDAQ", NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
 
 const validSymbol = /^(?:[A-Z0-9_-]{1,20}:)?[A-Z0-9][A-Z0-9._!^=-]{0,22}$/;
 function chartUrl(symbol: string, locale: string) {
@@ -95,6 +96,8 @@ export function MarketLookup() {
   const chartSymbol = requestedExchange || !knownExchange ? symbol : knownExchange + ":" + ticker;
   const odditySelected = /^(?:NASDAQ:)?ODD$/.test(symbol);
   const fundSelected = /^(?:(?:AMEX|NYSEARCA):)?SPY$/.test(symbol);
+  const storySymbol = odditySelected ? "NASDAQ:ODD" : fundSelected ? "AMEX:SPY" : chartSymbol;
+  const illustrated = Boolean(companyStoryFor(storySymbol));
 
   useEffect(() => {
     if (!symbol) return;
@@ -142,21 +145,19 @@ export function MarketLookup() {
   return <section id="consultar-ticker" className="ai-market" aria-labelledby="ai-market-title">
     <p className="ve-kicker"><ChartCandlestick size={19} aria-hidden="true" /> Datos de mercado</p>
     <h2 id="ai-market-title">Consulta un ticker o empresa</h2>
-    <p>Consulta gráficos y documentos públicos por ticker. La primera ficha educativa ampliada se guarda en este navegador.</p>
+    <p>Consulta el gráfico, los documentos públicos y la historia de la empresa cuando esté disponible.</p>
     <form className="ai-market-form" onSubmit={submit}>
       <label className="ve-search"><Search size={20} aria-hidden="true" /><input type="search" maxLength={44} aria-label="Ticker o nombre de empresa" placeholder="Ej. NASDAQ:ODD" value={input} onChange={(event) => setInput(event.target.value)} /></label>
       <button className="ve-cta" type="submit">Consultar ticker</button>
     </form>
     <div className="ai-market-samples" aria-label="Símbolos de ejemplo">{samples.map((sample) => <button key={sample} type="button" aria-pressed={symbol === sample} onClick={() => select(sample)}>{sample}</button>)}</div>
     {message && <p role="status">{message}</p>}
-    {blocked && <div className="ai-market-issuer" role="status"><p>La ficha educativa ampliada de este navegador ya está asignada a otro ticker. Aquí puedes consultar el gráfico y los documentos públicos.</p>
-      <a className="ve-cta" href={base + "/research/#planes-research"}>Ver planes de Research</a></div>}
     {symbol && <div className="ai-market-result" ref={result} tabIndex={-1}>
-      {!blocked && (odditySelected ? <><StoryStrip story="oddity" />
-        <a href={oddityStoryPath}>Explorar los escenarios y fuentes de ODDITY <ArrowUpRight size={15} aria-hidden="true" /></a></>
-        : hasStory && <TickerStory ticker={ticker} name={profile?.name ?? publicData?.name ?? "SPDR S&P 500 ETF Trust"}
-            sector={issuer?.sector} profile={profile} filings={publicData?.filings ?? []} />)}
-      {!hasStory && <p className="ai-market-issuer" role="status">{filingStatus || "Buscando una ficha pública para este símbolo."}</p>}
+      {illustrated ? <CompanyStory symbol={storySymbol} locale={locale} />
+        : hasStory && !blocked ? <TickerStory ticker={ticker} name={profile?.name ?? publicData?.name ?? ticker}
+            sector={issuer?.sector} profile={profile} filings={publicData?.filings ?? []} />
+          : !hasStory && <p className="ai-market-issuer" role="status">{filingStatus || "Buscando una ficha pública para este símbolo."}</p>}
+      {odditySelected && !blocked && <a href={oddityStoryPath}>Explorar los escenarios y fuentes de ODDITY <ArrowUpRight size={15} aria-hidden="true" /></a>}
       <h3>Gráfico de {symbol}</h3>
       <iframe key={symbol} title={`Gráfico de ${symbol} en TradingView`} src={chartUrl(chartSymbol, locale)} sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
       <a href={`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(chartSymbol)}`} target="_blank" rel="noopener noreferrer">Abrir gráfico en TradingView <ArrowUpRight size={15} aria-hidden="true" /></a>
@@ -167,6 +168,7 @@ export function MarketLookup() {
         {publicData.filings.length ? <ul role="list">{publicData.filings.map(({ form, date, href }) => <li key={href}><a href={href} target="_blank" rel="noopener noreferrer">{form} · <time dateTime={date}>{date}</time> <ArrowUpRight size={15} aria-hidden="true" /></a></li>)}</ul>
           : <p>Sin documentos recientes de los tipos que muestra este buscador.</p>}
       </div>}
+      {blocked && <div className="ai-market-issuer"><a href={base + "/research/#planes-research"}>Ver planes de Research <ArrowUpRight size={15} aria-hidden="true" /></a></div>}
     </div>}
     <p className="ai-market-source"><a className="avs-reading-link" href={visualStoriesPath + "#historias-mercado"}>Entender volumen, indicadores y etapas en viñetas <ArrowUpRight size={16} aria-hidden="true" /></a></p>
     {!odditySelected && <p className="ai-market-source"><a className="avs-reading-link" href={visualStoriesPath + "#historia-fuentes"}>Cómo comprobar el periodo y la fuente de una cifra <ArrowUpRight size={16} aria-hidden="true" /></a></p>}

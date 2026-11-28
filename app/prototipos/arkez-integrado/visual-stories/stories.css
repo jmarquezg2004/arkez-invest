@@ -87,3 +87,11 @@
 .ticker-story li > div:only-child { padding:.65rem; }
 .ai-quiz-panel .avs { margin-block:1rem; }
 .ai-quiz-panel .avs h3 { font-size:clamp(1.45rem,3vw,2rem); }
+
+.avs-company-comic { margin:1rem 0 1.3rem; box-shadow:0 8px 28px #05152640; }
+.avs-company-comic .avs-art { aspect-ratio:1.55; }
+.avs-company-comic figcaption { margin-top:1rem; padding:.65rem .9rem; background:#f6e5b6; color:#14283e; border-inline-start:3px solid #a97219; }
+.avs-company-comic figcaption p { margin:0; }
+.ai-market .avs-company-comic figcaption a { color:#14283e; font-size:.86rem; }
+.ai-market .avs-company-comic h3 { font-size:clamp(1.55rem,3.4vw,2.55rem); font-weight:650; margin:0; }
+.avs-company-comic:is([data-company-story="NASDAQ:ODD"],[data-company-story="NASDAQ:TTD"]) .avs-art { aspect-ratio:1; }
