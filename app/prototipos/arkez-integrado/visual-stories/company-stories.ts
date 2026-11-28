@@ -1,8 +1,37 @@
 type Panels = readonly [string, string, string, string];
 type StoryCopy = { title: string; prompts: Panels; captions: Panels; takeaway: string; watch: readonly [string, string, string] };
-export type CompanyStoryData = { source: string; es: StoryCopy; en: StoryCopy };
+export type CompanyStoryData = { source: string; outlookSource?: string; es: StoryCopy; en: StoryCopy };
 
 const stories: Record<string, CompanyStoryData> = {
+  "NASDAQ:SPCX": {
+    source: "https://www.sec.gov/Archives/edgar/data/1181412/000162828026066880/spcx-20260930.htm",
+    outlookSource: "https://www.sec.gov/Archives/edgar/data/1181412/000162828026042639/spaceexplorationtechnologi.htm",
+    es: {
+      title: "¿Cómo gana dinero SpaceX?",
+      prompts: ["¿Quién paga por un lanzamiento?", "¿Internet donde no llega el cable?", "¿Y si más barcos se conectan?", "¿Quién pagaría por procesar datos en órbita?"],
+      captions: [
+        "Empresas y gobiernos pagan a SpaceX por llevar cargas al espacio. Reutilizar partes del cohete evita fabricar uno entero para cada viaje.",
+        "Con Starlink, hogares y empresas pagan por conectarse a internet mediante satélites. Es útil donde instalar cable cuesta mucho.",
+        "En los próximos años, la demanda podría crecer si más hogares alejados y barcos contratan el servicio y siguen pagando por él.",
+        "SpaceX plantea llevar centros de datos al espacio. Para que ese proyecto se sostenga, tendría que funcionar a un costo que los clientes acepten pagar.",
+      ],
+      watch: ["Clientes de Starlink que renuevan", "Contratos de lanzamiento", "Clientes y costos del cómputo en órbita"],
+      takeaway: "SpaceX cobra por transportar cargas y conectar a sus clientes. La demanda futura depende de cuántos sigan pagando por esos servicios.",
+    },
+    en: {
+      title: "How does SpaceX make money?",
+      prompts: ["Who pays for a launch?", "Internet where cables don’t reach?", "What if more ships connect?", "Who would pay for computing in orbit?"],
+      captions: [
+        "Businesses and governments pay SpaceX to carry payloads into space. Reusing parts means it does not need to build a whole rocket for every trip.",
+        "With Starlink, households and businesses pay for internet through satellites. It helps in places where laying cable is expensive.",
+        "Demand could grow over the next few years if more remote households and ships sign up and keep paying for the service.",
+        "SpaceX plans to put data centers in orbit. That idea would need to work at a price customers are willing to pay.",
+      ],
+      watch: ["Starlink customers who renew", "Launch contracts", "Orbital computing customers and costs"],
+      takeaway: "SpaceX gets paid to carry payloads and connect customers. Future demand depends on how many keep paying for those services.",
+    },
+  },
+
   "NYSE:TGLS": {
     source: "https://www.sec.gov/Archives/edgar/data/1534675/000149315226050739/form10-q.htm",
     es: {

@@ -109,3 +109,5 @@
 .avs-company-comic figcaption svg { flex-shrink:0; }
 .ai-market .avs-company-comic figcaption a { color:#14283e; font-size:.86rem; }
 .avs-company-comic[data-generated-art] .avs-art img { object-fit:fill; }
+
+.avs-company-comic .avs-outlook-source { margin-inline-start:1rem; }

@@ -4,6 +4,10 @@ const marketRoot = "/api/mercados/empresa";
 const secIndex = "https://www.sec.gov/files/company_tickers_exchange.json";
 export const secHeaders = { "User-Agent": "Arkez Invest Research (https://arkezinvest.com/)", Accept: "application/json" };
 // Fallback snapshot of SEC ticker/CIK data, mirrored at revision d653ee1 of larsondg2000/SEC-10K-and-10Q-Reports.
+const businessForms = ["10-K", "20-F", "40-F", "N-1A", "485BPOS", "N-CSR"];
+const offeringForms = ["424B4", "S-1", "S-1/A", "F-1", "F-1/A"];
+const quarterlyForms = ["10-Q", "6-K"];
+const displayForms = [...businessForms, ...offeringForms, ...quarterlyForms, "8-K"];
 export const normalizeSecSymbol = (ticker) => ticker.trim().toUpperCase().replaceAll(".", "-");
 
 export function createMarketLookup({ load = fetch, now = Date.now, directory = bundledMarketDirectory } = {}) {
@@ -48,7 +52,7 @@ export function createMarketLookup({ load = fetch, now = Date.now, directory = b
     if (!Array.isArray(recent?.form)) throw new Error("SEC filings unavailable");
     const filings = [];
     for (const [i, form] of recent.form.entries()) {
-      if (!["10-K", "10-Q", "20-F", "40-F", "8-K", "6-K", "N-1A", "485BPOS", "N-CSR"].includes(form)) continue;
+      if (!displayForms.includes(form)) continue;
       const number = recent.accessionNumber?.[i];
       const document = recent.primaryDocument?.[i];
       const date = recent.filingDate?.[i];
@@ -56,8 +60,9 @@ export function createMarketLookup({ load = fetch, now = Date.now, directory = b
       filings.push({ form, date, href: `https://www.sec.gov/Archives/edgar/data/${cik}/${number.replaceAll("-", "")}/${document}` });
       if (filings.length >= 5 && filings.some(({ form }) => ["10-K", "20-F", "40-F", "N-1A", "485BPOS", "N-CSR"].includes(form))) break;
     }
-    const annual = filings.find(({ form }) => ["10-K", "20-F", "40-F", "N-1A", "485BPOS", "N-CSR"].includes(form));
-    return { name: data.name, sector: data.sicDescription, filings: filings.slice(0, 5), annual };
+    const storyFilings = [businessForms, offeringForms, quarterlyForms]
+      .map((forms) => filings.find(({ form }) => forms.includes(form))).filter(Boolean);
+    return { name: data.name, sector: data.sicDescription, filings: filings.slice(0, 5), storyFilings };
   }
 
   return async (url) => {
@@ -83,7 +88,7 @@ export function createMarketLookup({ load = fetch, now = Date.now, directory = b
     const details = await getFilings(cik).catch(() => null);
     return reply(200, {
       symbol, name: details?.name || name, exchange, sector: details?.sector, edgar,
-      annual: details?.annual, fromBackup, filingsUnavailable: !details, filings: details?.filings ?? [],
+      storyFilings: details?.storyFilings, fromBackup, filingsUnavailable: !details, filings: details?.filings ?? [],
     });
   };
 }

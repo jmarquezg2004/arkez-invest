@@ -22,7 +22,7 @@ type Issuer = {
   filings: { form: string; date: string; href: string }[];
 };
 
-const samples = ["NYSE:TGLS", "NYSE:KSS", "NASDAQ:ODD", "NYSE:NU", "NASDAQ:TTD", "NASDAQ:AAPL", "AMEX:SPY"];
+const samples = ["NASDAQ:SPCX", "NYSE:TGLS", "NYSE:KSS", "NASDAQ:ODD", "NYSE:NU", "NASDAQ:TTD", "NASDAQ:AAPL", "AMEX:SPY"];
 const kss = { name: "Kohl’s Corporation", exchange: "NYSE", filings: [{ form: "10-K", date: "2026-03-19", href: "https://www.sec.gov/Archives/edgar/data/885639/000119312526115982/kss-20260131.htm" }] };
 const tgls: Issuer = {
   name: "Tecnoglass Holdings Inc.", exchange: "NYSE",
@@ -30,7 +30,7 @@ const tgls: Issuer = {
   filings: [{ form: "10-Q", date: "2026-11-09", href: "https://www.sec.gov/Archives/edgar/data/1534675/000149315226050739/form10-q.htm" }],
 };
 const verifiedIssuers: Record<string, Issuer> = { KSS: kss, TGLS: tgls };
-const companyExchanges: Record<string, string> = { TGLS: "NYSE", KSS: "NYSE", AAPL: "NASDAQ", TTD: "NASDAQ", NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
+const companyExchanges: Record<string, string> = { SPCX: "NASDAQ", TGLS: "NYSE", KSS: "NYSE", AAPL: "NASDAQ", TTD: "NASDAQ", NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
 
 function IssuerDetails({ issuer }: { issuer: Issuer }) {
   return <div className="ai-market-issuer">
@@ -61,7 +61,7 @@ export function MarketLookup() {
   const [issuer, setIssuer] = useState<Issuer | null>(null);
   const [filingStatus, setFilingStatus] = useState("");
   const [generated, setGenerated] = useState<GeneratedCompanyStory | null>(null);
-  const [storyLoading, setStoryLoading] = useState(false);
+  const [storyUnavailable, setStoryUnavailable] = useState(false);
 
   const [blocked, setBlocked] = useState(false);
   const usedTicker = useRef("");
@@ -79,6 +79,7 @@ export function MarketLookup() {
 
   function select(input: string) {
     const requested = input.trim().replace(/^kohl[’']?s(?: corporation)?$/i, "NYSE:KSS")
+      .replace(/^space\s?x$/i, "NASDAQ:SPCX")
       .replace(/^tecnoglass(?: holdings)?(?: inc\.?)?$/i, "NYSE:TGLS");
     const knownCompany = catalog.find(({ name, ticker }) => ticker && normalizeName(name) === normalizeName(requested));
     const next = knownCompany?.ticker ?? (/^oddity(?: tech)?$/i.test(requested) ? "NASDAQ:ODD" : requested.toUpperCase());
@@ -91,7 +92,7 @@ export function MarketLookup() {
     if (next !== symbol) {
       setIssuer(null);
       setGenerated(null);
-      setStoryLoading(false);
+      setStoryUnavailable(false);
       setFilingStatus("");
       const saved = savedTicker();
       setBlocked(Boolean(saved && saved !== cleanTicker(next)));
@@ -170,27 +171,25 @@ export function MarketLookup() {
   const directoryIssuer = !illustrated && publicData?.edgar && publicData.exchange && publicData.exchange !== "OTC" ? publicData : undefined;
   const directorySymbol = directoryIssuer ? `${directoryIssuer.exchange!.toUpperCase()}:${ticker}` : "";
   useEffect(() => {
-    if (!directorySymbol || directoryIssuer?.filingsUnavailable) return;
+    if (!directorySymbol) return;
     const controller = new AbortController();
-    setStoryLoading(true);
     fetch(`/api/mercados/historia?ticker=${encodeURIComponent(ticker)}`, { signal: controller.signal })
       .then(async (response) => {
         if (response.ok) {
           const story: GeneratedCompanyStory = await response.json();
           if (!controller.signal.aborted) setGenerated(story);
-        }
+        } else if (!controller.signal.aborted) setStoryUnavailable(true);
       })
-      .catch(() => {})
-      .finally(() => { if (!controller.signal.aborted) setStoryLoading(false); });
+      .catch(() => { if (!controller.signal.aborted) setStoryUnavailable(true); });
     return () => controller.abort();
-  }, [directorySymbol, directoryIssuer?.filingsUnavailable, ticker]);
+  }, [directorySymbol, ticker]);
   useEffect(() => {
     if (symbol) result.current?.focus({ preventScroll: true });
   }, [symbol]);
   return <section id="consultar-ticker" className="ai-market" aria-labelledby="ai-market-title">
     <p className="ve-kicker"><ChartCandlestick size={19} aria-hidden="true" /> Datos de mercado</p>
     <h2 id="ai-market-title">Consulta un ticker o empresa</h2>
-    <p>Consulta un símbolo de EE. UU. para ver su historia o guía ilustrada, el gráfico y los documentos públicos.</p>
+    <p>Consulta un símbolo de EE. UU. para ver el gráfico y, cuando esté disponible, una historia sobre el negocio y su demanda.</p>
     <form className="ai-market-form" onSubmit={submit}>
       <label className="ve-search"><Search size={20} aria-hidden="true" /><input type="search" maxLength={44} aria-label="Ticker o nombre de empresa" placeholder="Ej. NASDAQ:ODD" value={input} onChange={(event) => setInput(event.target.value)} /></label>
       <button className="ve-cta" type="submit">Consultar ticker</button>
@@ -199,17 +198,19 @@ export function MarketLookup() {
     {message && <p role="status">{message}</p>}
     {symbol && <div className="ai-market-result" ref={result} tabIndex={-1}>
       {illustrated ? <CompanyStory symbol={storySymbol} locale={locale} />
-        : directoryIssuer ? <CompanyStory symbol={directorySymbol} locale={locale} issuer={{ ...directoryIssuer, ticker }} generated={generated} loading={storyLoading} />
+        : generated ? <CompanyStory symbol={directorySymbol} locale={locale} generated={generated} />
+        : directoryIssuer ? <p className="ai-market-issuer" role="status">{storyUnavailable
+          ? "La historia de esta empresa aún no está disponible. Puedes consultar el gráfico y los documentos públicos."
+          : "Preparando una explicación de qué vende la empresa, quién paga y qué podría mover la demanda…"}</p>
         : profile && !blocked ? <TickerStory ticker={ticker} name={profile?.name ?? publicData?.name ?? ticker}
             sector={issuer?.sector} profile={profile} filings={publicData?.filings ?? []} />
           : !hasStory && <p className="ai-market-issuer" role="status">{filingStatus || "Buscando una ficha pública para este símbolo."}</p>}
-      {!illustrated && publicData && <IssuerDetails issuer={publicData} />}
       {odditySelected && !blocked && <a href={oddityStoryPath}>Explorar los escenarios y fuentes de ODDITY <ArrowUpRight size={15} aria-hidden="true" /></a>}
       <h3>Gráfico de {symbol}</h3>
       <iframe key={symbol} title={`Gráfico de ${symbol} en TradingView`} src={chartUrl(chartSymbol, locale)} sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
       <a href={`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(chartSymbol)}`} target="_blank" rel="noopener noreferrer">Abrir gráfico en TradingView <ArrowUpRight size={15} aria-hidden="true" /></a>
       {hasStory && filingStatus && <p role="status">{filingStatus}</p>}
-      {illustrated && publicData && <IssuerDetails issuer={publicData} />}
+      {publicData && <IssuerDetails issuer={publicData} />}
       {blocked && <div className="ai-market-issuer"><a href={base + "/research/#planes-research"}>Ver planes de Research <ArrowUpRight size={15} aria-hidden="true" /></a></div>}
     </div>}
     <p className="ai-market-source"><a className="avs-reading-link" href={visualStoriesPath + "#historias-mercado"}>Entender volumen, indicadores y etapas en viñetas <ArrowUpRight size={16} aria-hidden="true" /></a></p>
