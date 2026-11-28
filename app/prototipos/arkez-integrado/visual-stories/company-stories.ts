@@ -3,6 +3,34 @@ type StoryCopy = { title: string; prompts: Panels; captions: Panels; takeaway: s
 export type CompanyStoryData = { source: string; outlookSource?: string; es: StoryCopy; en: StoryCopy };
 
 const stories: Record<string, CompanyStoryData> = {
+  "NYSE:BB": {
+    source: "https://www.sec.gov/Archives/edgar/data/1070235/000107023526000115/bbry-20260831.htm",
+    es: {
+      title: "¿Cómo gana dinero BlackBerry?",
+      prompts: ["¿BlackBerry dentro del carro?", "¿Y quién paga por una llamada segura?", "¿Qué pasa si más carros usan software?", "¿Una prueba ya es una venta?"],
+      captions: [
+        "BlackBerry vende QNX, software que funciona dentro de equipos como los tableros de los carros. Los fabricantes pagan por usarlo.",
+        "También cobra a gobiernos y empresas por herramientas que ayudan a proteger llamadas, mensajes y dispositivos de trabajo.",
+        "En los próximos años, QNX podría vender más si los fabricantes lo eligen para nuevos modelos y esos carros llegan a producción.",
+        "Una prueba con un fabricante puede tardar años en convertirse en ventas. La señal concreta es que salgan carros de la fábrica con QNX instalado.",
+      ],
+      watch: ["Modelos con QNX que se fabrican", "Licencias y pagos por unidad", "Renovaciones de comunicaciones seguras"],
+      takeaway: "BlackBerry gana por el software que fabricantes, gobiernos y empresas pagan por usar.",
+    },
+    en: {
+      title: "How does BlackBerry make money?",
+      prompts: ["BlackBerry inside a car?", "Who pays for a secure call?", "What if more cars need software?", "Does a trial count as a sale?"],
+      captions: [
+        "BlackBerry sells QNX, software that runs inside equipment such as car dashboards. Manufacturers pay to use it.",
+        "It also charges governments and businesses for tools that help protect calls, messages, and work devices.",
+        "QNX could sell more over the next few years if carmakers choose it for new models and those cars enter production.",
+        "A trial with a manufacturer can take years to turn into sales. The practical sign is cars leaving the factory with QNX installed.",
+      ],
+      watch: ["Models with QNX entering production", "Licenses and per-unit payments", "Secure communications renewals"],
+      takeaway: "BlackBerry makes money from software that manufacturers, governments, and businesses pay to use.",
+    },
+  },
+
   "NASDAQ:SPCX": {
     source: "https://www.sec.gov/Archives/edgar/data/1181412/000162828026066880/spcx-20260930.htm",
     outlookSource: "https://www.sec.gov/Archives/edgar/data/1181412/000162828026042639/spaceexplorationtechnologi.htm",

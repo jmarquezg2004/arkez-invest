@@ -1,7 +1,7 @@
 import { normalizeSecSymbol, secHeaders } from "./preview-market.mjs";
 
 export const companyStoryRoot = "/api/mercados/historia";
-const storyVersion = "2";
+const storyVersion = "3";
 const filingJargon = /\b(?:EDGAR|SIC code|classification code|código (?:SIC|de clasificación)|formulario (?:10-K|10-Q|8-K|20-F)|form (?:10-K|10-Q|8-K|20-F))\b/i;
 
 function filingBusinessText(html, form) {
@@ -18,8 +18,10 @@ function filingBusinessText(html, form) {
       : ["424B4", "S-1", "S-1/A", "F-1", "F-1/A"].includes(form)
         ? /(?:prospectus summary|business overview|our business|our segments)/gi
         : ["10-Q", "6-K"].includes(form)
-          ? /(?:description of business|nature of operations|business overview|company overview)/gi
-          : /item\s*1\s*[.:–-]?\s*business\b/gi;
+          ? /(?:description of business|nature of (?:business|operations)|business overview|company overview|overview of (?:the|our) business|operating segments)/gi
+          : form === "8-K"
+            ? /(?:about [a-z][^.!?]{1,80}|business highlights|quarterly highlights|segment highlights)/gi
+            : /item\s*1\s*[.:–-]?\s*business\b/gi;
   for (const match of cleaned.slice(0, 500_000).matchAll(heading)) {
     const section = cleaned.slice(match.index + match[0].length, match.index + match[0].length + 10000)
       .split(/item\s*(?:1a|5)\s*[.:–-]?\s*(?:risk factors|operating and financial review)|item\s*1b\s*[.:–-]?\s*unresolved/gi)[0];
@@ -28,8 +30,7 @@ function filingBusinessText(html, form) {
   return "";
 }
 
-async function loadBusinessExcerpt(filing, load) {
-  const url = new URL(filing.href);
+async function readSecDocument(url, load) {
   if (url.origin !== "https://www.sec.gov" || !url.pathname.startsWith("/Archives/edgar/data/")) return "";
   const page = await load(url, { headers: secHeaders, redirect: "error", signal: AbortSignal.timeout(4500) });
   if (!page.ok || !page.body) return "";
@@ -45,7 +46,22 @@ async function loadBusinessExcerpt(filing, load) {
   } finally {
     await reader.cancel().catch(() => {});
   }
-  return filingBusinessText(html, filing.form);
+  return html;
+}
+
+async function loadBusinessExcerpt(filing, load) {
+  const url = new URL(filing.href);
+  const html = await readSecDocument(url, load);
+  if (!html || filing.form !== "8-K") return { excerpt: filingBusinessText(html, filing.form), source: filing.href };
+  for (const [, href, label] of html.matchAll(/<a\b[^>]*href\s*=\s*["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)) {
+    if (!/^(?:exhibit\s*)?99\.1(?:\s|$)/i.test(label.replace(/<[^>]+>/g, "").trim())) continue;
+    const exhibit = new URL(href, url);
+    const directory = url.pathname.slice(0, url.pathname.lastIndexOf("/") + 1);
+    if (exhibit.origin !== url.origin || exhibit.pathname.slice(0, exhibit.pathname.lastIndexOf("/") + 1) !== directory) continue;
+    const excerpt = filingBusinessText(await readSecDocument(exhibit, load), filing.form);
+    if (excerpt) return { excerpt, source: exhibit.href };
+  }
+  return { excerpt: "", source: filing.href };
 }
 
 function readStoryDraft(value) {
@@ -79,15 +95,18 @@ export function createCompanyStoryHandler({ lookup, load = fetch, getCache = () 
     const url = new URL(request.url);
     const ticker = normalizeSecSymbol(url.searchParams.get("ticker") ?? "");
     if (!/^[A-Z][A-Z0-9-]{0,11}$/.test(ticker)) return reply(400, { error: "ticker" });
+    const requestedExchange = url.searchParams.get("exchange")?.toUpperCase() ?? "";
+    if (requestedExchange && !/^(NASDAQ|NYSE|AMEX|NYSEARCA|CBOE|BATS)$/.test(requestedExchange)) return reply(400, { error: "exchange" });
     const cacheUrl = new URL(companyStoryRoot, url.origin);
     cacheUrl.searchParams.set("ticker", ticker);
     cacheUrl.searchParams.set("v", storyVersion);
+    if (requestedExchange) cacheUrl.searchParams.set("exchange", requestedExchange);
     const key = new Request(cacheUrl);
     const cache = getCache();
     const cached = await cache?.match(key).catch(() => undefined);
     if (cached) return cached;
     if (!env.AI?.run) return reply(503, { error: "inactive" });
-    let work = pending.get(ticker);
+    let work = pending.get(key.url);
     if (!work) {
       const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
       const now = Math.floor(Date.now() / 60_000);
@@ -100,14 +119,18 @@ export function createCompanyStoryHandler({ lookup, load = fetch, getCache = () 
         const result = await lookup(url);
         if (!result.ok) return reply(result.status, { error: "issuer" });
         const issuer = await result.json();
-        if (issuer.symbol !== ticker || !issuer.exchange || issuer.exchange === "OTC") return reply(404, { error: "exchange" });
+        const exchange = issuer.exchange?.toUpperCase();
+        if (issuer.symbol !== ticker || !exchange || exchange === "OTC" || (requestedExchange && requestedExchange !== exchange)) {
+          return reply(404, { error: "exchange" });
+        }
         const filings = issuer.storyFilings ?? [];
         if (!filings.length) return reply(422, { error: "filing" });
         let excerpt = "";
+        let source = "";
         let filing;
         for (const candidate of filings) {
-          excerpt = await loadBusinessExcerpt(candidate, load).catch(() => "");
-          if (excerpt) { filing = candidate; break; }
+          const business = await loadBusinessExcerpt(candidate, load).catch(() => null);
+          if (business?.excerpt) { ({ excerpt, source } = business); filing = candidate; break; }
         }
         if (!filing) return reply(422, { error: "excerpt" });
         const draft = await env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
@@ -124,7 +147,7 @@ export function createCompanyStoryHandler({ lookup, load = fetch, getCache = () 
           steps: 6,
           prompt: "Arkez Visual Stories editorial education comic. One square image with exactly four equal edge-to-edge quadrants, exact 50% horizontal and vertical splits. No text, no bubbles, no borders, no gutters. Adult Isa consistently has dark brown curls, dark glasses, gold hoop earrings and burgundy jacket. Vibrant flat cel colors cyan, coral, gold, purple, expressive faces and confident dark ink outlines. Medium-close scenes with a readable action, room at top. In reading order: " + story.scenes.map((scene, i) => `${["top left", "top right", "bottom left", "bottom right"][i]}: ${scene}`).join(". "),
         })).catch(() => null);
-        const copy = { es: story.es, en: story.en, source: filing.href };
+        const copy = { es: story.es, en: story.en, source };
         const image = art?.image;
         if (typeof image !== "string" || image.length > 2_000_000 || !/^[A-Za-z0-9+/]+={0,2}$/.test(image)) return Response.json(copy, { headers: { "Cache-Control": "public, max-age=300" } });
         const mime = image.startsWith("/9j/") ? "image/jpeg" : image.startsWith("iVBORw0KGgo") ? "image/png" : "";
@@ -136,8 +159,8 @@ export function createCompanyStoryHandler({ lookup, load = fetch, getCache = () 
           ctx?.waitUntil(save);
         }
         return response;
-      }).catch(() => reply(503, { error: "unavailable" })).finally(() => pending.delete(ticker));
-      pending.set(ticker, work);
+      }).catch(() => reply(503, { error: "unavailable" })).finally(() => pending.delete(key.url));
+      pending.set(key.url, work);
     }
     return (await work).clone();
   };

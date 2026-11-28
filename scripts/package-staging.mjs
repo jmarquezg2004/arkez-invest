@@ -32,7 +32,8 @@ const market = read(join(root, "scripts", "preview-market.mjs")).split("\n").sli
 const companyStory = read(join(root, "scripts", "preview-company-story.mjs")).split("\n").slice(1).join("\n");
 const isa = read(join(root, "scripts", "preview-isa.mjs"));
 const worker = read(join(root, "deployment", "arkez-staging-worker.mjs"));
-const program = `const stagingPolicies = ${JSON.stringify(policies)};\n${news}\n${archive}\nconst bundledMarketDirectory = ${marketDirectory};\n${market}\n${companyStory}\n${isa}\n${worker}`;
+const revision = (process.env.CF_PAGES_COMMIT_SHA ?? "").match(/^[a-f0-9]{7,40}$/i)?.[0] ?? "";
+const program = `const stagingRevision = ${JSON.stringify(revision)};\nconst stagingPolicies = ${JSON.stringify(policies)};\n${news}\n${archive}\nconst bundledMarketDirectory = ${marketDirectory};\n${market}\n${companyStory}\n${isa}\n${worker}`;
 writeFileSync(join(destination, "_worker.js"), program);
 writeFileSync(join(destination, "_headers"), "/_next/static/*\n  Cache-Control: public, max-age=31536000, immutable\n");
 console.log(destination);

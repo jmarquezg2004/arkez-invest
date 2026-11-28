@@ -9,10 +9,11 @@ import nu from "./nu-story.webp";
 import aapl from "./aapl-story.webp";
 import spy from "./spy-story.webp";
 import tgls from "./tgls-story.webp";
+import bb from "./bb-story.webp";
 import spcx from "./spcx-story.webp";
 
 const artwork: Record<string, StaticImageData> = {
-  "NASDAQ:SPCX": spcx, "NYSE:TGLS": tgls, "NASDAQ:ODD": odd, "NASDAQ:TTD": ttd, "NYSE:KSS": kss, "NYSE:NU": nu, "NASDAQ:AAPL": aapl, "AMEX:SPY": spy,
+  "NYSE:BB": bb, "NASDAQ:SPCX": spcx, "NYSE:TGLS": tgls, "NASDAQ:ODD": odd, "NASDAQ:TTD": ttd, "NYSE:KSS": kss, "NYSE:NU": nu, "NASDAQ:AAPL": aapl, "AMEX:SPY": spy,
 };
 
 export type GeneratedCompanyStory = CompanyStoryData & { image?: string };
@@ -32,7 +33,7 @@ export function CompanyStory({ symbol, locale, generated }: {
         <img src="/brand/logo.webp" width={340} height={123} alt="Arkez Invest" />
         <span>Visual Stories</span>
       </div>
-      <h3 id={id}><span>{symbol.split(":")[1]}</span> {copy.title}</h3>
+      <h3 id={id}><span>{symbol.split(":").at(-1)}</span> {copy.title}</h3>
     </header>
     <ol className="avs-panels" aria-label={locale === "es" ? "Historia en cuatro viñetas" : "Four-panel story"}>
       {copy.captions.map((caption, i) => <li key={i} data-panel={i + 1}>

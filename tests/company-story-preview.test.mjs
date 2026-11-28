@@ -79,3 +79,39 @@ test("usa el prospecto de una empresa recién listada y conserva la explicación
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), { es: copy, en: copy, source: publicFiling });
 });
+
+test("recupera una explicación del comunicado del emisor cuando el informe no describe el negocio", async () => {
+  const root = "https://www.sec.gov/Archives/edgar/data/1234/000000123426000001/";
+  const sources = [];
+  const copy = {
+    title: "Example Grocer",
+    prompts: ["A", "B", "C", "D"], captions: ["a", "b", "c", "d"], watch: ["a", "b", "c"], takeaway: "Groceries.",
+  };
+  const history = createCompanyStoryHandler({
+    lookup: async () => Response.json({ symbol: "GRO", exchange: "NYSE", storyFilings: [
+      { href: root + "short.htm", form: "40-F" },
+      { href: root + "report.htm", form: "8-K" },
+    ] }),
+    load: async (url) => {
+      sources.push(url.href);
+      const body = {
+        "/short.htm": "See attached documents.",
+        "/report.htm": '<a href="../x.htm">99.1</a><a href="earnings.htm">99.1</a>',
+        "/earnings.htm": `<h2>Business Highlights</h2><p>${"Shoppers buy fresh produce and food from the company. ".repeat(20)}</p>`,
+      };
+      return new Response(body[url.pathname.slice(url.pathname.lastIndexOf("/"))]);
+    },
+    getCache: () => undefined,
+  });
+  const env = { AI: { run: async (model, input) => {
+    if (!model.includes("llama")) return { image: "/9j/AAAA" };
+    assert.match(input.messages[1].content, /Shoppers buy fresh produce/);
+    return { response: { es: copy, en: copy, scenes: ["Market", "Cashier", "Delivery", "Store"] } };
+  } } };
+  assert.equal((await history(new Request("https://example.com/api/mercados/historia?ticker=GRO&exchange=NASDAQ"), env)).status, 404);
+  assert.deepEqual(sources, []);
+  const response = await history(new Request("https://example.com/api/mercados/historia?ticker=GRO&exchange=NYSE"), env);
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).source, root + "earnings.htm");
+  assert.deepEqual(sources, [root + "short.htm", root + "report.htm", root + "earnings.htm"]);
+});

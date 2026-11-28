@@ -30,7 +30,7 @@ const tgls: Issuer = {
   filings: [{ form: "10-Q", date: "2026-11-09", href: "https://www.sec.gov/Archives/edgar/data/1534675/000149315226050739/form10-q.htm" }],
 };
 const verifiedIssuers: Record<string, Issuer> = { KSS: kss, TGLS: tgls };
-const companyExchanges: Record<string, string> = { SPCX: "NASDAQ", TGLS: "NYSE", KSS: "NYSE", AAPL: "NASDAQ", TTD: "NASDAQ", NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
+const companyExchanges: Record<string, string> = { BB: "NYSE", SPCX: "NASDAQ", TGLS: "NYSE", KSS: "NYSE", AAPL: "NASDAQ", TTD: "NASDAQ", NU: "NYSE", JPM: "NYSE", XOM: "NYSE", WMT: "NASDAQ", LLY: "NYSE", SPY: "NYSEARCA" };
 
 function IssuerDetails({ issuer }: { issuer: Issuer }) {
   return <div className="ai-market-issuer">
@@ -62,6 +62,7 @@ export function MarketLookup() {
   const [filingStatus, setFilingStatus] = useState("");
   const [generated, setGenerated] = useState<GeneratedCompanyStory | null>(null);
   const [storyUnavailable, setStoryUnavailable] = useState(false);
+  const [storyAttempt, setStoryAttempt] = useState(0);
 
   const [blocked, setBlocked] = useState(false);
   const usedTicker = useRef("");
@@ -79,6 +80,7 @@ export function MarketLookup() {
 
   function select(input: string) {
     const requested = input.trim().replace(/^kohl[’']?s(?: corporation)?$/i, "NYSE:KSS")
+      .replace(/^blackberry(?: (?:ltd|limited)\.?)?$/i, "NYSE:BB")
       .replace(/^space\s?x$/i, "NASDAQ:SPCX")
       .replace(/^tecnoglass(?: holdings)?(?: inc\.?)?$/i, "NYSE:TGLS");
     const knownCompany = catalog.find(({ name, ticker }) => ticker && normalizeName(name) === normalizeName(requested));
@@ -97,7 +99,13 @@ export function MarketLookup() {
       const saved = savedTicker();
       setBlocked(Boolean(saved && saved !== cleanTicker(next)));
       setSymbol(next);
-    } else result.current?.focus();
+    } else {
+      if (storyUnavailable) {
+        setStoryUnavailable(false);
+        setStoryAttempt((count) => count + 1);
+      }
+      result.current?.focus();
+    }
   }
 
   useEffect(() => {
@@ -168,12 +176,16 @@ export function MarketLookup() {
 
   const publicData = issuer ?? publicIssuer;
   const hasStory = Boolean(profile || odditySelected || fundSelected || publicData);
-  const directoryIssuer = !illustrated && publicData?.edgar && publicData.exchange && publicData.exchange !== "OTC" ? publicData : undefined;
-  const directorySymbol = directoryIssuer ? `${directoryIssuer.exchange!.toUpperCase()}:${ticker}` : "";
+  const requestStory = !illustrated && /^[A-Z][A-Z0-9-]{0,11}$/.test(ticker)
+    && matchingExchange && requestedExchange !== "OTC";
+  const exchange = requestedExchange || issuer?.exchange?.toUpperCase();
+  const generatedSymbol = exchange ? `${exchange}:${ticker}` : ticker;
   useEffect(() => {
-    if (!directorySymbol) return;
+    if (!requestStory) return;
     const controller = new AbortController();
-    fetch(`/api/mercados/historia?ticker=${encodeURIComponent(ticker)}`, { signal: controller.signal })
+    const query = new URLSearchParams({ ticker });
+    if (requestedExchange) query.set("exchange", requestedExchange);
+    fetch(`/api/mercados/historia?${query}`, { signal: controller.signal })
       .then(async (response) => {
         if (response.ok) {
           const story: GeneratedCompanyStory = await response.json();
@@ -182,7 +194,7 @@ export function MarketLookup() {
       })
       .catch(() => { if (!controller.signal.aborted) setStoryUnavailable(true); });
     return () => controller.abort();
-  }, [directorySymbol, ticker]);
+  }, [requestStory, requestedExchange, storyAttempt, ticker]);
   useEffect(() => {
     if (symbol) result.current?.focus({ preventScroll: true });
   }, [symbol]);
@@ -198,8 +210,8 @@ export function MarketLookup() {
     {message && <p role="status">{message}</p>}
     {symbol && <div className="ai-market-result" ref={result} tabIndex={-1}>
       {illustrated ? <CompanyStory symbol={storySymbol} locale={locale} />
-        : generated ? <CompanyStory symbol={directorySymbol} locale={locale} generated={generated} />
-        : directoryIssuer ? <p className="ai-market-issuer" role="status">{storyUnavailable
+        : generated ? <CompanyStory symbol={generatedSymbol} locale={locale} generated={generated} />
+        : requestStory ? <p className="ai-market-issuer" role="status">{storyUnavailable
           ? "La historia de esta empresa aún no está disponible. Puedes consultar el gráfico y los documentos públicos."
           : "Preparando una explicación de qué vende la empresa, quién paga y qué podría mover la demanda…"}</p>
         : profile && !blocked ? <TickerStory ticker={ticker} name={profile?.name ?? publicData?.name ?? ticker}

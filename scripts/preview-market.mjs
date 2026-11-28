@@ -57,11 +57,16 @@ export function createMarketLookup({ load = fetch, now = Date.now, directory = b
       const document = recent.primaryDocument?.[i];
       const date = recent.filingDate?.[i];
       if (!/^\d{10}-\d{2}-\d{6}$/.test(number ?? "") || !/^[a-z\d_-]+\.html?$/i.test(document ?? "") || !/^\d{4}-\d{2}-\d{2}$/.test(date ?? "")) continue;
-      filings.push({ form, date, href: `https://www.sec.gov/Archives/edgar/data/${cik}/${number.replaceAll("-", "")}/${document}` });
-      if (filings.length >= 5 && filings.some(({ form }) => ["10-K", "20-F", "40-F", "N-1A", "485BPOS", "N-CSR"].includes(form))) break;
+      const earnings = form === "8-K" && recent.items?.[i]?.split(",").some((item) => item.trim() === "2.02");
+      filings.push({ form, date, ...(earnings && { earnings }), href: `https://www.sec.gov/Archives/edgar/data/${cik}/${number.replaceAll("-", "")}/${document}` });
+
     }
-    const storyFilings = [businessForms, offeringForms, quarterlyForms]
-      .map((forms) => filings.find(({ form }) => forms.includes(form))).filter(Boolean);
+    const storyFilings = [
+      filings.find(({ form }) => businessForms.includes(form)),
+      filings.find(({ form }) => offeringForms.includes(form)),
+      filings.find(({ form }) => quarterlyForms.includes(form)),
+      filings.find(({ earnings }) => earnings),
+    ].filter(Boolean);
     return { name: data.name, sector: data.sicDescription, filings: filings.slice(0, 5), storyFilings };
   }
 

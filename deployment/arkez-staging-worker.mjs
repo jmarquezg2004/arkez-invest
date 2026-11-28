@@ -6,6 +6,7 @@ const getMarket = createMarketLookup();
 const getCompanyStory = createCompanyStoryHandler({ lookup: getMarket });
 const askIsa = createIsaHandler();
 const stagingHeaders = {
+  ...(stagingRevision && { "X-Arkez-Revision": stagingRevision }),
   "X-Robots-Tag": "noindex, nofollow",
   "X-Content-Type-Options": "nosniff",
   "X-Frame-Options": "DENY",
@@ -16,7 +17,12 @@ const stagingHeaders = {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    if (url.pathname === companyStoryRoot) return getCompanyStory(request, env, ctx);
+    if (url.pathname === companyStoryRoot) {
+      const response = await getCompanyStory(request, env, ctx);
+      const headers = new Headers(response.headers);
+      for (const [name, value] of Object.entries(stagingHeaders)) headers.set(name, value);
+      return new Response(response.body, { status: response.status, headers });
+    }
     if (url.pathname === isaRoot) return askIsa(request, env);
     if (request.method !== "GET" && request.method !== "HEAD") {
       return new Response(null, { status: 405, headers: { ...stagingHeaders, Allow: "GET, HEAD" } });
