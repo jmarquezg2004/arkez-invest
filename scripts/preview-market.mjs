@@ -8,10 +8,21 @@ const businessForms = ["10-K", "20-F", "40-F", "N-1A", "485BPOS", "N-CSR"];
 const offeringForms = ["424B4", "S-1", "S-1/A", "F-1", "F-1/A"];
 const quarterlyForms = ["10-Q", "6-K"];
 const displayForms = [...businessForms, ...offeringForms, ...quarterlyForms, "8-K"];
+const normalizeIssuerName = (name) => name.normalize("NFKD").replace(/\p{M}/gu, "")
+  .toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim()
+  .replace(/(?: (?:CORP(?:ORATION)?|INC(?:ORPORATED)?|LIMITED|LTD|PLC|CO(?:MPANY)?))+$/, "");
+
 export const normalizeSecSymbol = (ticker) => ticker.trim().toUpperCase().replaceAll(".", "-");
 
 export function createMarketLookup({ load = fetch, now = Date.now, directory = bundledMarketDirectory } = {}) {
   const backup = new Map(directory.filter((row) => typeof row[2] === "string").map((row) => [normalizeSecSymbol(row[2]), row]));
+  function findIssuer(rows, symbol, name) {
+    const exact = rows.find((row) => typeof row[2] === "string" && normalizeSecSymbol(row[2]) === symbol);
+    if (exact || !name) return exact;
+    const matches = rows.filter((row) => typeof row[1] === "string" && normalizeIssuerName(row[1]) === name);
+    if (new Set(matches.map(([cik]) => cik)).size !== 1) return undefined;
+    return matches.find((row) => typeof row[3] === "string" && /^(Nasdaq|NYSE|Cboe|NYSE Arca|NYSE American)$/i.test(row[3]));
+  }
   const cache = new Map();
   const retryAfter = new Map();
   let windowEnds = 0;
@@ -40,10 +51,10 @@ export function createMarketLookup({ load = fetch, now = Date.now, directory = b
     return result;
   }
 
-  async function liveIssuer(symbol) {
+  async function liveIssuer(symbol, name) {
     const index = await get(secIndex, 12 * 60 * 60_000);
     if (!Array.isArray(index.data)) throw new Error("SEC index unavailable");
-    return index.data.find((row) => typeof row[2] === "string" && normalizeSecSymbol(row[2]) === symbol);
+    return findIssuer(index.data, symbol, name);
   }
 
   async function getFilings(cik) {
@@ -71,28 +82,30 @@ export function createMarketLookup({ load = fetch, now = Date.now, directory = b
   }
 
   return async (url) => {
-    const symbol = normalizeSecSymbol(url.searchParams.get("ticker") ?? "");
+    const input = url.searchParams.get("ticker")?.trim() ?? "";
+    const symbol = normalizeSecSymbol(input);
+    const name = url.searchParams.has("resolve") && input.length <= 44 ? normalizeIssuerName(input) : "";
     const reply = (status, body) => Response.json(body, {
       status, headers: { "Cache-Control": status === 200 ? "public, max-age=120" : "no-store" },
     });
-    if (!/^[A-Z0-9][A-Z0-9-]{0,11}$/.test(symbol)) return reply(400, { error: "ticker" });
+    if (!name && !/^[A-Z0-9][A-Z0-9-]{0,11}$/.test(symbol)) return reply(400, { error: "ticker" });
 
     let row;
     let fromBackup = false;
     try {
-      row = await liveIssuer(symbol);
+      row = await liveIssuer(symbol, name);
     } catch {
-      row = backup.get(symbol);
+      row = backup.get(symbol) ?? (name ? findIssuer(directory, symbol, name) : undefined);
       fromBackup = true;
     }
     if (!row) return fromBackup ? reply(503, { error: "unavailable" }) : reply(404, { error: "not-found" });
 
-    const [cik, name,, exchange] = row;
-    if (!Number.isSafeInteger(cik) || cik <= 0 || typeof name !== "string") return reply(503, { error: "unavailable" });
+    const [cik, issuerName, listedTicker, exchange] = row;
+    if (!Number.isSafeInteger(cik) || cik <= 0 || typeof issuerName !== "string") return reply(503, { error: "unavailable" });
     const edgar = `https://www.sec.gov/edgar/browse/?CIK=${cik}&owner=exclude`;
-    const details = await getFilings(cik).catch(() => null);
+    const details = url.searchParams.has("resolve") ? null : await getFilings(cik).catch(() => null);
     return reply(200, {
-      symbol, name: details?.name || name, exchange, sector: details?.sector, edgar,
+      symbol: normalizeSecSymbol(listedTicker), name: details?.name || issuerName, exchange, sector: details?.sector, edgar,
       storyFilings: details?.storyFilings, fromBackup, filingsUnavailable: !details, filings: details?.filings ?? [],
     });
   };

@@ -59,3 +59,12 @@ test("solo Explore y Research permiten el marco externo de TradingView", () => {
     assert.doesNotMatch(policy, /script-src[^;]*tradingview/);
   }
 });
+
+test("resuelve Intel a INTC por nombre aunque falle el directorio en vivo", async () => {
+  const lookup = createMarketLookup({ load: async () => new Response(null, { status: 503 }) });
+  const response = await lookup(new URL("https://example.com/api/mercados/empresa?ticker=Intel&resolve=1"));
+  assert.equal(response.status, 200);
+  const result = await response.json();
+  assert.equal(result.symbol, "INTC");
+  assert.match(result.exchange, /^Nasdaq$/i);
+});

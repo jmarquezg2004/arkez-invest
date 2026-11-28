@@ -115,3 +115,28 @@ test("recupera una explicación del comunicado del emisor cuando el informe no d
   assert.equal((await response.json()).source, root + "earnings.htm");
   assert.deepEqual(sources, [root + "short.htm", root + "report.htm", root + "earnings.htm"]);
 });
+
+test("usa evidencia alternativa solo si el identificador coincide con el emisor", async () => {
+  const copy = {
+    title: "Example", prompts: ["A", "B", "C", "D"], captions: ["a", "b", "c", "d"], watch: ["a", "b", "c"], takeaway: "Example.",
+  };
+  const query = new Request("https://example.com/api/mercados/historia?ticker=MU");
+  let candidateCik = "0000723125";
+  const history = createCompanyStoryHandler({
+    lookup: async () => Response.json({ symbol: "MU", exchange: "Nasdaq", name: "Micron Technology Inc", edgar: "https://www.sec.gov/edgar/browse/?CIK=723125" }),
+    load: async (url) => url.hostname === "en.wikipedia.org"
+      ? Response.json({ query: { pages: [{ pageid: 123, pageprops: { wikibase_item: "Q42" }, extract: "Micron sells memory chips. ".repeat(8) }] } })
+      : Response.json({ entities: { Q42: { claims: { P5531: [{ mainsnak: { datavalue: { value: candidateCik } } }] } } } }),
+    getCache: () => undefined,
+  });
+  const env = { AI: { run: async (model, input) => {
+    if (!model.includes("llama")) return {};
+    assert.match(input.messages[1].content, /Micron sells memory chips/);
+    return { response: { es: copy, en: copy, scenes: ["Memory", "Computer", "Factory", "Order"] } };
+  } } };
+  const response = await history(query, env);
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).source, "https://en.wikipedia.org/?curid=123");
+  candidateCik = "999";
+  assert.equal((await history(query, env)).status, 422);
+});

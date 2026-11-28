@@ -54,7 +54,7 @@ export function CompanyStory({ symbol, locale, generated }: {
     <figcaption>
       <p><Lightbulb size={24} aria-hidden="true" />{copy.takeaway}</p>
       <a href={story.source} target="_blank" rel="noopener noreferrer">
-        {locale === "es" ? "Consultar fuente primaria" : "Read the primary source"} <ArrowUpRight size={15} aria-hidden="true" />
+        {locale === "es" ? "Consultar la fuente" : "Read the source"} <ArrowUpRight size={15} aria-hidden="true" />
       </a>
       {story.outlookSource && <a className="avs-outlook-source" href={story.outlookSource} target="_blank" rel="noopener noreferrer">
         {locale === "es" ? "Fuente sobre los planes futuros" : "Source on future plans"} <ArrowUpRight size={15} aria-hidden="true" />

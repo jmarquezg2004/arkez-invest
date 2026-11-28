@@ -60,13 +60,15 @@ export function MarketLookup() {
   const [message, setMessage] = useState("");
   const [issuer, setIssuer] = useState<Issuer | null>(null);
   const [filingStatus, setFilingStatus] = useState("");
+  const [missingUsTicker, setMissingUsTicker] = useState(false);
   const [generated, setGenerated] = useState<GeneratedCompanyStory | null>(null);
-  const [storyUnavailable, setStoryUnavailable] = useState(false);
+  const [storyFailure, setStoryFailure] = useState("");
   const [storyAttempt, setStoryAttempt] = useState(0);
 
   const [blocked, setBlocked] = useState(false);
   const usedTicker = useRef("");
   const result = useRef<HTMLDivElement>(null);
+  const lookupSequence = useRef(0);
 
   function savedTicker() {
     try { return localStorage.getItem(freeConsultationKey) || usedTicker.current; }
@@ -78,13 +80,23 @@ export function MarketLookup() {
     select(input);
   }
 
-  function select(input: string) {
+  async function select(input: string) {
+    const sequence = ++lookupSequence.current;
     const requested = input.trim().replace(/^kohl[’']?s(?: corporation)?$/i, "NYSE:KSS")
       .replace(/^blackberry(?: (?:ltd|limited)\.?)?$/i, "NYSE:BB")
       .replace(/^space\s?x$/i, "NASDAQ:SPCX")
       .replace(/^tecnoglass(?: holdings)?(?: inc\.?)?$/i, "NYSE:TGLS");
     const knownCompany = catalog.find(({ name, ticker }) => ticker && normalizeName(name) === normalizeName(requested));
-    const next = knownCompany?.ticker ?? (/^oddity(?: tech)?$/i.test(requested) ? "NASDAQ:ODD" : requested.toUpperCase());
+    let next = knownCompany?.ticker ?? (/^oddity(?: tech)?$/i.test(requested) ? "NASDAQ:ODD" : requested.toUpperCase());
+    if (!knownCompany && !next.includes(":") && requested.trim()) {
+      const query = new URLSearchParams({ ticker: requested, resolve: "1" });
+      const data = await fetch(`/api/mercados/empresa?${query}`, { signal: AbortSignal.timeout(3200) })
+        .then((response) => response.ok ? response.json() : null).catch(() => null);
+      if (sequence !== lookupSequence.current) return;
+      if (data?.symbol && /^[A-Z0-9][A-Z0-9.-]{0,11}$/.test(data.symbol)) {
+        next = data.symbol;
+      }
+    }
     if (!validSymbol.test(next)) {
       setMessage("Escribe el ticker o el nombre exacto de una empresa del catálogo.");
       return;
@@ -94,14 +106,15 @@ export function MarketLookup() {
     if (next !== symbol) {
       setIssuer(null);
       setGenerated(null);
-      setStoryUnavailable(false);
+      setStoryFailure("");
       setFilingStatus("");
+      setMissingUsTicker(false);
       const saved = savedTicker();
       setBlocked(Boolean(saved && saved !== cleanTicker(next)));
       setSymbol(next);
     } else {
-      if (storyUnavailable) {
-        setStoryUnavailable(false);
+      if (storyFailure) {
+        setStoryFailure("");
         setStoryAttempt((count) => count + 1);
       }
       result.current?.focus();
@@ -126,7 +139,9 @@ export function MarketLookup() {
   const profile = !requestedExchange || requestedExchange === knownExchange ? profileMatch : undefined;
   const publicIssuer = !requestedExchange || requestedExchange === "NYSE"
     ? verifiedIssuers[ticker] ?? null : null;
-  const chartSymbol = requestedExchange || !knownExchange ? symbol : knownExchange + ":" + ticker;
+  const listing = knownExchange || issuer?.exchange?.toUpperCase();
+  const chartExchange = listing === "NYSE ARCA" ? "AMEX" : listing === "NYSE AMERICAN" ? "AMEX" : listing;
+  const chartSymbol = requestedExchange || !chartExchange || chartExchange === "OTC" ? symbol : chartExchange + ":" + ticker;
   const odditySelected = /^(?:NASDAQ:)?ODD$/.test(symbol);
   const fundSelected = /^(?:(?:AMEX|NYSEARCA):)?SPY$/.test(symbol);
   const storySymbol = odditySelected ? "NASDAQ:ODD" : fundSelected ? "AMEX:SPY" : chartSymbol;
@@ -152,6 +167,7 @@ export function MarketLookup() {
       .then(async (response) => {
         if (controller.signal.aborted) return;
         if (response.status === 404) {
+          setMissingUsTicker(true);
           setFilingStatus("La SEC no devolvió una ficha para este ticker. Comprueba el símbolo y la bolsa.");
           return;
         }
@@ -190,9 +206,12 @@ export function MarketLookup() {
         if (response.ok) {
           const story: GeneratedCompanyStory = await response.json();
           if (!controller.signal.aborted) setGenerated(story);
-        } else if (!controller.signal.aborted) setStoryUnavailable(true);
+        } else {
+          const failure = await response.json().catch(() => null);
+          if (!controller.signal.aborted) setStoryFailure(failure?.error ?? "unavailable");
+        }
       })
-      .catch(() => { if (!controller.signal.aborted) setStoryUnavailable(true); });
+      .catch(() => { if (!controller.signal.aborted) setStoryFailure("unavailable"); });
     return () => controller.abort();
   }, [requestStory, requestedExchange, storyAttempt, ticker]);
   useEffect(() => {
@@ -211,16 +230,22 @@ export function MarketLookup() {
     {symbol && <div className="ai-market-result" ref={result} tabIndex={-1}>
       {illustrated ? <CompanyStory symbol={storySymbol} locale={locale} />
         : generated ? <CompanyStory symbol={generatedSymbol} locale={locale} generated={generated} />
-        : requestStory ? <p className="ai-market-issuer" role="status">{storyUnavailable
-          ? "La historia de esta empresa aún no está disponible. Puedes consultar el gráfico y los documentos públicos."
-          : "Preparando una explicación de qué vende la empresa, quién paga y qué podría mover la demanda…"}</p>
+        : requestStory ? <p className="ai-market-issuer" role="status">{storyFailure === "inactive"
+          ? "El generador de historias está desconectado en este sitio de prueba."
+          : storyFailure === "limit"
+            ? "Hay muchas consultas en curso. Inténtalo en un minuto."
+            : storyFailure
+              ? "Aún no pudimos preparar la historia. El gráfico y las fuentes disponibles siguen abajo."
+              : "Preparando una explicación de qué vende la empresa, quién paga y qué podría mover la demanda…"}</p>
         : profile && !blocked ? <TickerStory ticker={ticker} name={profile?.name ?? publicData?.name ?? ticker}
             sector={issuer?.sector} profile={profile} filings={publicData?.filings ?? []} />
           : !hasStory && <p className="ai-market-issuer" role="status">{filingStatus || "Buscando una ficha pública para este símbolo."}</p>}
       {odditySelected && !blocked && <a href={oddityStoryPath}>Explorar los escenarios y fuentes de ODDITY <ArrowUpRight size={15} aria-hidden="true" /></a>}
+      {missingUsTicker && !requestedExchange && !illustrated && !generated ? <p role="status">No encontramos este símbolo en el directorio de EE. UU. Comprueba el ticker o escribe el nombre de la empresa.</p> : <>
       <h3>Gráfico de {symbol}</h3>
       <iframe key={symbol} title={`Gráfico de ${symbol} en TradingView`} src={chartUrl(chartSymbol, locale)} sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
       <a href={`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(chartSymbol)}`} target="_blank" rel="noopener noreferrer">Abrir gráfico en TradingView <ArrowUpRight size={15} aria-hidden="true" /></a>
+      </>}
       {hasStory && filingStatus && <p role="status">{filingStatus}</p>}
       {publicData && <IssuerDetails issuer={publicData} />}
       {blocked && <div className="ai-market-issuer"><a href={base + "/research/#planes-research"}>Ver planes de Research <ArrowUpRight size={15} aria-hidden="true" /></a></div>}
