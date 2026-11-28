@@ -108,4 +108,4 @@
 .avs-company-comic figcaption p { display:flex; align-items:center; gap:.55rem; margin:0; padding:.65rem .9rem; background:#ffdc80; color:#14283e; border-radius:.8rem; font-size:clamp(.98rem,1.65vw,1.16rem); }
 .avs-company-comic figcaption svg { flex-shrink:0; }
 .ai-market .avs-company-comic figcaption a { color:#14283e; font-size:.86rem; }
-.avs-company-comic:is([data-company-story="NASDAQ:ODD"],[data-company-story="NASDAQ:TTD"]) .avs-art { aspect-ratio:1; }
+.avs-company-comic[data-generated-art] .avs-art img { object-fit:fill; }

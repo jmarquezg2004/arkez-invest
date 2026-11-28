@@ -1,8 +1,8 @@
 type Panels = readonly [string, string, string, string];
 type StoryCopy = { title: string; prompts: Panels; captions: Panels; takeaway: string; watch: readonly [string, string, string] };
-type CompanyStory = { source: string; es: StoryCopy; en: StoryCopy };
+export type CompanyStoryData = { source: string; es: StoryCopy; en: StoryCopy };
 
-const stories: Record<string, CompanyStory> = {
+const stories: Record<string, CompanyStoryData> = {
   "NYSE:TGLS": {
     source: "https://www.sec.gov/Archives/edgar/data/1534675/000149315226050739/form10-q.htm",
     es: {

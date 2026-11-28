@@ -42,7 +42,7 @@ const copy: Record<string, string> = {
   "Programas de innovación y novedades del regulador financiero del Reino Unido.": "Innovation programs and news from the UK financial regulator.",
   "Guías, alertas y herramientas educativas de la SEC.": "Investor guides, alerts, and educational tools from the SEC.",
   "Publicaciones e iniciativas de educación financiera.": "Financial education publications and initiatives.",
-  "Consulta el gráfico, los documentos públicos y la historia de la empresa cuando esté disponible.": "Look up the chart, public filings, and the company’s story when available.",
+  "Consulta un símbolo de EE. UU. para ver su historia o guía ilustrada, el gráfico y los documentos públicos.": "Look up a US symbol to see its story or illustrated guide, chart, and public filings.",
   "La ficha educativa ampliada de este navegador ya está asignada a otro ticker. Aquí puedes consultar el gráfico y los documentos públicos.": "An expanded educational profile is already saved for another ticker in this browser. The chart and public filings are available below.",
   "Abrir gráfico en TradingView": "Open chart in TradingView",
   "Ver expediente en EDGAR": "View SEC filings on EDGAR",

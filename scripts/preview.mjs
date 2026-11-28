@@ -5,6 +5,7 @@ import { extname, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { commonHeaders, contentPolicy, previewPolicyOptions } from "./pages-headers.mjs";
 
+import { companyStoryRoot, createCompanyStoryHandler } from "./preview-company-story.mjs";
 import { createMarketLookup } from "./preview-market.mjs";
 import { createNewsPhoto, createPreviewNews } from "./preview-news.mjs";
 import { archivedHeadlines, directoryArchive } from "./news-archive.mjs";
@@ -48,6 +49,7 @@ function limiter(max) {
 }
 
 export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs = 800, news = createPreviewNews({ enrich: true, archive: directoryArchive }), newsPhoto = createNewsPhoto(news, fetch, [...archivedHeadlines, ...directoryArchive]), market = createMarketLookup() } = {}) {
+  const companyStory = createCompanyStoryHandler({ lookup: market });
   const contactChallenges = new Map();
   const allowIssue = limiter(24);
   const allowSubmit = limiter(8);
@@ -66,6 +68,11 @@ export function createPreviewServer({ root = defaultRoot, now = Date.now, waitMs
     try {
       const path = decodeURIComponent(new URL(request.url, origin).pathname);
       if (path.startsWith("//") || path.includes("\\") || path.includes("\0")) return reply(response, 400, { ok: false });
+      if (path === companyStoryRoot) {
+        const result = await companyStory(new Request(new URL(request.url, origin), { method: request.method }), {});
+        response.writeHead(result.status, Object.fromEntries(result.headers));
+        return response.end(await result.text());
+      }
       if (path === "/api/mercados/empresa") {
         if (request.method !== "GET") return reply(response, 405, { ok: false });
         const result = await market(new URL(request.url, origin));

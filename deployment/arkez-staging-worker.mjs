@@ -3,6 +3,7 @@ const integratedHome = "/prototipos/arkez-integrado/";
 const getHeadlines = createPreviewNews({ enrich: true, archive: directoryArchive });
 const getNewsPhoto = createNewsPhoto(getHeadlines, fetch, [...archivedHeadlines, ...directoryArchive]);
 const getMarket = createMarketLookup();
+const getCompanyStory = createCompanyStoryHandler({ lookup: getMarket });
 const askIsa = createIsaHandler();
 const stagingHeaders = {
   "X-Robots-Tag": "noindex, nofollow",
@@ -13,8 +14,9 @@ const stagingHeaders = {
 };
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname === companyStoryRoot) return getCompanyStory(request, env, ctx);
     if (url.pathname === isaRoot) return askIsa(request, env);
     if (request.method !== "GET" && request.method !== "HEAD") {
       return new Response(null, { status: 405, headers: { ...stagingHeaders, Allow: "GET, HEAD" } });

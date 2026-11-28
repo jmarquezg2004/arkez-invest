@@ -8,7 +8,7 @@ import { base, oddityStoryPath, visualStoriesPath } from "./routes";
 
 import { useLanguage } from "./language";
 import { TickerStory } from "./visual-stories/ticker-story";
-import { CompanyStory } from "./visual-stories/company-story";
+import { CompanyStory, type GeneratedCompanyStory } from "./visual-stories/company-story";
 import { companyStoryFor } from "./visual-stories/company-stories";
 
 const freeConsultationKey = "arkez-research-demo-free-ticker-v1";
@@ -60,6 +60,8 @@ export function MarketLookup() {
   const [message, setMessage] = useState("");
   const [issuer, setIssuer] = useState<Issuer | null>(null);
   const [filingStatus, setFilingStatus] = useState("");
+  const [generated, setGenerated] = useState<GeneratedCompanyStory | null>(null);
+  const [storyLoading, setStoryLoading] = useState(false);
 
   const [blocked, setBlocked] = useState(false);
   const usedTicker = useRef("");
@@ -88,6 +90,8 @@ export function MarketLookup() {
     setInput(next);
     if (next !== symbol) {
       setIssuer(null);
+      setGenerated(null);
+      setStoryLoading(false);
       setFilingStatus("");
       const saved = savedTicker();
       setBlocked(Boolean(saved && saved !== cleanTicker(next)));
@@ -163,13 +167,30 @@ export function MarketLookup() {
 
   const publicData = issuer ?? publicIssuer;
   const hasStory = Boolean(profile || odditySelected || fundSelected || publicData);
+  const directoryIssuer = !illustrated && publicData?.edgar && publicData.exchange && publicData.exchange !== "OTC" ? publicData : undefined;
+  const directorySymbol = directoryIssuer ? `${directoryIssuer.exchange!.toUpperCase()}:${ticker}` : "";
+  useEffect(() => {
+    if (!directorySymbol || directoryIssuer?.filingsUnavailable) return;
+    const controller = new AbortController();
+    setStoryLoading(true);
+    fetch(`/api/mercados/historia?ticker=${encodeURIComponent(ticker)}`, { signal: controller.signal })
+      .then(async (response) => {
+        if (response.ok) {
+          const story: GeneratedCompanyStory = await response.json();
+          if (!controller.signal.aborted) setGenerated(story);
+        }
+      })
+      .catch(() => {})
+      .finally(() => { if (!controller.signal.aborted) setStoryLoading(false); });
+    return () => controller.abort();
+  }, [directorySymbol, directoryIssuer?.filingsUnavailable, ticker]);
   useEffect(() => {
     if (symbol) result.current?.focus({ preventScroll: true });
   }, [symbol]);
   return <section id="consultar-ticker" className="ai-market" aria-labelledby="ai-market-title">
     <p className="ve-kicker"><ChartCandlestick size={19} aria-hidden="true" /> Datos de mercado</p>
     <h2 id="ai-market-title">Consulta un ticker o empresa</h2>
-    <p>Consulta el gráfico, los documentos públicos y la historia de la empresa cuando esté disponible.</p>
+    <p>Consulta un símbolo de EE. UU. para ver su historia o guía ilustrada, el gráfico y los documentos públicos.</p>
     <form className="ai-market-form" onSubmit={submit}>
       <label className="ve-search"><Search size={20} aria-hidden="true" /><input type="search" maxLength={44} aria-label="Ticker o nombre de empresa" placeholder="Ej. NASDAQ:ODD" value={input} onChange={(event) => setInput(event.target.value)} /></label>
       <button className="ve-cta" type="submit">Consultar ticker</button>
@@ -178,6 +199,7 @@ export function MarketLookup() {
     {message && <p role="status">{message}</p>}
     {symbol && <div className="ai-market-result" ref={result} tabIndex={-1}>
       {illustrated ? <CompanyStory symbol={storySymbol} locale={locale} />
+        : directoryIssuer ? <CompanyStory symbol={directorySymbol} locale={locale} issuer={{ ...directoryIssuer, ticker }} generated={generated} loading={storyLoading} />
         : profile && !blocked ? <TickerStory ticker={ticker} name={profile?.name ?? publicData?.name ?? ticker}
             sector={issuer?.sector} profile={profile} filings={publicData?.filings ?? []} />
           : !hasStory && <p className="ai-market-issuer" role="status">{filingStatus || "Buscando una ficha pública para este símbolo."}</p>}
